@@ -12,14 +12,20 @@ class _GroupViewState extends State<GroupView> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('Group'),
+        title: Text(
+          'Group',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.yellow,
       ),
+      backgroundColor: Colors.yellow[200],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Group Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

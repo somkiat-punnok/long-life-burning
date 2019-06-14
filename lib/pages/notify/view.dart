@@ -12,14 +12,20 @@ class _NotifyViewState extends State<NotifyView> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('Notify'),
+        title: Text(
+          'Notify',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.brown,
       ),
+      backgroundColor: Colors.brown[200],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Notify Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

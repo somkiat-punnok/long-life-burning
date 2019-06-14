@@ -14,16 +14,23 @@ class _StepCountViewState extends State<StepCountView> {
 
   @override
   Widget build(BuildContext context) {
+
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('Step Count'),
+        title: Text(
+          'Step Count',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
       ),
+      backgroundColor: Colors.black87,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Step Count Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

@@ -12,14 +12,20 @@ class _AboutViewState extends State<AboutView> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('About'),
+        title: Text(
+          'About',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.pink,
       ),
+      backgroundColor: Colors.pink[200],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'About Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

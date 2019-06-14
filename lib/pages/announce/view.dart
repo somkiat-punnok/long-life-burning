@@ -12,14 +12,20 @@ class _AnnounceViewState extends State<AnnounceView> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('Announce'),
+        title: Text(
+          'Announce',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue,
       ),
+      backgroundColor: Colors.blue[200],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Announce Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

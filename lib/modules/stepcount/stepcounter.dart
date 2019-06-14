@@ -1,4 +1,4 @@
-import 'dart:math';
+/*import 'dart:math';
 import 'dart:async';
 import 'package:pedometer/pedometer.dart';
 
@@ -67,4 +67,4 @@ class StepCounter {
     var calories = _kmx;
     _calories = "$calories";
   }
-}
+}*/

@@ -12,14 +12,20 @@ class _NearbyViewState extends State<NearbyView> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('Nearby'),
+        title: Text(
+          'Nearby',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.orange,
       ),
+      backgroundColor: Colors.orange[200],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Nearby Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),

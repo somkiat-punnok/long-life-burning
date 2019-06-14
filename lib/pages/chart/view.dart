@@ -12,14 +12,20 @@ class _ChartViewState extends State<ChartView> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar:  PlatformAppBar(
-        title: Text('Chart'),
+        title: Text(
+          'Chart',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
       ),
+      backgroundColor: Colors.green[200],
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Chart Page',
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
