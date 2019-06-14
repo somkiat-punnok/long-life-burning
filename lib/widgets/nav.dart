@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:long_life_burning/contents/content.dart';
 import 'package:long_life_burning/routes/route.dart';
 
 class NavBar extends StatefulWidget {
@@ -11,7 +12,7 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
 
   int _pageIndex = 0;
-  Widget currentPage = Routes.page[0];
+  Widget currentPage = Routes.pageNavBar[0];
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override
@@ -26,8 +27,8 @@ class _NavBarState extends State<NavBar> {
 
     void onChanged (int index) {
       setState(() {
+        currentPage = Routes.pageNavBar[index];
         _pageIndex = index;
-        currentPage = Routes.page[index];
       });
     }
 
@@ -43,7 +44,7 @@ class _NavBarState extends State<NavBar> {
         items: [
           navBarItem('', Icons.home),
           navBarItem('', Icons.near_me),
-          navBarItem('', Icons.memory),
+          navBarItem('', IconsAndroid.marathon),
           navBarItem('', Icons.group),
           navBarItem('', Icons.view_headline),
         ],
@@ -51,21 +52,14 @@ class _NavBarState extends State<NavBar> {
       ios: (_) => CupertinoTabBarData(
         currentIndex: _pageIndex,
         itemChanged: onChanged,
-        activeColor: Colors.blue,
-        inactiveColor: Colors.black54,
-        border: Border(
-          top: BorderSide(
-            color: Colors.blue,
-            width: 1.0, // One physical pixel.
-            style: BorderStyle.solid,
-          ),
-        ),
+        //activeColor: Colors.green,
+        //inactiveColor: Colors.orange,
         items: [
-          navBarItem('', CupertinoIcons.book),
-          navBarItem('', CupertinoIcons.book),
-          navBarItem('', CupertinoIcons.book),
+          navBarItem('', IconsiOS.home),
+          navBarItem('', IconsiOS.near_me),
+          navBarItem('', IconsiOS.marathon),
           navBarItem('', CupertinoIcons.group_solid),
-          navBarItem('', CupertinoIcons.profile_circled),
+          navBarItem('', IconsiOS.view_headline),
         ],
       ),
     );

@@ -10,7 +10,7 @@ import 'package:long_life_burning/pages/stepcount/view.dart';
 
 class Routes {
 
-  static final List<Widget> page = [
+  static final List<Widget> pageNavBar = [
     StepCountView(),
     NearbyView(),
     AnnounceView(),
