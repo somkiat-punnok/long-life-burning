@@ -12,6 +12,7 @@ import 'package:long_life_burning/pages/stepcount/view.dart';
 
 class Routes {
 
+  // Page route
   static Map<String, WidgetBuilder> route = {
     Content.Index_Page: (context) => Index(),
     Content.About_Page: (context) => AboutView(),
@@ -23,7 +24,8 @@ class Routes {
     Content.StepCount_Page: (context) => StepCountView(),
   };
 
-  static final List<Widget> page = [
+  // Page view on navBar
+  static final List<Widget> pageNavBar = [
     StepCountView(),
     NearbyView(),
     AnnounceView(),
