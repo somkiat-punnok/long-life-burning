@@ -11,6 +11,8 @@ class _NotifyViewState extends State<NotifyView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(),
+      ios: (_) => CupertinoPageScaffoldData(),
       appBar:  PlatformAppBar(
         title: Text(
           'Notify',

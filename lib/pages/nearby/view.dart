@@ -11,6 +11,8 @@ class _NearbyViewState extends State<NearbyView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(),
+      ios: (_) => CupertinoPageScaffoldData(),
       appBar:  PlatformAppBar(
         title: Text(
           'Nearby',

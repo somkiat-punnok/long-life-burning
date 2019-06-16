@@ -11,6 +11,8 @@ class _GroupViewState extends State<GroupView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(),
+      ios: (_) => CupertinoPageScaffoldData(),
       appBar:  PlatformAppBar(
         title: Text(
           'Group',

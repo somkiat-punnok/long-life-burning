@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:long_life_burning/routes/route.dart';
 import 'package:long_life_burning/widgets/nav.dart';
 
 class App extends StatefulWidget {
@@ -10,24 +11,27 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
 
-  // _AppState() {
-  // }
-  
   @override
   Widget build(BuildContext context) {
 
-    final themeData = new ThemeData(
-      primarySwatch: Colors.blue,
-    );
-
-    final cupertinoTheme = new CupertinoThemeData(
-      primaryColor: Colors.blue,
-    );
-
     return PlatformApp(
-      android: (_) => new MaterialAppData(theme: themeData),
-      ios: (_) => new CupertinoAppData(theme: cupertinoTheme),
-      home: NavBar(),
+      android: (_) => new MaterialAppData(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          platform: TargetPlatform.android,
+        ),
+        routes: Routes.route,
+        home: NavBar(),
+      ),
+      ios: (_) => new CupertinoAppData(
+        debugShowCheckedModeBanner: false,
+        theme: CupertinoThemeData(
+          primaryColor: CupertinoColors.activeBlue,
+        ),
+        routes: Routes.route,
+        home: NavBar(),
+      ),
     );
 
   }

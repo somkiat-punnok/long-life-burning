@@ -11,6 +11,8 @@ class _ChartViewState extends State<ChartView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(),
+      ios: (_) => CupertinoPageScaffoldData(),
       appBar:  PlatformAppBar(
         title: Text(
           'Chart',

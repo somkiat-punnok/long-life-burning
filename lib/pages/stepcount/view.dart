@@ -16,6 +16,8 @@ class _StepCountViewState extends State<StepCountView> {
   Widget build(BuildContext context) {
 
     return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(),
+      ios: (_) => CupertinoPageScaffoldData(),
       appBar:  PlatformAppBar(
         title: Text(
           'Step Count',

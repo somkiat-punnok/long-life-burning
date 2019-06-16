@@ -11,23 +11,46 @@ class _AnnounceViewState extends State<AnnounceView> {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar:  PlatformAppBar(
-        title: Text(
-          'Announce',
-          style: TextStyle(color: Colors.white),
+      android: (_) => MaterialScaffoldData(
+        appBar: AppBar(
+          title: Text(
+            'Announce',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.blue,
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blue[200],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Announce Page',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
       ),
-      backgroundColor: Colors.blue[200],
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Announce Page',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
+      ios: (_) => CupertinoPageScaffoldData(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(
+            'Announce',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Announce Page',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );
