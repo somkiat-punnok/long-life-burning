@@ -1,21 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-class Content {
-  
-  // Key others
-  //static final String API_Key = '';
-
-  // Routing name
-  static final String Index_Page = '/';
-  static final String About_Page = '/about';
-  static final String Announce_Page = '/announce';
-  static final String Chart_Page = '/chart';
-  static final String Group_Page = '/group';
-  static final String Nearby_Page = '/nearby';
-  static final String Notify_Page = '/notify';
-  static final String StepCount_Page = '/stepcount';
-
-}
 
 class IconsiOS {
 
@@ -38,7 +22,13 @@ class IconsiOS {
     fontPackage: CupertinoIcons.iconFontPackage
   );
 
-  static const IconData view_headline = IconData(
+  static const IconData group = IconData(
+    0xf47c,
+    fontFamily: CupertinoIcons.iconFont,
+    fontPackage: CupertinoIcons.iconFontPackage
+  );
+
+  static const IconData others = IconData(
     0xf394,
     fontFamily: CupertinoIcons.iconFont,
     fontPackage: CupertinoIcons.iconFontPackage
@@ -49,8 +39,28 @@ class IconsiOS {
 class IconsAndroid {
 
   // Icons on Android
+  static const IconData home = IconData(
+    0xe88a,
+    fontFamily: 'MaterialIcons'
+  );
+
+  static const IconData near_me = IconData(
+    0xe569,
+    fontFamily: 'MaterialIcons'
+  );
+
   static const IconData marathon = IconData(
     0xe322,
+    fontFamily: 'MaterialIcons'
+  );
+
+  static const IconData group = IconData(
+    0xe7ef,
+    fontFamily: 'MaterialIcons'
+  );
+
+  static const IconData others = IconData(
+    0xe8ee,
     fontFamily: 'MaterialIcons'
   );
 

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:long_life_burning/contents/content.dart';
+import 'package:long_life_burning/constants/constant.dart';
 import 'package:long_life_burning/screen/index.dart';
 // Page
 import 'package:long_life_burning/pages/about/view.dart';
@@ -14,14 +14,14 @@ class Routes {
 
   // Page route
   static Map<String, WidgetBuilder> route = {
-    Content.Index_Page: (context) => Index(),
-    Content.About_Page: (context) => AboutView(),
-    Content.Announce_Page: (context) => AnnounceView(),
-    Content.Chart_Page: (context) => ChartView(),
-    Content.Group_Page: (context) => GroupView(),
-    Content.Nearby_Page: (context) => NearbyView(),
-    Content.Notify_Page: (context) => NotifyView(),
-    Content.StepCount_Page: (context) => StepCountView(),
+    Constants.Index_Page: (context) => Index(),
+    Constants.About_Page: (context) => AboutView(),
+    Constants.Announce_Page: (context) => AnnounceView(),
+    Constants.Chart_Page: (context) => ChartView(),
+    Constants.Group_Page: (context) => GroupView(),
+    Constants.Nearby_Page: (context) => NearbyView(),
+    Constants.Notify_Page: (context) => NotifyView(),
+    Constants.StepCount_Page: (context) => StepCountView(),
   };
 
   // Page view on navBar
