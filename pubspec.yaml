@@ -10,12 +10,11 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
-  #font_awesome_flutter: ^8.4.0
   flutter_platform_widgets: ^0.10.0
+  shared_preferences: 0.5.3+1
+  background_fetch: ^0.2.0
   #page_transition: ^1.1.0
-  #fluro: ^1.4.0
   #flutter_local_notifications: ^0.7.1+1
-  #table_calendar: ^1.2.2
 
   # Authentication
   #firebase_auth: ^0.11.1+6
@@ -59,9 +58,10 @@ flutter:
         - asset: assets/fonts/sarabun/Sarabun-Bold.ttf
         - asset: assets/fonts/sarabun/Sarabun-Italic.ttf
         - asset: assets/fonts/sarabun/Sarabun-BoldItalic.ttf
-          style: regular
+          style: normal # italic or normal
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  #         weight: 700 # between 100 and 900
