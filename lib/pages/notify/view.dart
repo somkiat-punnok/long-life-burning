@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:long_life_burning/constants/platform.dart';
+import 'package:long_life_burning/widgets/scaffold.dart';
+import 'package:long_life_burning/widgets/appbar.dart';
 
 class NotifyView extends StatefulWidget {
   @override
@@ -8,19 +10,43 @@ class NotifyView extends StatefulWidget {
 }
 
 class _NotifyViewState extends State<NotifyView> {
+
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(),
-      ios: (_) => CupertinoPageScaffoldData(),
-      appBar:  PlatformAppBar(
+
+    if ( Platforms.isIOS ) {
+      return IOSScaffold(
+        appBar: IOSAppBar(
+          title: Text(
+            'Notify',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.black,
+        ),
+        backgroundColor: Colors.black87,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Notify Page',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return AndroidScaffold(
+      appBar:  AndroidAppBar(
         title: Text(
           'Notify',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.brown,
+        backgroundColor: Colors.black,
       ),
-      backgroundColor: Colors.brown[200],
+      backgroundColor: Colors.black87,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -33,5 +59,7 @@ class _NotifyViewState extends State<NotifyView> {
         ),
       ),
     );
+
   }
+
 }

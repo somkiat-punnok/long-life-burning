@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:long_life_burning/constants/platform.dart';
+import 'package:long_life_burning/widgets/scaffold.dart';
+import 'package:long_life_burning/widgets/appbar.dart';
 
 class AnnounceView extends StatefulWidget {
   @override
@@ -8,22 +10,23 @@ class AnnounceView extends StatefulWidget {
 }
 
 class _AnnounceViewState extends State<AnnounceView> {
+
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(
-        appBar: AppBar(
+    
+    if ( Platforms.isIOS ) {
+      return IOSScaffold(
+        appBar: IOSAppBar(
           title: Text(
             'Announce',
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.black,
         ),
-        backgroundColor: Colors.blue[200],
+        backgroundColor: Colors.black87,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
                 'Announce Page',
@@ -32,27 +35,31 @@ class _AnnounceViewState extends State<AnnounceView> {
             ],
           ),
         ),
+      );
+    }
+
+    return AndroidScaffold(
+      appBar:  AndroidAppBar(
+        title: Text(
+          'Announce',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black,
       ),
-      ios: (_) => CupertinoPageScaffoldData(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(
-            'Announce',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Announce Page',
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
-          ),
+      backgroundColor: Colors.black87,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Announce Page',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
         ),
       ),
     );
+
   }
+
 }

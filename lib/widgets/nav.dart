@@ -1,73 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:long_life_burning/contents/content.dart';
-import 'package:long_life_burning/routes/route.dart';
 
-class NavBar extends StatefulWidget {
-  @override
-  _NavBarState createState() => _NavBarState();
-}
+class AndroidNavBar extends StatelessWidget {
 
-class _NavBarState extends State<NavBar> {
+  AndroidNavBar({
+    Key key,
+    this.widgetKey,
+    this.index = 0,
+    this.callback,
+    this.items,
+  }) : super(key: key);
 
-  int _pageIndex = 0;
-  Widget currentPage = Routes.pageNavBar[0];
-  final PageStorageBucket bucket = PageStorageBucket();
+  final Key widgetKey;
+  final int index;
+  final ValueChanged<int> callback;
+  final List<BottomNavigationBarItem> items;
 
   @override
   Widget build(BuildContext context) {
 
-    BottomNavigationBarItem navBarItem(String title, IconData icon) {
-      return new BottomNavigationBarItem(
-        title: Text(title),
-        icon: Icon(icon),
-      );
-    }
-
-    void onChanged (int index) {
-      setState(() {
-        currentPage = Routes.pageNavBar[index];
-        _pageIndex = index;
-      });
-    }
-
-    var navBar = new PlatformNavBar(
-      android: (_) => MaterialNavBarData(
-        currentIndex: _pageIndex,
-        itemChanged: onChanged,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+    return BottomAppBar(
+      key: widgetKey,
+      color: Colors.white,
+      clipBehavior: Clip.none,
+      child: BottomNavigationBar(
+        items: items,
+        currentIndex: index,
+        onTap: callback,
+        iconSize: 28.0,
+        type: BottomNavigationBarType.fixed,
+        key: widgetKey,
+        backgroundColor: Colors.white,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.black54,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          navBarItem('', Icons.home),
-          navBarItem('', Icons.near_me),
-          navBarItem('', IconsAndroid.marathon),
-          navBarItem('', Icons.group),
-          navBarItem('', Icons.view_headline),
-        ],
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
       ),
-      ios: (_) => CupertinoTabBarData(
-        currentIndex: _pageIndex,
-        itemChanged: onChanged,
-        //activeColor: Colors.green,
-        //inactiveColor: Colors.orange,
-        items: [
-          navBarItem('', IconsiOS.home),
-          navBarItem('', IconsiOS.near_me),
-          navBarItem('', IconsiOS.marathon),
-          navBarItem('', CupertinoIcons.group_solid),
-          navBarItem('', IconsiOS.view_headline),
-        ],
-      ),
-    );
-
-    return PlatformScaffold(
-      body: PageStorage(child: currentPage, bucket: bucket),
-      bottomNavBar: navBar,
     );
 
   }
+
+}
+
+class IOSNavBar extends StatelessWidget implements PreferredSizeWidget  {
+
+  IOSNavBar({
+    Key key,
+    this.widgetKey,
+    this.index = 0,
+    this.callback,
+    this.items,
+  }) : super(key: key);
+
+  final Key widgetKey;
+  final int index;
+  final ValueChanged<int> callback;
+  final List<BottomNavigationBarItem> items;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(50.0);
+
+  @override
+  Widget build(BuildContext context) {
+
+    return CupertinoTabBar(
+      key: widgetKey,
+      currentIndex: index,
+      onTap: callback,
+      items: items,
+      activeColor: CupertinoColors.activeBlue,
+      inactiveColor: CupertinoColors.inactiveGray,
+      backgroundColor: CupertinoColors.lightBackgroundGray,
+      iconSize: 30.0,
+      border: Border(
+        top: BorderSide(
+          color: Color(0x4C000000),
+          width: 0.0, // One physical pixel.
+          style: BorderStyle.solid,
+        ),
+      ),
+    );
+
+  }
+
 }
