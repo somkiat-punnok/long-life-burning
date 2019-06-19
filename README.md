@@ -1,6 +1,6 @@
-# long_life_burning
+# Long Life Burning
 
-Project application comunity for workout.
+Application community for workout.
 
 ## Getting Started
 
