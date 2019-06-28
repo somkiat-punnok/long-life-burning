@@ -1,7 +1,6 @@
-import 'dart:math';
-import 'dart:async';
+//import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pedometer/pedometer.dart';
+//import 'package:pedometer/pedometer.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,116 +11,85 @@ class StepCount extends StatefulWidget {
 
 class _StepCountState extends State<StepCount> {
 
-  String muestrePasos = "";
+  //StreamSubscription<int> _subscription;
   String _km = "Unknown";
   String _calories = "Unknown";
+  String _stepCountValue = "Unknown";
 
-  String _stepCountValue = 'Unknown';
-  StreamSubscription<int> _subscription;
-
-  double _numerox; //numero pasos
-  double _convert;
+  //double _number;
   double _kmx;
-  double burnedx;
-  double _porciento;
-  // double percent=0.1;
 
-  @override
-  void initState() {
-    super.initState();
-    //initPlatformState();
-    setUpPedometer();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   setUpPedometer();
+  // }
 
-  //inicia codigo pedometer
-  void setUpPedometer() {
-    Pedometer pedometer = new Pedometer();
-    _subscription = pedometer.stepCountStream.listen( _onData,
-        onError: _onError, onDone: _onDone, cancelOnError: true );
-  }
+  // void setUpPedometer() {
+  //   Pedometer pedometer = Pedometer();
+  //   _subscription = pedometer.stepCountStream.listen( _onData,
+  //     onError: _onError, onDone: _onDone, cancelOnError: true );
+  // }
 
-  void _onData(int stepCountValue) async {
-    setState(() {
-      _stepCountValue = "$stepCountValue";
-    });
+  // void _onData(int stepCountValue) async {
+  //   setState(() {
+  //     _stepCountValue = "$stepCountValue";
+  //   });
+  //   var dist = stepCountValue;
+  //   double y = (dist + .0);
+  //   setState(() {
+  //     _number = y;
+  //   });
+  //   getDistanceRun(_number);
+  // }
 
-    var dist = stepCountValue;
-    double y = (dist + .0);
+  // void reset() {
+  //   setState(() {
+  //     int stepCountValue = 0;
+  //     _stepCountValue = "$stepCountValue";
+  //   });
+  // }
 
-    setState(() {
-      _numerox = y;
-    });
+  // void _onDone() {}
 
-    var long3 = (_numerox);
-    long3 = num.parse(y.toStringAsFixed(2));
-    var long4 = (long3 / 10000);
+  // void _onError(error) {
+  //   print("Flutter Pedometer Error: $error");
+  // }
 
-    int decimals = 1;
-    int fac = pow(10, decimals);
-    double d = long4;
-    d = (d * fac).round() / fac;
-    print("d: $d");
+  // //function to determine the distance run in kilometers using number of steps
+  // void getDistanceRun(double _number) {
+  //   var distance = ((_number * 78) / 100000);
+  //   distance = num.parse(distance.toStringAsFixed(2)); //dos decimales
+  //   var distancekm = distance * 34;
+  //   distancekm = num.parse(distancekm.toStringAsFixed(2));
+  //   setState(() {
+  //     _km = "$distance";
+  //   });
+  //   setState(() {
+  //     _kmx = num.parse(distancekm.toStringAsFixed(2));
+  //   });
+  // }
 
-    getDistanceRun(_numerox);
-
-    setState(() {
-      _convert = d;
-    });
-  }
-
-  void reset() {
-    setState(() {
-      int stepCountValue = 0;
-      stepCountValue = 0;
-      _stepCountValue = "$stepCountValue";
-    });
-  }
-
-  void _onDone() {}
-
-  void _onError(error) {
-    print("Flutter Pedometer Error: $error");
-  }
-
-  //function to determine the distance run in kilometers using number of steps
-  void getDistanceRun(double _numerox) {
-    var distance = ((_numerox * 78) / 100000);
-    distance = num.parse(distance.toStringAsFixed(2)); //dos decimales
-    var distancekmx = distance * 34;
-    distancekmx = num.parse(distancekmx.toStringAsFixed(2));
-    //print(distance.runtimeType);
-    setState(() {
-      _km = "$distance";
-      //print(_km);
-    });
-    setState(() {
-      _kmx = num.parse(distancekmx.toStringAsFixed(2));
-    });
-  }
-
-  //function to determine the calories burned in kilometers using number of steps
   void getBurnedRun() {
     setState(() {
-      var calories = _kmx; //dos decimales
+      var calories = _kmx;
       _calories = "$calories";
-      //print(_calories);
     });
   }
-
-  //fin codigo pedometer
 
   @override
   Widget build(BuildContext context) {
-    //print(_stepCountValue);
+
     getBurnedRun();
-    return new MaterialApp(
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: const Text('Step Counter app'),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Step Counter app'),
           backgroundColor: Colors.black54,
         ),
-        body: new ListView(
+        body: ListView(
           padding: EdgeInsets.all(5.0),
           children: <Widget>[
             Container(
@@ -141,12 +109,12 @@ class _StepCountState extends State<StepCount> {
                     topLeft: Radius.circular(27.0),
                     topRight: Radius.circular(27.0),
                   )),
-                   child: new CircularPercentIndicator(
+                   child: CircularPercentIndicator(
                   radius: 200.0,
                   lineWidth: 13.0,
                   animation: true,
                   center: Container(
-                    child: new Row(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
@@ -176,9 +144,9 @@ class _StepCountState extends State<StepCount> {
                   ),
                   percent: 0.217,
                   //percent: _convert,
-                  footer: new Text(
+                  footer: Text(
                     "Pasos:  $_stepCountValue",
-                    style: new TextStyle(
+                    style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0,
                         color: Colors.purple),
@@ -187,146 +155,146 @@ class _StepCountState extends State<StepCount> {
                   progressColor: Colors.purpleAccent,
                 ),
             ),
-             Divider(
-                height: 5.0,
+            Divider(
+              height: 5.0,
+            ),
+            Container(
+              width: 80,
+              height: 100,
+              padding: EdgeInsets.only(left: 25.0, top: 10.0, bottom: 10.0),
+              color: Colors.transparent,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    child: Card(
+                      child: Container(
+                        height: 80.0,
+                        width: 80.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/distance.png"),
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                        child: Text(
+                          "$_km Km",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 14.0),
+                        ),
+                      ),
+                      color: Colors.white54,
+                    ),
+                  ),
+                  VerticalDivider(
+                    width: 20.0,
+                  ),
+                  Container(
+                    child: Card(
+                      child: Container(
+                        height: 80.0,
+                        width: 80.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/burned.png"),
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                      ),
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  VerticalDivider(
+                    width: 20.0,
+                  ),
+                  Container(
+                    child: Card(
+                      child: Container(
+                        height: 80.0,
+                        width: 80.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/step.png"),
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                      ),
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ],
               ),
-                            Container(
-                width: 80,
-                height: 100,
-                padding: EdgeInsets.only(left: 25.0, top: 10.0, bottom: 10.0),
-                color: Colors.transparent,
-                child: Row(
-                  children: <Widget>[
-                    new Container(
-                      child: new Card(
-                        child: Container(
-                          height: 80.0,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/distance.png"),
-                              fit: BoxFit.fitWidth,
-                              alignment: Alignment.topCenter,
-                            ),
-                          ),
-                          child: Text(
-                            "$_km Km",
-                            textAlign: TextAlign.right,
-                            style: new TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14.0),
-                          ),
+            ),
+            Divider(
+              height: 2,
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 2.0),
+              width: 150, //ancho
+              height: 30, //largo tambien por numero height: 300
+              color: Colors.transparent,
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(left: 40.0),
+                    child: Card(
+                      child: Container(
+                        child: Text(
+                          "$_km Km",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.white),
                         ),
-                        color: Colors.white54,
                       ),
+                      color: Colors.purple,
                     ),
-                    VerticalDivider(
-                      width: 20.0,
-                    ),
-                    new Container(
-                      child: new Card(
-                        child: Container(
-                          height: 80.0,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/burned.png"),
-                              fit: BoxFit.fitWidth,
-                              alignment: Alignment.topCenter,
-                            ),
-                          ),
+                  ),
+                  VerticalDivider(
+                    width: 20.0,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Card(
+                      child: Container(
+                        child: Text(
+                          "$_calories kCal",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.white),
                         ),
-                        color: Colors.transparent,
                       ),
+                      color: Colors.red,
                     ),
-                    VerticalDivider(
-                      width: 20.0,
-                    ),
-                    new Container(
-                      child: new Card(
-                        child: Container(
-                          height: 80.0,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/step.png"),
-                              fit: BoxFit.fitWidth,
-                              alignment: Alignment.topCenter,
-                            ),
-                          ),
+                  ),
+                  VerticalDivider(
+                    width: 5.0,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Card(
+                      child: Container(
+                        child: Text(
+                          "$_stepCountValue Steps",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                              color: Colors.white),
                         ),
-                        color: Colors.transparent,
                       ),
+                      color: Colors.black,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Divider(
-                height: 2,
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 2.0),
-                width: 150, //ancho
-                height: 30, //largo tambien por numero height: 300
-                color: Colors.transparent,
-                child: Row(
-                  children: <Widget>[
-                    new Container(
-                      padding: EdgeInsets.only(left: 40.0),
-                      child: new Card(
-                        child: Container(
-                          child: Text(
-                            "$_km Km",
-                            textAlign: TextAlign.right,
-                            style: new TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.0,
-                                color: Colors.white),
-                          ),
-                        ),
-                        color: Colors.purple,
-                      ),
-                    ),
-                    VerticalDivider(
-                      width: 20.0,
-                    ),
-                    new Container(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: new Card(
-                        child: Container(
-                          child: Text(
-                            "$_calories kCal",
-                            textAlign: TextAlign.right,
-                            style: new TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.0,
-                                color: Colors.white),
-                          ),
-                        ),
-                        color: Colors.red,
-                      ),
-                    ),
-                    VerticalDivider(
-                      width: 5.0,
-                    ),
-                    new Container(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: new Card(
-                        child: Container(
-                          child: Text(
-                            "$_stepCountValue Steps",
-                            textAlign: TextAlign.right,
-                            style: new TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.0,
-                                color: Colors.white),
-                          ),
-                        ),
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            ),
           ],
         ),
       ),

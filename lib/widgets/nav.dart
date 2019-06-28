@@ -58,7 +58,7 @@ class IOSNavBar extends StatelessWidget implements PreferredSizeWidget  {
   final List<BottomNavigationBarItem> items;
 
   @override
-  Size get preferredSize => const Size.fromHeight(50.0);
+  Size get preferredSize => Size.fromHeight(50.0);
 
   @override
   Widget build(BuildContext context) {

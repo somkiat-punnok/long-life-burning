@@ -97,7 +97,7 @@ class IOSAppBar extends StatelessWidget implements ObstructingPreferredSizeWidge
 
   @override
   Size get preferredSize {
-    return const Size.fromHeight(44.0);
+    return Size.fromHeight(44.0);
   }
 
   @override

@@ -4,13 +4,13 @@ class Constants {
   //static final String API_Key = '';
 
   // Routing name
-  static final String Index_Page = '/';
-  static final String About_Page = '/about';
-  static final String Announce_Page = '/announce';
-  static final String Chart_Page = '/chart';
-  static final String Group_Page = '/group';
-  static final String Nearby_Page = '/nearby';
-  static final String Notify_Page = '/notify';
-  static final String StepCount_Page = '/stepcount';
+  static const String Index_Page = '/';
+  static const String About_Page = '/about';
+  static const String Announce_Page = '/announce';
+  static const String Chart_Page = '/chart';
+  static const String Group_Page = '/group';
+  static const String Nearby_Page = '/nearby';
+  static const String Notify_Page = '/notify';
+  static const String StepCount_Page = '/stepcount';
 
 }

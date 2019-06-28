@@ -30,7 +30,7 @@ class _IndexState extends State<Index> {
     Widget navBar;
 
     if ( Platforms.isIOS ) {
-      navBar = new IOSNavBar(
+      navBar = IOSNavBar(
         index: _pageIndex,
         callback: onChanged,
         items: [
@@ -48,7 +48,7 @@ class _IndexState extends State<Index> {
       );
     }
 
-    navBar = new AndroidNavBar(
+    navBar = AndroidNavBar(
       index: _pageIndex,
       callback: onChanged,
       items: [
@@ -70,7 +70,7 @@ class _IndexState extends State<Index> {
 }
 
 BottomNavigationBarItem navBarItem(String title, IconData icon) {
-  return new BottomNavigationBarItem(
+  return BottomNavigationBarItem(
     title: Text(title),
     icon: Icon(icon),
   );

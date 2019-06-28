@@ -18,7 +18,7 @@ abstract class Base<I extends Widget, A extends Widget> extends StatelessWidget 
       return iOSrun(context);
     }
 
-    return throw new UnsupportedError(
+    return throw UnsupportedError(
       'This platform is not supported: ' + Platforms.os);
   }
 
