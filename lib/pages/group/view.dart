@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/constants/platform.dart';
-import 'package:long_life_burning/widgets/scaffold.dart';
-import 'package:long_life_burning/widgets/appbar.dart';
 
 class GroupView extends StatefulWidget {
   @override
@@ -15,22 +13,31 @@ class _GroupViewState extends State<GroupView> {
   Widget build(BuildContext context) {
     
     if ( Platforms.isIOS ) {
-      return IOSScaffold(
-        appBar: IOSAppBar(
-          title: Text(
+      return CupertinoPageScaffold(
+        resizeToAvoidBottomInset: true,
+        backgroundColor: CupertinoColors.darkBackgroundGray,
+        navigationBar: CupertinoNavigationBar(
+          transitionBetweenRoutes: true,
+          middle: Text(
             'Group',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: CupertinoColors.white),
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: CupertinoColors.black,
+          border: Border(
+            bottom: BorderSide(
+              color: Color(0x4C000000),
+              width: 0.0,
+              style: BorderStyle.solid,
+            ),
+          ),
         ),
-        backgroundColor: Colors.black87,
-        body: Center(
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
                 'Group Page',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: CupertinoColors.white),
               ),
             ],
           ),
@@ -38,15 +45,17 @@ class _GroupViewState extends State<GroupView> {
       );
     }
 
-    return AndroidScaffold(
-      appBar:  AndroidAppBar(
+    return Scaffold(
+      resizeToAvoidBottomPadding: true,
+      backgroundColor: Colors.black87,
+      appBar: AppBar(
         title: Text(
           'Group',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
+        elevation: 4.0,
       ),
-      backgroundColor: Colors.black87,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
