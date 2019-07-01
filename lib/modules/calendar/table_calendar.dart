@@ -1,7 +1,7 @@
-import 'package:date_utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
+import 'package:date_utils/date_utils.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import 'package:long_life_burning/modules/calendar/customization/customization.dart';
@@ -554,6 +554,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         content = Stack(
           alignment: widget.calendarStyle.markersAlignment,
           children: children,
+          overflow: widget.calendarStyle.canEventMarkersOverflow ? Overflow.visible : Overflow.clip,
         );
       }
     }
