@@ -28,9 +28,6 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
 
   void _onVisibleDaysChanged(first, last, format) {
     setState(() {
-      if((_selectedDay.month == first.month || _selectedDay.month == last.month) && lastMonth != _selectedDay.month) {
-        lastMonth = _selectedDay.month;
-      }
       if(format == CalendarFormat.month) {
         if (first.month == DateTime.now().month && lastMonth != DateTime.now().month) {
           _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);

@@ -13,9 +13,6 @@ class CalendarLogic {
   double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleDays => _visibleDays.value;
-  String get formatButtonText => _useNextCalendarFormat
-      ? _availableCalendarFormats[_nextFormat()]
-      : _availableCalendarFormats[_calendarFormat.value];
 
   DateTime _focusedDay;
   DateTime _selectedDay;
@@ -27,12 +24,11 @@ class CalendarLogic {
   DateTime _previousLastDay;
   int _pageId;
   double _dx;
-  bool _useNextCalendarFormat;
 
   CalendarLogic(
     this._availableCalendarFormats,
     this._startingDayOfWeek,
-    this._useNextCalendarFormat, {
+  {
     DateTime initialDay,
     CalendarFormat initialFormat,
     OnVisibleDaysChanged onVisibleDaysChanged,
@@ -72,29 +68,16 @@ class CalendarLogic {
     _visibleDays.dispose();
   }
 
-  CalendarFormat _nextFormat() {
-    final formats = _availableCalendarFormats.keys.toList();
-    int id = formats.indexOf(_calendarFormat.value);
-    id = (id + 1) % formats.length;
-
-    return formats[id];
-  }
-
-  void toggleCalendarFormat() {
-    _calendarFormat.value = _nextFormat();
-  }
-
   void swipeCalendarFormat(bool isSwipeUp) {
     final formats = _availableCalendarFormats.keys.toList();
     int id = formats.indexOf(_calendarFormat.value);
 
-    // Order of CalendarFormats must be from biggest to smallest,
-    // eg.: [month, twoWeeks, week]
     if (isSwipeUp) {
       id = _clamp(0, formats.length - 1, id + 1);
     } else {
       id = _clamp(0, formats.length - 1, id - 1);
     }
+    
     _calendarFormat.value = formats[id];
   }
 
@@ -114,7 +97,7 @@ class CalendarLogic {
     _selectedDay = value;
     _focusedDay = value;
 
-    if (calendarFormat != CalendarFormat.twoWeeks || isProgrammatic) {
+    if (isProgrammatic) {
       _visibleDays.value = _getVisibleDays();
     }
 
@@ -124,8 +107,6 @@ class CalendarLogic {
   void selectPrevious() {
     if (calendarFormat == CalendarFormat.month) {
       _selectPreviousMonth();
-    } else if (calendarFormat == CalendarFormat.twoWeeks) {
-      _selectPreviousTwoWeeks();
     } else {
       _selectPreviousWeek();
     }
@@ -137,8 +118,6 @@ class CalendarLogic {
   void selectNext() {
     if (calendarFormat == CalendarFormat.month) {
       _selectNextMonth();
-    } else if (calendarFormat == CalendarFormat.twoWeeks) {
-      _selectNextTwoWeeks();
     } else {
       _selectNextWeek();
     }
@@ -153,23 +132,6 @@ class CalendarLogic {
 
   void _selectNextMonth() {
     _focusedDay = Utils.nextMonth(_focusedDay);
-  }
-
-  void _selectPreviousTwoWeeks() {
-    if (_visibleDays.value.take(7).contains(_focusedDay)) {
-      // in top row
-      _focusedDay = Utils.previousWeek(_focusedDay);
-    } else {
-      // in bottom row OR not visible
-      _focusedDay = Utils.previousWeek(_focusedDay.subtract(const Duration(days: 7)));
-    }
-  }
-
-  void _selectNextTwoWeeks() {
-    if (!_visibleDays.value.skip(7).contains(_focusedDay)) {
-      // not in bottom row [eg: in top row OR not visible]
-      _focusedDay = Utils.nextWeek(_focusedDay);
-    }
   }
 
   void _selectPreviousWeek() {
@@ -203,11 +165,6 @@ class CalendarLogic {
   List<DateTime> _getVisibleDays() {
     if (calendarFormat == CalendarFormat.month) {
       return _daysInMonth(_focusedDay);
-    } else if (calendarFormat == CalendarFormat.twoWeeks) {
-      return _daysInWeek(_focusedDay)
-        ..addAll(_daysInWeek(
-          _focusedDay.add(const Duration(days: 7)),
-        ));
     } else {
       return _daysInWeek(_focusedDay);
     }

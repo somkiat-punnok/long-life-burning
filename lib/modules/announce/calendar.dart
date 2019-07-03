@@ -63,7 +63,6 @@ class _CalendarState extends State<Calendar> {
       ),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
-        formatButtonVisible: false,
         titleTextStyle: TextStyle(color: Colors.black),
       ),
       builders: CalendarBuilders(

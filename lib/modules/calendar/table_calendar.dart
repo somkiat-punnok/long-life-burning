@@ -20,7 +20,7 @@ typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat 
 typedef String TextBuilder(DateTime date, dynamic locale);
 
 /// Format to display the `TableCalendar` with.
-enum CalendarFormat { month, twoWeeks, week }
+enum CalendarFormat { month, week }
 
 /// Available animations to update the `CalendarFormat` with.
 enum FormatAnimation { slide, scale }
@@ -153,7 +153,6 @@ class TableCalendar extends StatefulWidget {
     this.forcedCalendarFormat,
     this.availableCalendarFormats = const {
       CalendarFormat.month: 'Month',
-      CalendarFormat.twoWeeks: '2 weeks',
       CalendarFormat.week: 'Week',
     },
     this.headerVisible = true,
@@ -190,7 +189,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     _calendarLogic = CalendarLogic(
       widget.availableCalendarFormats,
       widget.startingDayOfWeek,
-      widget.headerStyle.formatButtonShowsNext,
       initialFormat: widget.initialCalendarFormat,
       initialDay: widget.selectedDay,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
@@ -253,12 +251,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     });
   }
 
-  void _toggleCalendarFormat() {
-    setState(() {
-      _calendarLogic.toggleCalendarFormat();
-    });
-  }
-
   void _onHorizontalSwipe(DismissDirection direction) {
     if (direction == DismissDirection.startToEnd) {
       // Swipe right
@@ -309,7 +301,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildHeader() {
-    final children = [
+    final children = widget.headerStyle.centerHeaderTitle ? [
       CustomIconButton(
         icon: widget.headerStyle.leftChevronIcon,
         onTap: _selectPrevious,
@@ -322,7 +314,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
               ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
               : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
           style: widget.headerStyle.titleTextStyle,
-          textAlign: widget.headerStyle.centerHeaderTitle ? TextAlign.center : TextAlign.start,
+          textAlign: TextAlign.center,
         ),
       ),
       CustomIconButton(
@@ -331,32 +323,21 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         margin: widget.headerStyle.rightChevronMargin,
         padding: widget.headerStyle.rightChevronPadding,
       ),
+    ] : [
+      Expanded(
+        child: Text(
+          widget.headerStyle.titleTextBuilder != null
+              ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+              : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
+          style: widget.headerStyle.titleTextStyle,
+          textAlign: TextAlign.start,
+        ),
+      ),
     ];
-
-    if (widget.headerStyle.formatButtonVisible &&
-        widget.availableCalendarFormats.length > 1 &&
-        widget.forcedCalendarFormat == null) {
-      children.insert(2, SizedBox(width: 8.0));
-      children.insert(3, _buildFormatButton());
-    }
 
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: children,
-    );
-  }
-
-  Widget _buildFormatButton() {
-    return GestureDetector(
-      onTap: _toggleCalendarFormat,
-      child: Container(
-        decoration: widget.headerStyle.formatButtonDecoration,
-        padding: widget.headerStyle.formatButtonPadding,
-        child: Text(
-          _calendarLogic.formatButtonText,
-          style: widget.headerStyle.formatButtonTextStyle,
-        ),
-      ),
     );
   }
 
@@ -582,8 +563,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final isToday = widget.builders.todayDayBuilder != null && tIsToday;
     final isOutsideHoliday = widget.builders.outsideHolidayDayBuilder != null && tIsOutside && tIsHoliday;
     final isHoliday = widget.builders.holidayDayBuilder != null && !tIsOutside && tIsHoliday;
-    final isOutsideWeekend =
-        widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
+    final isOutsideWeekend = widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend && !tIsHoliday;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend && !tIsHoliday;
 

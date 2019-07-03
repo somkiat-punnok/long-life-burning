@@ -61,10 +61,6 @@ class CellWidget extends StatelessWidget {
       return calendarStyle.todayStyle;
     } else if (isSelected) {
       return calendarStyle.selectedStyle;
-    } else if (isOutsideMonth && isHoliday) {
-      return calendarStyle.outsideHolidayStyle;
-    } else if (isHoliday) {
-      return calendarStyle.holidayStyle;
     } else if (isOutsideMonth && isWeekend) {
       return calendarStyle.outsideWeekendStyle;
     } else if (isOutsideMonth) {
