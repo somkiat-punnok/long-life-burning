@@ -78,7 +78,7 @@ class _CalendarState extends State<Calendar> {
             ),
           );
         },
-        markersBuilder: (context, date, events, holidays) {
+        markersBuilder: (context, date, events) {
           return [
             Container(
               decoration: BoxDecoration(
@@ -139,7 +139,6 @@ class _CalendarState extends State<Calendar> {
 
   // DateTime _selectedDay;
   // Map<DateTime, List> _visibleEvents;
-  // Map<DateTime, List> _visibleHolidays;
   // List _selectedEvents;
   // AnimationController _controller;
 
@@ -149,7 +148,6 @@ class _CalendarState extends State<Calendar> {
   //   _selectedDay = DateTime.now();
   //   _selectedEvents = Event.events[_selectedDay] ?? [];
   //   _visibleEvents = Event.events;
-  //   _visibleHolidays = Event.holidays;
 
   //   _controller = AnimationController(
   //     vsync: this,
@@ -175,14 +173,6 @@ class _CalendarState extends State<Calendar> {
   //             entry.key.isBefore(last.add(const Duration(days: 1))),
   //       ),
   //     );
-
-  //     _visibleHolidays = Map.fromEntries(
-  //       Event.holidays.entries.where(
-  //         (entry) =>
-  //             entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
-  //             entry.key.isBefore(last.add(const Duration(days: 1))),
-  //       ),
-  //     );
   //   });
   // }
 
@@ -190,7 +180,6 @@ class _CalendarState extends State<Calendar> {
   //   return TableCalendar(
   //     locale: 'en_US',
   //     events: _visibleEvents,
-  //     holidays: _visibleHolidays,
   //     initialCalendarFormat: CalendarFormat.month,
   //     formatAnimation: FormatAnimation.slide,
   //     startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -221,7 +210,6 @@ class _CalendarState extends State<Calendar> {
   //   return TableCalendar(
   //     locale: 'en_US',
   //     events: _visibleEvents,
-  //     holidays: _visibleHolidays,
   //     initialCalendarFormat: CalendarFormat.month,
   //     formatAnimation: FormatAnimation.slide,
   //     startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -234,7 +222,6 @@ class _CalendarState extends State<Calendar> {
   //       selectedColor: Colors.deepOrange[400],
   //       todayColor: Colors.deepOrange[200],
   //       weekendStyle: TextStyle().copyWith(color: Colors.blue[800]),
-  //       holidayStyle: TextStyle().copyWith(color: Colors.blue[800]),
   //     ),
   //     daysOfWeekStyle: DaysOfWeekStyle(
   //       weekendStyle: TextStyle().copyWith(color: Colors.blue[600]),
@@ -278,7 +265,7 @@ class _CalendarState extends State<Calendar> {
   //           ),
   //         );
   //       },
-  //       markersBuilder: (context, date, events, holidays) {
+  //       markersBuilder: (context, date, events) {
   //         final children = <Widget>[];
 
   //         if (events.isNotEmpty) {
@@ -287,16 +274,6 @@ class _CalendarState extends State<Calendar> {
   //               right: 1,
   //               bottom: 1,
   //               child: _buildEventsMarker(date, events),
-  //             ),
-  //           );
-  //         }
-
-  //         if (holidays.isNotEmpty) {
-  //           children.add(
-  //             Positioned(
-  //               right: -2,
-  //               top: -2,
-  //               child: _buildHolidaysMarker(),
   //             ),
   //           );
   //         }
@@ -332,14 +309,6 @@ class _CalendarState extends State<Calendar> {
   //         ),
   //       ),
   //     ),
-  //   );
-  // }
-
-  // Widget _buildHolidaysMarker() {
-  //   return Icon(
-  //     Icons.add_box,
-  //     size: 20.0,
-  //     color: Colors.blueGrey[800],
   //   );
   // }
 

@@ -56,7 +56,6 @@ class _StepCountState extends State<StepCount> {
   //   print("Flutter Pedometer Error: $error");
   // }
 
-  // //function to determine the distance run in kilometers using number of steps
   // void getDistanceRun(double _number) {
   //   var distance = ((_number * 78) / 100000);
   //   distance = num.parse(distance.toStringAsFixed(2)); //dos decimales
@@ -70,6 +69,7 @@ class _StepCountState extends State<StepCount> {
   //   });
   // }
 
+  // 1 step = 0.732 meters.
   void getBurnedRun() {
     setState(() {
       var calories = _kmx;

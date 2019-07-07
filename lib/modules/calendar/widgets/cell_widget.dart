@@ -9,7 +9,6 @@ class CellWidget extends StatelessWidget {
   final bool isToday;
   final bool isWeekend;
   final bool isOutsideMonth;
-  final bool isHoliday;
   final CalendarStyle calendarStyle;
 
   const CellWidget({
@@ -20,7 +19,6 @@ class CellWidget extends StatelessWidget {
     this.isToday = false,
     this.isWeekend = false,
     this.isOutsideMonth = false,
-    this.isHoliday = false,
     @required this.calendarStyle,
   })  : assert(text != null),
         assert(calendarStyle != null),
