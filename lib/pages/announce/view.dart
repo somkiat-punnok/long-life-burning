@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:long_life_burning/constants/constant.dart';
+import 'package:long_life_burning/constants/platform.dart';
+import 'package:long_life_burning/pages/announce/year.dart';
 import 'package:long_life_burning/modules/announce/events.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
-//import 'package:long_life_burning/constants/platform.dart';
 
 class AnnounceView extends StatefulWidget {
   @override
@@ -60,6 +62,21 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
     });
   }
 
+  _selection(BuildContext context) {
+    Navigator.of(context).pushNamed(Constants.Years_Page).then((res) {
+      final result = res as List;
+      setState(() {
+        if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
+          _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        }
+        else {
+          _selectedDay = DateTime(result[0], result[1], 1);
+        }
+      });
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +88,9 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
             selectedDay: _selectedDay,
             selectedEvents: _selectedEvents,
             onDaySelected: _onDaySelected,
+            onTitleText: () {
+              _selection(context);
+            },
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
           EventList(

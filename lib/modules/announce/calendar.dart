@@ -8,6 +8,7 @@ import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
 typedef void OnDaySelected(DateTime day, List events);
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
+typedef void OnTitleText();
 
 class Calendar extends StatefulWidget {
 
@@ -15,6 +16,7 @@ class Calendar extends StatefulWidget {
   final DateTime selectedDay;
   final List selectedEvents;
   final OnDaySelected onDaySelected;
+  final OnTitleText onTitleText;
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   Calendar({
@@ -23,6 +25,7 @@ class Calendar extends StatefulWidget {
     this.selectedDay,
     this.selectedEvents,
     this.onDaySelected,
+    this.onTitleText,
     this.onVisibleDaysChanged,
   }) : super(key: key);
 
@@ -47,6 +50,7 @@ class _CalendarState extends State<Calendar> {
         CalendarFormat.week: 'Week',
       },
       onDaySelected: widget.onDaySelected,
+      onTitleText: widget.onTitleText,
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,

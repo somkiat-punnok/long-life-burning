@@ -16,6 +16,9 @@ typedef void OnDaySelected(DateTime day, List events);
 /// Callback exposing currently visible days (first and last of them), as well as current `CalendarFormat`.
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 
+/// Callback exposing on click text header.
+typedef void OnTitleText();
+
 /// Builder signature for any text that can be localized and formatted with `DateFormat`.
 typedef String TextBuilder(DateTime date, dynamic locale);
 
@@ -43,6 +46,9 @@ class TableCalendar extends StatefulWidget {
   /// Contains a `List` of objects (eg. events) assigned to particular `DateTime`s.
   /// Each `DateTime` inside this `Map` should get its own `List` of above mentioned objects.
   final Map<DateTime, List> events;
+
+  /// Called whenever any title gets tapped.
+  final OnTitleText onTitleText;
 
   /// Called whenever any day gets tapped.
   final OnDaySelected onDaySelected;
@@ -139,6 +145,7 @@ class TableCalendar extends StatefulWidget {
     this.locale,
     this.events = const {},
     this.onDaySelected,
+    this.onTitleText,
     this.onUnavailableDaySelected,
     this.onVisibleDaysChanged,
     this.selectedDay,
@@ -304,12 +311,15 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         padding: widget.headerStyle.leftChevronPadding,
       ),
       Expanded(
-        child: Text(
-          widget.headerStyle.titleTextBuilder != null
-              ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
-              : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
-          style: widget.headerStyle.titleTextStyle,
-          textAlign: TextAlign.center,
+        child: GestureDetector(
+          child: Text(
+            widget.headerStyle.titleTextBuilder != null
+                ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+                : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
+            style: widget.headerStyle.titleTextStyle,
+            textAlign: TextAlign.center,
+          ),
+          onTap: widget.onTitleText,
         ),
       ),
       CustomIconButton(
@@ -320,12 +330,15 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
     ] : [
       Expanded(
-        child: Text(
-          widget.headerStyle.titleTextBuilder != null
-              ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
-              : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
-          style: widget.headerStyle.titleTextStyle,
-          textAlign: TextAlign.start,
+        child: GestureDetector(
+          child: Text(
+            widget.headerStyle.titleTextBuilder != null
+                ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+                : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
+            style: widget.headerStyle.titleTextStyle,
+            textAlign: TextAlign.start,
+          ),
+          onTap: widget.onTitleText,
         ),
       ),
     ];
