@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
 /// Class containing styling and configuration of `TableCalendar`'s header.

@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:date_utils/date_utils.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
-
 import 'package:long_life_burning/modules/calendar/customization/customization.dart';
 import 'package:long_life_burning/modules/calendar/logic/calendar_logic.dart';
 import 'package:long_life_burning/modules/calendar/widgets/widgets.dart';

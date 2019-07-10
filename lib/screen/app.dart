@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/constants/platform.dart';
-import 'package:long_life_burning/constants/constant.dart';
 import 'package:long_life_burning/routes/route.dart';
+import 'package:long_life_burning/screen/index.dart';
 
-class App extends StatefulWidget {
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
+class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +17,6 @@ class _AppState extends State<App> {
         ),
         home: Index(),
         routes: Routes.route,
-        //initialRoute: Constants.Index_Page,
       );
     }
     
@@ -34,7 +27,6 @@ class _AppState extends State<App> {
       ),
       home: Index(),
       routes: Routes.route,
-      //initialRoute: Constants.Index_Page,
     );
 
   }
