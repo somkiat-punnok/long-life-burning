@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/constants/constant.dart';
-import 'package:long_life_burning/constants/platform.dart';
-import 'package:long_life_burning/pages/announce/year.dart';
 import 'package:long_life_burning/modules/announce/events.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
