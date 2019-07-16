@@ -54,8 +54,8 @@ flutter:
     - assets/icons/burn.png
     - assets/icons/distance.png
     - assets/icons/runner.png
-    - assets/images/weather-bk.png
-    - assets/images/weather-bk_enlarged.png
+    - assets/images/forest.jpg
+    - assets/images/ocean.jpg
 
   fonts:
     # style italic or normal

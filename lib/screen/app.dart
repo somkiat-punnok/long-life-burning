@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/constants/platform.dart';
 import 'package:long_life_burning/routes/route.dart';
-import 'package:long_life_burning/screen/index.dart';
+import 'splash.dart';
 
 class App extends StatelessWidget {
 
@@ -22,7 +22,7 @@ class App extends StatelessWidget {
             ),
           ),
         ),
-        home: Index(),
+        home: SplashScreen(),
         routes: Routes.route,
       );
     }
@@ -39,7 +39,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      home: Index(),
+      home: SplashScreen(),
       routes: Routes.route,
     );
 
