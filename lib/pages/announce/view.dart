@@ -72,14 +72,12 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
         }
       });
     });
-    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Calendar(
             events: _events,
@@ -98,74 +96,5 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
       ),
     );
   }
-
-  // Widget _buildEventList() {
-  //   return ListView(
-  //     children: _selectedEvents
-  //         .map((event) => Container(
-  //               decoration: BoxDecoration(
-  //                 border: Border.all(width: 0.8),
-  //                 borderRadius: BorderRadius.circular(12.0),
-  //               ),
-  //               margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-  //               child: ListTile(
-  //                 title: Text(event.toString()),
-  //                 onTap: () => print('$event tapped!'),
-  //               ),
-  //             ))
-  //         .toList(),
-  //   );
-  // }
-
-  // @override
-  // Widget build(BuildContext context) {
-    
-  //   if ( Platforms.isIOS ) {
-  //     return IOSScaffold(
-  //       appBar: IOSAppBar(
-  //         title: Text(
-  //           'Announce',
-  //           style: TextStyle(color: Colors.white),
-  //         ),
-  //         backgroundColor: Colors.black,
-  //       ),
-  //       backgroundColor: Colors.black87,
-  //       body: Center(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             Text(
-  //               'Announce Page',
-  //               style: TextStyle(color: Colors.white),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     );
-  //   }
-
-  //   return AndroidScaffold(
-  //     appBar:  AndroidAppBar(
-  //       title: Text(
-  //         'Announce',
-  //         style: TextStyle(color: Colors.white),
-  //       ),
-  //       backgroundColor: Colors.black,
-  //     ),
-  //     backgroundColor: Colors.black87,
-  //     body: Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: <Widget>[
-  //           Text(
-  //             'Announce Page',
-  //             style: TextStyle(color: Colors.white),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-
-  // }
 
 }

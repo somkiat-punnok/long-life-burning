@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../customization/calendar_style.dart';
 
 class CellWidget extends StatelessWidget {
+
   final String text;
   final bool isUnavailable;
   final bool isSelected;
@@ -68,4 +69,5 @@ class CellWidget extends StatelessWidget {
       return calendarStyle.weekdayStyle;
     }
   }
+  
 }

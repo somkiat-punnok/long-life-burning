@@ -5,6 +5,7 @@ import 'package:long_life_burning/modules/calendar/month/month_title.dart';
 import 'package:long_life_burning/modules/calendar/day/day_number.dart';
 
 class MonthView extends StatelessWidget {
+
   const MonthView({
     @required this.context,
     @required this.year,
@@ -92,4 +93,5 @@ class MonthView extends StatelessWidget {
           child: buildMonthView(context),
         );
   }
+  
 }

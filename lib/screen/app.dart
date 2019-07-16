@@ -13,7 +13,14 @@ class App extends StatelessWidget {
       return CupertinoApp(
         debugShowCheckedModeBanner: false,
         theme: CupertinoThemeData(
+          brightness: Brightness.light,
           primaryColor: CupertinoColors.activeBlue,
+          textTheme: CupertinoTextThemeData(
+            textStyle: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.normal,
+            ),
+          ),
         ),
         home: Index(),
         routes: Routes.route,
@@ -23,7 +30,14 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        brightness: Brightness.light,
         primarySwatch: Colors.blue,
+        textTheme: TextTheme(
+          display1: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontStyle: FontStyle.normal,
+          ),
+        ),
       ),
       home: Index(),
       routes: Routes.route,

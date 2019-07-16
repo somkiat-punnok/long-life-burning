@@ -51,9 +51,10 @@ class _GroupViewState extends State<GroupView> {
       appBar: AppBar(
         title: Text(
           'Group',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
         elevation: 4.0,
       ),
       body: Center(

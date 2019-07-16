@@ -11,25 +11,23 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
 
-  int _pageIndex = 0;
+  int pageIndex = 0;
   Widget currentPage = Routes.pageNavBar[0];
-  final PageStorageBucket bucket = PageStorageBucket();
 
   void onChanged (int index) {
     setState(() {
       currentPage = Routes.pageNavBar[index];
-      _pageIndex = index;
+      pageIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     if ( Platforms.isIOS ) {
       return CupertinoTabScaffold(
         resizeToAvoidBottomInset: true,
         tabBar: CupertinoTabBar(
-          currentIndex: _pageIndex,
+          currentIndex: pageIndex,
           onTap: onChanged,
           items: [
             navBarItem('', IconsiOS.home),
@@ -52,16 +50,15 @@ class _IndexState extends State<Index> {
         ),
         tabBuilder: (BuildContext context, int index) {
           return CupertinoPageScaffold(
-            child: PageStorage(child: currentPage, bucket: bucket),
+            child: currentPage,
             resizeToAvoidBottomInset: true,
           );
         },
       );
     }
-
     return Scaffold(
       resizeToAvoidBottomPadding: true,
-      body: PageStorage(child: currentPage, bucket: bucket),
+      body: currentPage,
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         clipBehavior: Clip.none,
@@ -73,7 +70,7 @@ class _IndexState extends State<Index> {
             navBarItem('', IconsAndroid.group),
             navBarItem('', IconsAndroid.others),
           ],
-          currentIndex: _pageIndex,
+          currentIndex: pageIndex,
           onTap: onChanged,
           iconSize: 28.0,
           type: BottomNavigationBarType.fixed,
@@ -85,7 +82,6 @@ class _IndexState extends State<Index> {
         ),
       ),
     );
-
   }
 
 }

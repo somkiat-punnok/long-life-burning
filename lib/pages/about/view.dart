@@ -54,6 +54,7 @@ class _AboutViewState extends State<AboutView> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
+        brightness: Brightness.dark,
         elevation: 4.0,
       ),
       body: Center(

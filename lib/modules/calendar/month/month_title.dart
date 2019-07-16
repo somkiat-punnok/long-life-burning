@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/calendar/utils/dates.dart';
 
 class MonthTitle extends StatelessWidget {
+
   const MonthTitle({
     @required this.month,
     this.monthNames,
@@ -30,4 +31,5 @@ class MonthTitle extends StatelessWidget {
       ),
     );
   }
+  
 }

@@ -1,71 +1,25 @@
 import 'package:flutter/material.dart';
 
-/// Class containing styling for `TableCalendar`'s content.
 class CalendarStyle {
-  /// Style of foreground Text for regular weekdays.
+  
   final TextStyle weekdayStyle;
-
-  /// Style of foreground Text for regular weekends.
   final TextStyle weekendStyle;
-
-  /// Style of foreground Text for selected day.
   final TextStyle selectedStyle;
-
-  /// Style of foreground Text for today.
   final TextStyle todayStyle;
-
-  /// Style of foreground Text for weekdays outside of current month.
   final TextStyle outsideStyle;
-
-  /// Style of foreground Text for weekends outside of current month.
   final TextStyle outsideWeekendStyle;
-
-  /// Style of foreground Text for days outside of `startDay` - `endDay` Date range.
   final TextStyle unavailableStyle;
-
-  /// Background Color of selected day.
   final Color selectedColor;
-
-  /// Background Color of today.
   final Color todayColor;
-
-  /// Color of event markers placed on the bottom of every day containing events.
   final Color markersColor;
-
-  /// General `Alignment` for event markers.
-  /// NOTE: `markersPositionBottom` defaults to `5.0`, so you might want to set it to `null` when using `markersAlignment`.
   final Alignment markersAlignment;
-
-  /// `top` property of `Positioned` widget used for event markers.
   final double markersPositionTop;
-
-  /// `bottom` property of `Positioned` widget used for event markers.
-  /// NOTE: This defaults to `5.0`, so you might occasionally want to set it to `null`.
   final double markersPositionBottom;
-
-  /// `left` property of `Positioned` widget used for event markers.
   final double markersPositionLeft;
-
-  /// `right` property of `Positioned` widget used for event markers.
   final double markersPositionRight;
-
-  /// Maximum amount of event markers to be displayed.
   final int markersMaxAmount;
-
-  /// Specifies whether or not days outside of current month should be displayed.
-  ///
-  /// Sometimes a fragment of previous month's last week (or next month's first week) appears in current month's view.
-  /// This property defines if those should be visible (eg. with custom style) or hidden.
   final bool outsideDaysVisible;
-
-  /// Determines rendering priority for SelectedDay and Today.
-  /// * `true` - SelectedDay will have higher priority than Today
-  /// * `false` - Today will have higher priority than SelectedDay
   final bool renderSelectedFirst;
-
-  /// Specifies if the rendered event markers for a date can overflow the boundaries of that date cell.
-  /// * `true` - The event markers will draw over the cell boundaries
-  /// * `false` - The event markers will not draw over the cell boundaries and will be cut off if they are too big.
   final bool canEventMarkersOverflow;
 
   const CalendarStyle({
@@ -89,4 +43,5 @@ class CalendarStyle {
     this.renderSelectedFirst = true,
     this.canEventMarkersOverflow = false,
   });
+  
 }

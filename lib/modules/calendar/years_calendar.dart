@@ -3,7 +3,8 @@ import 'package:long_life_burning/modules/calendar/utils/dates.dart';
 import 'package:long_life_burning/modules/calendar/utils/screen_sizes.dart';
 import 'package:long_life_burning/modules/calendar/year/year_view.dart';
 
-class YearsCalendar extends StatefulWidget {
+class YearsCalendar extends StatelessWidget {
+
   YearsCalendar({
     @required this.context,
     @required this.initialDate,
@@ -29,27 +30,22 @@ class YearsCalendar extends StatefulWidget {
   final List<String> monthNames;
   final Function onMonthTap;
 
-  @override
-  _YearsCalendarState createState() => _YearsCalendarState();
-}
-
-class _YearsCalendarState extends State<YearsCalendar> {
   /// Gets a widget with the view of the given year.
   YearView _getYearView(int year, bool isToyear) {
     return YearView(
       context: context,
       year: year,
       isToyear: isToyear,
-      todayColor: widget.todayColor,
-      monthNames: widget.monthNames,
-      onMonthTap: widget.onMonthTap,
+      todayColor: todayColor,
+      monthNames: monthNames,
+      onMonthTap: onMonthTap,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final int _itemCount = widget.lastDate.year - widget.firstDate.year + 1;
-    final double _initialOffset = (widget.initialDate.year - widget.firstDate.year) * getYearViewHeight(context);
+    final int _itemCount = lastDate.year - firstDate.year + 1;
+    final double _initialOffset = (initialDate.year - firstDate.year) * getYearViewHeight(context);
     final ScrollController _scrollController = ScrollController(initialScrollOffset: _initialOffset);
 
     return ListView.builder(
@@ -57,10 +53,11 @@ class _YearsCalendarState extends State<YearsCalendar> {
       controller: _scrollController,
       itemCount: _itemCount,
       itemBuilder: (BuildContext context, int index) {
-        final int year = index + widget.firstDate.year;
+        final int year = index + firstDate.year;
         final bool isToyear = dateIsToyear(DateTime(year));
         return _getYearView(year, isToyear);
       },
     );
   }
+  
 }

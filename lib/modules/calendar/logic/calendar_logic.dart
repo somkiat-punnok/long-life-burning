@@ -6,6 +6,7 @@ const double _dxMax = 1.2;
 const double _dxMin = -1.2;
 
 class CalendarLogic {
+
   DateTime get focusedDay => _focusedDay;
   DateTime get selectedDay => _selectedDay;
   int get pageId => _pageId;
@@ -269,4 +270,5 @@ class CalendarLogic {
       return value;
     }
   }
+  
 }
