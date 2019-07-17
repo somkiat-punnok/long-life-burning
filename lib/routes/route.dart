@@ -6,12 +6,13 @@ import 'package:long_life_burning/screen/index.dart';
 // Page
 import 'package:long_life_burning/pages/about/view.dart';
 import 'package:long_life_burning/pages/announce/view.dart';
-import 'package:long_life_burning/pages/announce/year.dart';
 import 'package:long_life_burning/pages/chart/view.dart';
+import 'package:long_life_burning/pages/common/year.dart';
 import 'package:long_life_burning/pages/group/view.dart';
 import 'package:long_life_burning/pages/nearby/view.dart';
 import 'package:long_life_burning/pages/notify/view.dart';
 import 'package:long_life_burning/pages/stepcount/view.dart';
+import 'package:long_life_burning/pages/stepcount/record_view.dart';
 
 class Routes {
 
@@ -26,6 +27,7 @@ class Routes {
     Constants.Nearby_Page: (context) => NearbyView(),
     Constants.Notify_Page: (context) => NotifyView(),
     Constants.StepCount_Page: (context) => StepCountView(),
+    Constants.Record_Page: (context) => RecordView(),
   };
 
   // Page view on navBar

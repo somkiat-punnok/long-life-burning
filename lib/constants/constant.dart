@@ -13,5 +13,6 @@ class Constants {
   static const String Nearby_Page = '/nearby';
   static const String Notify_Page = '/notify';
   static const String StepCount_Page = '/stepcount';
+  static const String Record_Page = '/record';
 
 }

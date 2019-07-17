@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:long_life_burning/constants/platform.dart';
+import 'package:long_life_burning/constants/constant.dart';
 //import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
 import 'package:long_life_burning/modules/stepcount/forecast/forecast.dart';
 import 'package:long_life_burning/modules/stepcount/forecast/radial_list.dart';
@@ -113,6 +114,7 @@ class _StepCountViewState extends State<StepCountView> with TickerProviderStateM
               backgroundColor: Colors.transparent,
               brightness: Brightness.dark,
               elevation: 0.0,
+              automaticallyImplyLeading: false,
               title: Text(
                 'Step Counts',
                 style: TextStyle(
@@ -120,6 +122,23 @@ class _StepCountViewState extends State<StepCountView> with TickerProviderStateM
                   fontSize: 30.0,
                 ),
               ),
+              actions: <Widget>[
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pushNamed(Constants.Record_Page),
+                    borderRadius: BorderRadius.circular(100.0),
+                    child: Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Icon(
+                        Icons.event_note,
+                        color: Colors.white,
+                        size: 30.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
