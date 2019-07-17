@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class BackgroundWithRings extends StatelessWidget {
 
-  final double radius = 140.0;
-
   @override
   Widget build(BuildContext context) {
+    final double radius = MediaQuery.of(context).size.width / 3;
+    print('${MediaQuery.of(context).size.height}');
+    print('${MediaQuery.of(context).size.width}');
+    print('$radius');
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -25,13 +27,13 @@ class BackgroundWithRings extends StatelessWidget {
         ),
         CustomPaint(
           painter: WhiteCircleCutoutPainter(
-              centerOffset: Offset(40.0, 0.0),
-              circles: [
-                Circle(radius: radius, alpha: 0x10),
-                Circle(radius: radius + 15.0, alpha: 0x28),
-                Circle(radius: radius + 30.0, alpha: 0x38),
-                Circle(radius: radius + 75.0, alpha: 0x50),
-              ]
+            centerOffset: Offset(40.0, 0.0),
+            circles: [
+              Circle(radius: radius, alpha: 0x10),
+              Circle(radius: radius + 15.0, alpha: 0x28),
+              Circle(radius: radius + 30.0, alpha: 0x38),
+              Circle(radius: radius + 75.0, alpha: 0x50),
+            ]
           ),
           child: Container(),
         )

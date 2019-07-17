@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:long_life_burning/modules/stepcount/forecast/background/background_with_rings.dart';
-import 'package:long_life_burning/modules/stepcount/forecast/background/rain.dart';
 import 'package:long_life_burning/modules/stepcount/forecast/radial_list.dart';
 
 class Forecast extends StatelessWidget {
@@ -100,7 +99,6 @@ class Forecast extends StatelessWidget {
           radialList: radialList,
           controller: slidingListController,
         ),
-        Rain(),
       ],
     );
   }
