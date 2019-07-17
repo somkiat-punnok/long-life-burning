@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class BackgroundWithRings extends StatelessWidget {
 
-  final double radius = 140.0;
-
   @override
   Widget build(BuildContext context) {
+    final double radius = MediaQuery.of(context).size.width / 3;
+    print('${MediaQuery.of(context).size.height}');
+    print('${MediaQuery.of(context).size.width}');
+    print('$radius');
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[

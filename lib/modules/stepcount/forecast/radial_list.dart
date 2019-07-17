@@ -13,28 +13,30 @@ class SlidingRadialList extends StatelessWidget {
     this.controller,
   });
 
-  List<Widget> _radialListItems() {
+  List<Widget> _radialListItems(double height, double width) {
     int index = 0;
     return radialList.items.map((RadialListItemViewModel viewModel) {
       final listItem = _radialListItem(
         viewModel,
         controller.getItemAngle(index),
         controller.getItemOpacity(index),
+        height,
+        width,
       );
       ++index;
       return listItem;
     }).toList();
   }
 
-  Widget _radialListItem(RadialListItemViewModel viewModel, double angle, double opacity) {
+  Widget _radialListItem(RadialListItemViewModel viewModel, double angle, double opacity, double height, double width) {
     return Transform(
       transform: Matrix4.translationValues(
         45.0,
-        320.0,
+        height / 2.2,
         0.0,
       ),
       child: RadialPosition(
-        radius: 140.0 + 75.0,
+        radius: width / 3 + 75.0,
         angle: angle,
         child: Opacity(
           opacity: opacity,
@@ -52,7 +54,10 @@ class SlidingRadialList extends StatelessWidget {
       animation: controller,
       builder: (BuildContext context, Widget child) {
         return Stack(
-          children: _radialListItems(),
+          children: _radialListItems(
+            MediaQuery.of(context).size.height,
+            MediaQuery.of(context).size.width,
+          ),
         );
       },
     );
@@ -227,7 +232,7 @@ class RadialListItem extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(7.0),
+              padding: EdgeInsets.all(8.0),
               child: Image(
                 image: listItem.icon,
                 color: Colors.white,
