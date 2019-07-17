@@ -54,7 +54,7 @@ class SlidingUpPanel extends StatefulWidget {
   _SlidingUpPanelState createState() => _SlidingUpPanelState();
 }
 
-class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProviderStateMixin{
+class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProviderStateMixin {
 
   AnimationController _ac;
 

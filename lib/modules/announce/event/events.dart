@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/modules/event/event_info.dart';
-import 'package:long_life_burning/modules/event/event_card.dart';
+import 'package:long_life_burning/modules/announce/event/event_info.dart';
+import 'package:long_life_burning/modules/announce/event/event_card.dart';
+
+export 'package:long_life_burning/modules/announce/event/event_info.dart';
 
 class Event {
 
-  static final Map<DateTime, List<EventInfo>> events = {
+  static final Map<DateTime, List> events = {
     DateTime(2019, 5, 29): [EventInfo(detail: 'Event A0'), EventInfo(detail: 'Event B0'), EventInfo(detail: 'Event C0')],
     DateTime(2019, 6, 1): [EventInfo(detail: 'Event A1')],
     DateTime(2019, 6, 8): [EventInfo(detail: 'Event A2'), EventInfo(detail: 'Event B2'), EventInfo(detail: 'Event C2'), EventInfo(detail: 'Event D2')],
@@ -39,7 +40,11 @@ class EventList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView(
-        children: events.map((event) => EventCard(event: event,)).toList(),
+        children: events.map((event) => EventCard(
+          event: event,
+          onClick: () => print('${event.detail} tapped!'),
+        ))
+        .toList(),
       ),
     );
   }

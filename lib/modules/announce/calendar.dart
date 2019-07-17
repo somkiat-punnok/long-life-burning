@@ -1,29 +1,28 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
-
-typedef void OnDaySelected(DateTime day, List events);
-typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
-typedef void OnTitleText();
 
 class Calendar extends StatelessWidget {
 
   final Map<DateTime, List> events;
   final DateTime selectedDay;
-  final List selectedEvents;
   final OnDaySelected onDaySelected;
-  final OnTitleText onTitleText;
+  final OnHeader onTitleText;
+  final OnHeader onIcon1;
+  final OnHeader onIcon2;
+  final OnHeader onIcon3;
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   Calendar({
     Key key,
     this.events,
     this.selectedDay,
-    this.selectedEvents,
     this.onDaySelected,
     this.onTitleText,
+    this.onIcon1,
+    this.onIcon2,
+    this.onIcon3,
     this.onVisibleDaysChanged,
   }) : super(key: key);
 
@@ -42,6 +41,9 @@ class Calendar extends StatelessWidget {
       },
       onDaySelected: onDaySelected,
       onTitleText: onTitleText,
+      onIcon1: onIcon1,
+      onIcon2: onIcon2,
+      onIcon3: onIcon3,
       onVisibleDaysChanged: onVisibleDaysChanged,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
@@ -57,7 +59,6 @@ class Calendar extends StatelessWidget {
         weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
       ),
       headerStyle: HeaderStyle(
-        centerHeaderTitle: true,
         titleTextStyle: TextStyle(color: Colors.black),
       ),
       builders: CalendarBuilders(

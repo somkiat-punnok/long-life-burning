@@ -33,7 +33,7 @@ class _DotLoaderState extends State<DotLoader> with SingleTickerProviderStateMix
     controller = AnimationController(
       lowerBound: 0.0,
       upperBound: 1.0,
-      duration: Duration(milliseconds: 3000),
+      duration: Duration(seconds: 2),
       vsync: this,
     );
     animationRotation = Tween(begin: 0.0, end: 1.0).animate(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
 typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events);
-typedef SingleMarkerBuilder = Widget Function(BuildContext context, DateTime date, dynamic event);
 
 class CalendarBuilders {
   
@@ -14,7 +13,6 @@ class CalendarBuilders {
   final FullBuilder outsideWeekendDayBuilder;
   final FullBuilder unavailableDayBuilder;
   final FullListBuilder markersBuilder;
-  final SingleMarkerBuilder singleMarkerBuilder;
 
   const CalendarBuilders({
     this.dayBuilder,
@@ -25,7 +23,6 @@ class CalendarBuilders {
     this.outsideWeekendDayBuilder,
     this.unavailableDayBuilder,
     this.markersBuilder,
-    this.singleMarkerBuilder,
-  }) : assert(!(singleMarkerBuilder != null && markersBuilder != null));
+  });
   
 }

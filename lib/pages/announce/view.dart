@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/constants/constant.dart';
-import 'package:long_life_burning/modules/announce/events.dart';
+import 'package:long_life_burning/modules/announce/event/events.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
@@ -82,11 +82,13 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
           Calendar(
             events: _events,
             selectedDay: _selectedDay,
-            selectedEvents: _selectedEvents,
             onDaySelected: _onDaySelected,
             onTitleText: () {
               _selection(context);
             },
+            onIcon1: () => print("search"),
+            onIcon2: () => print("notify"),
+            onIcon3: () => print("settings"),
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
           EventList(

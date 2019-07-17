@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'event_info.dart';
 
 class EventCard extends StatelessWidget {
 
-  final event;
+  final EventInfo event;
+  final void Function() onClick;
 
   EventCard({
     Key key,
     this.event,
+    this.onClick,
   }) : super(key: key);
 
   @override
@@ -19,7 +22,7 @@ class EventCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: ListTile(
         title: Text(event.detail.toString()),
-        onTap: () => print('${event.detail} tapped!'),
+        onTap: onClick,
       ),
     );
   }

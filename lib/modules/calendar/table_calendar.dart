@@ -11,7 +11,7 @@ export 'package:long_life_burning/modules/calendar/customization/customization.d
 
 typedef void OnDaySelected(DateTime day, List events);
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
-typedef void OnTitleText();
+typedef void OnHeader();
 typedef String TextBuilder(DateTime date, dynamic locale);
 enum CalendarFormat { month, week }
 enum StartingDayOfWeek { monday, sunday }
@@ -21,7 +21,10 @@ class TableCalendar extends StatefulWidget {
 
   final dynamic locale;
   final Map<DateTime, List> events;
-  final OnTitleText onTitleText;
+  final OnHeader onTitleText;
+  final OnHeader onIcon1;
+  final OnHeader onIcon2;
+  final OnHeader onIcon3;
   final OnDaySelected onDaySelected;
   final VoidCallback onUnavailableDaySelected;
   final OnVisibleDaysChanged onVisibleDaysChanged;
@@ -49,6 +52,9 @@ class TableCalendar extends StatefulWidget {
     this.events = const {},
     this.onDaySelected,
     this.onTitleText,
+    this.onIcon1,
+    this.onIcon2,
+    this.onIcon3,
     this.onUnavailableDaySelected,
     this.onVisibleDaysChanged,
     this.selectedDay,
@@ -234,14 +240,45 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         elevation: 0.0,
         automaticallyImplyLeading: false,
         title: GestureDetector(
-          child: Text(
-            widget.headerStyle.titleTextBuilder != null
-                ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
-                : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
-            style: widget.headerStyle.titleTextStyle,
-          ),
           onTap: widget.onTitleText,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.chevron_left,
+                color: Colors.black,
+                size: 35.0,
+              ),
+              Text(
+                widget.headerStyle.titleTextBuilder != null
+                    ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+                    : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
+                style: widget.headerStyle.titleTextStyle,
+              ),
+            ],
+          ),
         ),
+        actions: <Widget>[
+          CustomIconButton(
+            icon: widget.headerStyle.rightIcon1,
+            onTap: widget.onIcon1 ?? () => print('on Icon 1'),
+            margin: widget.headerStyle.rightMargin1,
+            padding: widget.headerStyle.rightPadding1,
+          ),
+          CustomIconButton(
+            icon: widget.headerStyle.rightIcon2,
+            onTap: widget.onIcon2 ?? () => print('on Icon 2'),
+            margin: widget.headerStyle.rightMargin2,
+            padding: widget.headerStyle.rightPadding2,
+          ),
+          CustomIconButton(
+            icon: widget.headerStyle.rightIcon3,
+            onTap: widget.onIcon3 ?? () => print('on Icon 3'),
+            margin: widget.headerStyle.rightMargin3,
+            padding: widget.headerStyle.rightPadding3,
+          ),
+          SizedBox(width: 10.0,),
+        ],
       );
   }
 
@@ -395,20 +432,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             ),
           );
         }
-        else {
-          children.add(
-            Positioned(
-              top: widget.calendarStyle.markersPositionTop,
-              bottom: widget.calendarStyle.markersPositionBottom,
-              left: widget.calendarStyle.markersPositionLeft,
-              right: widget.calendarStyle.markersPositionRight,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: events.map((event) => _buildMarker(eventKey, event)).toList(),
-              ),
-            ),
-          );
-        }
       }
       if (children.length > 1) {
         content = Stack(
@@ -471,19 +494,4 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     }
   }
 
-  Widget _buildMarker(DateTime date, dynamic event) {
-    if (widget.builders.singleMarkerBuilder != null) {
-      return widget.builders.singleMarkerBuilder(context, date, event);
-    } else {
-      return Container(
-        width: 8.0,
-        height: 8.0,
-        margin: const EdgeInsets.symmetric(horizontal: 0.3),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: widget.calendarStyle.markersColor,
-        ),
-      );
-    }
-  }
 }

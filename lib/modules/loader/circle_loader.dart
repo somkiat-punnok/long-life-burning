@@ -79,6 +79,7 @@ class _CircleLoaderState extends State<CircleLoader> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       child: Stack(
         children: <Widget>[
           RotationTransition(

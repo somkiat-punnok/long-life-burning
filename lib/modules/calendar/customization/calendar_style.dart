@@ -13,10 +13,6 @@ class CalendarStyle {
   final Color todayColor;
   final Color markersColor;
   final Alignment markersAlignment;
-  final double markersPositionTop;
-  final double markersPositionBottom;
-  final double markersPositionLeft;
-  final double markersPositionRight;
   final int markersMaxAmount;
   final bool outsideDaysVisible;
   final bool renderSelectedFirst;
@@ -34,10 +30,6 @@ class CalendarStyle {
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
     this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
     this.markersAlignment = Alignment.bottomCenter,
-    this.markersPositionTop,
-    this.markersPositionBottom = 5.0,
-    this.markersPositionLeft,
-    this.markersPositionRight,
     this.markersMaxAmount = 4,
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
