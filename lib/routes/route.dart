@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:long_life_burning/constants/constant.dart';
 import 'package:long_life_burning/screen/index.dart';
 // Page
 import 'package:long_life_burning/pages/about/view.dart';
 import 'package:long_life_burning/pages/announce/view.dart';
+import 'package:long_life_burning/pages/announce/year.dart';
 import 'package:long_life_burning/pages/chart/view.dart';
 import 'package:long_life_burning/pages/group/view.dart';
 import 'package:long_life_burning/pages/nearby/view.dart';
@@ -17,6 +20,7 @@ class Routes {
     Constants.Index_Page: (context) => Index(),
     Constants.About_Page: (context) => AboutView(),
     Constants.Announce_Page: (context) => AnnounceView(),
+    Constants.Years_Page: (context) => YearsCalendarView(),
     Constants.Chart_Page: (context) => ChartView(),
     Constants.Group_Page: (context) => GroupView(),
     Constants.Nearby_Page: (context) => NearbyView(),
