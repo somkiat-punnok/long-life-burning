@@ -60,6 +60,10 @@ flutter:
   fonts:
     # style italic or normal
     # weight between 100 and 900
+    - family: CupertinoIcons
+      fonts:
+        - asset: assets/fonts/CupertinoIcons.ttf
+
     - family: Sarabun
       fonts:
         - asset: assets/fonts/sarabun/Sarabun-Regular.ttf

@@ -1,37 +1,31 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 class IconsiOS {
 
   // Icons on iOS
   static const IconData home = IconData(
     0xf38f,
-    fontFamily: CupertinoIcons.iconFont,
-    fontPackage: CupertinoIcons.iconFontPackage
+    fontFamily: 'CupertinoIcons',
   );
 
   static const IconData near_me = IconData(
     0xf474,
-    fontFamily: CupertinoIcons.iconFont,
-    fontPackage: CupertinoIcons.iconFontPackage
+    fontFamily: 'CupertinoIcons',
   );
 
   static const IconData marathon = IconData(
     0xf3f4,
-    fontFamily: CupertinoIcons.iconFont,
-    fontPackage: CupertinoIcons.iconFontPackage
+    fontFamily: 'CupertinoIcons',
   );
 
   static const IconData group = IconData(
     0xf47c,
-    fontFamily: CupertinoIcons.iconFont,
-    fontPackage: CupertinoIcons.iconFontPackage
+    fontFamily: 'CupertinoIcons',
   );
 
   static const IconData others = IconData(
     0xf394,
-    fontFamily: CupertinoIcons.iconFont,
-    fontPackage: CupertinoIcons.iconFontPackage
+    fontFamily: 'CupertinoIcons',
   );
 
 }
