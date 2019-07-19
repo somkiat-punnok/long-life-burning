@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/constants/constant.dart';
-import 'package:long_life_burning/modules/announce/event/events.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
+import 'package:long_life_burning/modules/announce/event/events.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
-class AnnounceView extends StatefulWidget {
+class AnnouncePage extends StatefulWidget {
   @override
-  _AnnounceViewState createState() => _AnnounceViewState();
+  _AnnouncePageState createState() => _AnnouncePageState();
 }
 
-class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMixin {
+class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMixin {
 
   int lastMonth;
   DateTime _selectedDay;
@@ -61,7 +60,7 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
   }
 
   _selection(BuildContext context) {
-    Navigator.of(context).pushNamed(Constants.Years_Page).then((res) {
+    Navigator.of(context).pushNamed(Constants.yearsRoute).then((res) {
       final result = res as List;
       setState(() {
         if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
@@ -76,7 +75,15 @@ class _AnnounceViewState extends State<AnnounceView> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
       body: Column(
         children: <Widget>[
           Calendar(

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/constants/constant.dart';
 
 class BackgroundWithRings extends StatelessWidget {
 
@@ -12,7 +13,7 @@ class BackgroundWithRings extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: ExactAssetImage('assets/images/ocean.jpg'),
+              image: ExactAssetImage(Constants.oceanImage),
               fit: BoxFit.cover,
             ),
           ),
@@ -23,7 +24,7 @@ class BackgroundWithRings extends StatelessWidget {
             offset: Offset(40.0, 0.0),
           ),
           child: Image.asset(
-            'assets/images/ocean.jpg',
+            Constants.oceanImage,
             fit: BoxFit.cover,
           ),
         ),

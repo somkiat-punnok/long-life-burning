@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 //import 'package:percent_indicator/circular_percent_indicator.dart';
 //import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+export 'package:long_life_burning/modules/stepcount/forecast/forecast.dart';
+export 'package:long_life_burning/modules/stepcount/forecast/radial_list.dart';
+
 class StepCount extends StatefulWidget {
   @override
   _StepCountState createState() => _StepCountState();

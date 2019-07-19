@@ -30,7 +30,6 @@ class YearsCalendar extends StatelessWidget {
   final List<String> monthNames;
   final Function onMonthTap;
 
-  /// Gets a widget with the view of the given year.
   YearView _getYearView(int year, bool isToyear) {
     return YearView(
       context: context,
@@ -47,7 +46,6 @@ class YearsCalendar extends StatelessWidget {
     final int _itemCount = lastDate.year - firstDate.year + 1;
     final double _initialOffset = (initialDate.year - firstDate.year) * getYearViewHeight(context);
     final ScrollController _scrollController = ScrollController(initialScrollOffset: _initialOffset);
-
     return ListView.builder(
       padding: const EdgeInsets.only(bottom: 16.0),
       controller: _scrollController,

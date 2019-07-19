@@ -29,10 +29,8 @@ class MonthView extends StatelessWidget {
   Widget buildMonthDays(BuildContext context) {
     final List<Row> dayRows = <Row>[];
     final List<DayNumber> dayRowChildren = <DayNumber>[];
-
     final int daysInMonth = getDaysInMonth(year, month);
     final int firstWeekdayOfMonth = DateTime(year, month, 1).weekday;
-
     for (int day = 2 - firstWeekdayOfMonth; day <= daysInMonth; day++) {
       final bool isToday = dateIsToday(DateTime(year, month, day));
       dayRowChildren.add(
@@ -42,9 +40,7 @@ class MonthView extends StatelessWidget {
           todayColor: todayColor,
         ),
       );
-
-      if ((day - 1 + firstWeekdayOfMonth) % DateTime.daysPerWeek == 0 ||
-          day == daysInMonth) {
+      if ((day - 1 + firstWeekdayOfMonth) % DateTime.daysPerWeek == 0 || day == daysInMonth) {
         dayRows.add(
           Row(
             children: List<DayNumber>.from(dayRowChildren),

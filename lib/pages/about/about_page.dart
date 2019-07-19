@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
+
+class AboutPage extends StatefulWidget {
+  @override
+  _AboutPageState createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
+      backgroundColor: Colors.black87,
+      appBar: PlatformAppBar(
+        title: Text(
+          'About',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.black,
+        android: (_) => MaterialAppBarData(
+          brightness: Brightness.dark,
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'About Page',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+}

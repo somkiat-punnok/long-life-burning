@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class IconsiOS {
 
+  IconsiOS._();
+
   // Icons on iOS
   static const IconData home = IconData(
     0xf38f,

@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/constants/platform.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/loader/dot_loader.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,30 +13,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () => Navigator.of(context).pushReplacementNamed('/index'));
+    Timer(Duration(seconds: 5), () async => Navigator.of(context).pushReplacementNamed('/index'));
   }
 
   @override
   Widget build(BuildContext context) {
-    if ( Platforms.isIOS ) {
-      return CupertinoPageScaffold(
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
         resizeToAvoidBottomInset: true,
-        backgroundColor: CupertinoColors.darkBackgroundGray,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Notify Page',
-                style: TextStyle(color: CupertinoColors.white),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -47,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/forest.jpg'),
+                image: AssetImage(Constants.forestImage),
               ),
             ),
           ),

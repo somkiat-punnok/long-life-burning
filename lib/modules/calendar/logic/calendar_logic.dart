@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:date_utils/date_utils.dart';
+import 'package:long_life_burning/widgets/date_utils.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
 const double _dxMax = 1.2;
@@ -198,7 +198,6 @@ class CalendarLogic {
     var daysAfter = 7 - last.weekday;
 
     if (_startingDayOfWeek == StartingDayOfWeek.sunday) {
-      // If the last day is Sunday (7) the entire week must be rendered
       if (daysAfter == 0) {
         daysAfter = 7;
       }

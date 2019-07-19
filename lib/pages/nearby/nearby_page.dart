@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/constants/platform.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/nearby/nearby.dart';
 import 'package:long_life_burning/modules/nearby/map.dart';
 
-class NearbyView extends StatefulWidget {
+class NearbyPage extends StatefulWidget {
   @override
-  _NearbyViewState createState() => _NearbyViewState();
+  _NearbyPageState createState() => _NearbyPageState();
 }
 
-class _NearbyViewState extends State<NearbyView> with TickerProviderStateMixin {
+class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
 
   final double _panelHeightClosed = 200.0;
   final double _initRadius = 20.0;
@@ -31,7 +30,7 @@ class _NearbyViewState extends State<NearbyView> with TickerProviderStateMixin {
             Icons.gps_fixed,
             color: Theme.of(context).primaryColor,
           ),
-          onPressed: (){},
+          onPressed: () {},
           backgroundColor: Colors.white,
         ),
       ),
@@ -39,10 +38,21 @@ class _NearbyViewState extends State<NearbyView> with TickerProviderStateMixin {
         top: 0.0,
         left: 0.0,
         right: 0.0,
-        child: AppBar(
+        child: PlatformAppBar(
           backgroundColor: Colors.transparent,
-          brightness: Brightness.light,
-          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          android: (_) => MaterialAppBarData(
+            brightness: Brightness.light,
+            elevation: 0.0,
+          ),
+          ios: (_) => CupertinoNavigationBarData(
+            actionsForegroundColor: Colors.transparent,
+            border: Border.all(
+              color: Colors.transparent,
+              width: 0.0,
+              style: BorderStyle.none
+            ),
+          ),
         ),
       ),
       Positioned(
@@ -79,18 +89,15 @@ class _NearbyViewState extends State<NearbyView> with TickerProviderStateMixin {
       ),
     ];
 
-    if ( Platforms.isIOS ) {
-      return CupertinoPageScaffold(
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
         resizeToAvoidBottomInset: true,
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: bodyStack,
-        ),
-      );
-    }
-
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
       body: Stack(
         alignment: Alignment.topCenter,
         children: bodyStack,

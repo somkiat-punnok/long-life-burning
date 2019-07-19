@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
-import 'package:date_utils/date_utils.dart';
-import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:long_life_burning/widgets/date_utils.dart';
+import 'package:long_life_burning/widgets/gesture_detector.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/calendar/customization/customization.dart';
 import 'package:long_life_burning/modules/calendar/logic/calendar_logic.dart';
 import 'package:long_life_burning/modules/calendar/widgets/widgets.dart';
 
 export 'package:long_life_burning/modules/calendar/customization/customization.dart';
 
+typedef String TextBuilder(DateTime date, dynamic locale);
 typedef void OnDaySelected(DateTime day, List events);
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
 typedef void OnHeader();
-typedef String TextBuilder(DateTime date, dynamic locale);
-enum CalendarFormat { month, week }
-enum StartingDayOfWeek { monday, sunday }
-enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
+enum CalendarFormat {
+  month,
+  week,
+}
+enum StartingDayOfWeek {
+  monday,
+  sunday,
+}
+enum AvailableGestures {
+  none,
+  verticalSwipe,
+  horizontalSwipe,
+  all,
+}
 
 class TableCalendar extends StatefulWidget {
 
@@ -203,13 +215,29 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildHeader() {
+    var title = GestureDetector(
+      onTap: widget.onTitleText,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(
+            Icons.chevron_left,
+            color: Colors.black,
+            size: 35.0,
+          ),
+          Text(
+            widget.headerStyle.titleTextBuilder != null
+                ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+                : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
+            style: widget.headerStyle.titleTextStyle,
+          ),
+        ],
+      ),
+    );
     return widget.headerStyle.centerHeaderTitle
-      ? AppBar(
+      ? PlatformAppBar(
         backgroundColor: Colors.transparent,
-        brightness: Brightness.light,
-        elevation: 0.0,
         automaticallyImplyLeading: false,
-        centerTitle: true,
         leading: CustomIconButton(
           icon: widget.headerStyle.leftChevronIcon,
           onTap: _selectPrevious,
@@ -225,60 +253,97 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           ),
           onTap: widget.onTitleText,
         ),
-        actions: <Widget>[
-          CustomIconButton(
+        android: (_) => MaterialAppBarData(
+          brightness: Brightness.light,
+          elevation: 0.0,
+          centerTitle: true,
+          actions: <Widget>[
+            CustomIconButton(
+              icon: widget.headerStyle.rightChevronIcon,
+              onTap: _selectNext,
+              margin: widget.headerStyle.rightChevronMargin,
+              padding: widget.headerStyle.rightChevronPadding,
+            ),
+          ],
+        ),
+        ios: (_) => CupertinoNavigationBarData(
+          actionsForegroundColor: Colors.transparent,
+          border: Border.all(
+            color: Colors.transparent,
+            width: 0.0,
+            style: BorderStyle.none
+          ),
+          trailing: CustomIconButton(
             icon: widget.headerStyle.rightChevronIcon,
             onTap: _selectNext,
             margin: widget.headerStyle.rightChevronMargin,
             padding: widget.headerStyle.rightChevronPadding,
           ),
-        ],
+        ),
       )
-      : AppBar(
+      : PlatformAppBar(
         backgroundColor: Colors.transparent,
-        brightness: Brightness.light,
-        elevation: 0.0,
         automaticallyImplyLeading: false,
-        title: GestureDetector(
-          onTap: widget.onTitleText,
-          child: Row(
+        android: (_) => MaterialAppBarData(
+          brightness: Brightness.light,
+          elevation: 0.0,
+          title: title,
+          actions: <Widget>[
+            CustomIconButton(
+              icon: widget.headerStyle.rightIcon1,
+              onTap: widget.onIcon1 ?? () => print('on Icon 1'),
+              margin: widget.headerStyle.rightMargin1,
+              padding: widget.headerStyle.rightPadding1,
+            ),
+            CustomIconButton(
+              icon: widget.headerStyle.rightIcon2,
+              onTap: widget.onIcon2 ?? () => print('on Icon 2'),
+              margin: widget.headerStyle.rightMargin2,
+              padding: widget.headerStyle.rightPadding2,
+            ),
+            CustomIconButton(
+              icon: widget.headerStyle.rightIcon3,
+              onTap: widget.onIcon3 ?? () => print('on Icon 3'),
+              margin: widget.headerStyle.rightMargin3,
+              padding: widget.headerStyle.rightPadding3,
+            ),
+            SizedBox(width: 10.0,),
+          ],
+        ),
+        ios: (_) => CupertinoNavigationBarData(
+          actionsForegroundColor: Colors.transparent,
+          automaticallyImplyMiddle: false,
+          border: Border.all(
+            color: Colors.transparent,
+            width: 0.0,
+            style: BorderStyle.none
+          ),
+          leading: title,
+          trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(
-                Icons.chevron_left,
-                color: Colors.black,
-                size: 35.0,
+              CustomIconButton(
+                icon: widget.headerStyle.rightIcon1,
+                onTap: widget.onIcon1 ?? () => print('on Icon 1'),
+                margin: widget.headerStyle.rightMargin1,
+                padding: widget.headerStyle.rightPadding1,
               ),
-              Text(
-                widget.headerStyle.titleTextBuilder != null
-                    ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
-                    : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
-                style: widget.headerStyle.titleTextStyle,
+              CustomIconButton(
+                icon: widget.headerStyle.rightIcon2,
+                onTap: widget.onIcon2 ?? () => print('on Icon 2'),
+                margin: widget.headerStyle.rightMargin2,
+                padding: widget.headerStyle.rightPadding2,
               ),
+              CustomIconButton(
+                icon: widget.headerStyle.rightIcon3,
+                onTap: widget.onIcon3 ?? () => print('on Icon 3'),
+                margin: widget.headerStyle.rightMargin3,
+                padding: widget.headerStyle.rightPadding3,
+              ),
+              SizedBox(width: 10.0,),
             ],
           ),
         ),
-        actions: <Widget>[
-          CustomIconButton(
-            icon: widget.headerStyle.rightIcon1,
-            onTap: widget.onIcon1 ?? () => print('on Icon 1'),
-            margin: widget.headerStyle.rightMargin1,
-            padding: widget.headerStyle.rightPadding1,
-          ),
-          CustomIconButton(
-            icon: widget.headerStyle.rightIcon2,
-            onTap: widget.onIcon2 ?? () => print('on Icon 2'),
-            margin: widget.headerStyle.rightMargin2,
-            padding: widget.headerStyle.rightPadding2,
-          ),
-          CustomIconButton(
-            icon: widget.headerStyle.rightIcon3,
-            onTap: widget.onIcon3 ?? () => print('on Icon 3'),
-            margin: widget.headerStyle.rightMargin3,
-            padding: widget.headerStyle.rightPadding3,
-          ),
-          SizedBox(width: 10.0,),
-        ],
       );
   }
 
@@ -294,7 +359,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   Widget _buildWrapper({Key key}) {
     Widget wrappedChild = _buildTable();
-
     switch (widget.availableGestures) {
       case AvailableGestures.all:
         wrappedChild = _buildVerticalSwipeWrapper(
@@ -316,7 +380,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       case AvailableGestures.none:
         break;
     }
-
     return Container(
       key: key,
       margin: EdgeInsets.symmetric(horizontal: 8.0),
@@ -362,13 +425,11 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final children = <TableRow>[
       _buildDaysOfWeek(),
     ];
-
     int x = 0;
     while (x < _calendarLogic.visibleDays.length) {
       children.add(_buildTableRow(_calendarLogic.visibleDays.skip(x).take(daysInWeek).toList()));
       x += daysInWeek;
     }
-
     return Table(
       defaultColumnWidth: FractionColumnWidth(1.0 / daysInWeek),
       children: children,
@@ -414,11 +475,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         _calendarLogic.calendarFormat == CalendarFormat.month) {
       return Container();
     }
-
     Widget content = _buildCellContent(date);
-
     final eventKey = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
-
     if (eventKey != null) {
       final children = <Widget>[content];
       final events = eventKey != null ? widget.events[eventKey].take(widget.calendarStyle.markersMaxAmount) : [];
@@ -441,7 +499,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         );
       }
     }
-
     return GestureDetector(
       behavior: widget.dayHitTestBehavior,
       onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDate(date),
@@ -451,20 +508,17 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   Widget _buildCellContent(DateTime date) {
     final eventKey = widget.events.keys.firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
-
     final tIsUnavailable = _isDayUnavailable(date);
     final tIsSelected = _calendarLogic.isSelected(date);
     final tIsToday = _calendarLogic.isToday(date);
     final tIsOutside = _calendarLogic.isExtraDay(date);
     final tIsWeekend = _calendarLogic.isWeekend(date);
-
     final isUnavailable = widget.builders.unavailableDayBuilder != null && tIsUnavailable;
     final isSelected = widget.builders.selectedDayBuilder != null && tIsSelected;
     final isToday = widget.builders.todayDayBuilder != null && tIsToday;
     final isOutsideWeekend = widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend;
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend;
-
     if (isUnavailable) {
       return widget.builders.unavailableDayBuilder(context, date, widget.events[eventKey]);
     } else if (isSelected && widget.calendarStyle.renderSelectedFirst) {

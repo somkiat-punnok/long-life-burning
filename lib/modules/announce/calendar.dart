@@ -88,29 +88,10 @@ class Calendar extends StatelessWidget {
           ];
         },
         selectedDayBuilder: (context, date, events) {
-          if(date.day == DateTime.now().day && date.month == DateTime.now().month && date.year == DateTime.now().year) {
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-              ),
-              margin: EdgeInsets.all(12.0),
-              width: 100,
-              height: 100,
-              child: Center(
-                child: Text(
-                  '${date.day}',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            );
-          }
           return Container(
             decoration: BoxDecoration(
-              color: Colors.black,
+              color:  (date.day == DateTime.now().day && date.month == DateTime.now().month && date.year == DateTime.now().year)
+                      ? Colors.red : Colors.black,
               shape: BoxShape.circle,
             ),
             margin: EdgeInsets.all(12.0),

@@ -26,7 +26,6 @@ class YearView extends StatelessWidget {
   Widget buildYearMonths(BuildContext context) {
     final List<Row> monthRows = <Row>[];
     final List<MonthView> monthRowChildren = <MonthView>[];
-
     for (int month = 1; month <= DateTime.monthsPerYear; month++) {
       final bool isTomonth = dateIsTomonth(DateTime(year, month));
       monthRowChildren.add(
@@ -41,7 +40,6 @@ class YearView extends StatelessWidget {
           onMonthTap: onMonthTap,
         ),
       );
-
       if (month % 3 == 0) {
         monthRows.add(
           Row(
@@ -53,7 +51,6 @@ class YearView extends StatelessWidget {
         monthRowChildren.clear();
       }
     }
-
     return Column(
       children: List<Row>.from(monthRows),
     );

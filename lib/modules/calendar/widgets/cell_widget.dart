@@ -40,13 +40,24 @@ class CellWidget extends StatelessWidget {
 
   Decoration _buildCellDecoration() {
     if (isSelected && calendarStyle.renderSelectedFirst) {
-      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
+      return BoxDecoration(
+        shape: BoxShape.circle,
+        color: calendarStyle.selectedColor,
+      );
     } else if (isToday) {
-      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.todayColor);
+      return BoxDecoration(
+        shape: BoxShape.circle,
+        color: calendarStyle.todayColor,
+      );
     } else if (isSelected) {
-      return BoxDecoration(shape: BoxShape.circle, color: calendarStyle.selectedColor);
+      return BoxDecoration(
+        shape: BoxShape.circle,
+        color: calendarStyle.selectedColor,
+      );
     } else {
-      return BoxDecoration(shape: BoxShape.circle);
+      return BoxDecoration(
+        shape: BoxShape.circle,
+      );
     }
   }
 

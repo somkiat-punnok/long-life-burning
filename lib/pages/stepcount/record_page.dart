@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/constants/constant.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/stepcount/record/records.dart';
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
 
-class RecordView extends StatefulWidget {
+class RecordPage extends StatefulWidget {
   @override
-  _RecordViewState createState() => _RecordViewState();
+  _RecordPageState createState() => _RecordPageState();
 }
 
-class _RecordViewState extends State<RecordView> with TickerProviderStateMixin {
+class _RecordPageState extends State<RecordPage> with TickerProviderStateMixin {
 
   int lastMonth;
   DateTime _selectedDay;
@@ -49,7 +48,7 @@ class _RecordViewState extends State<RecordView> with TickerProviderStateMixin {
   }
 
   _selection(BuildContext context) {
-    Navigator.of(context).pushNamed(Constants.Years_Page).then((res) {
+    Navigator.of(context).pushNamed(Constants.yearsRoute).then((res) {
       final result = res as List;
       setState(() {
         if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
@@ -64,7 +63,15 @@ class _RecordViewState extends State<RecordView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
       body: Column(
         children: <Widget>[
           Calendar(

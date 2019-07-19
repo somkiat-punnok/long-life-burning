@@ -15,17 +15,16 @@ class DayNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double size = getDayNumberSize(context);
-
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
       decoration: isToday
-          ? BoxDecoration(
-              color: todayColor,
-              borderRadius: BorderRadius.circular(size / 2),
-            )
-          : null,
+        ? BoxDecoration(
+            color: todayColor,
+            borderRadius: BorderRadius.circular(size / 2),
+          )
+        : null,
       child: Text(
         day < 1 ? '' : day.toString(),
         textAlign: TextAlign.center,

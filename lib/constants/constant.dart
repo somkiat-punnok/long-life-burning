@@ -1,18 +1,33 @@
 class Constants {
+
+  Constants._();
   
+  static const String appName = 'Long Burn';
+
   // Key others
   //static final String API_Key = '';
 
   // Routing name
-  static const String Index_Page = '/index';
-  static const String About_Page = '/about';
-  static const String Announce_Page = '/announce';
-  static const String Years_Page = '/year';
-  static const String Chart_Page = '/chart';
-  static const String Group_Page = '/group';
-  static const String Nearby_Page = '/nearby';
-  static const String Notify_Page = '/notify';
-  static const String StepCount_Page = '/stepcount';
-  static const String Record_Page = '/record';
+  static const String indexRoute = '/index';
+  static const String aboutRoute = '/about';
+  static const String announceRoute = '/announce';
+  static const String yearsRoute = '/year';
+  static const String chartRoute = '/chart';
+  static const String groupRoute = '/group';
+  static const String nearbyRoute = '/nearby';
+  static const String notifyRoute = '/notify';
+  static const String stepCountRoute = '/stepcount';
+  static const String recordRoute = '/record';
+
+  // image assets
+  static const String image = 'assets/images';
+  static const String forestImage = '$image/forest.jpg';
+  static const String oceanImage = '$image/ocean.jpg';
+
+  // icon assets
+  static const String icon = 'assets/icons';
+  static const String burnIcon = '$icon/burn.png';
+  static const String distanceIcon = '$icon/distance.png';
+  static const String runnerIcon = '$icon/runner.png';
 
 }

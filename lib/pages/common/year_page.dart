@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/calendar/years_calendar.dart';
 
-class YearsCalendarView extends StatefulWidget {
+class YearsCalendarPage extends StatefulWidget {
   @override
-  _YearsCalendarViewState createState() => _YearsCalendarViewState();
+  _YearsCalendarPageState createState() => _YearsCalendarPageState();
 }
 
-class _YearsCalendarViewState extends State<YearsCalendarView> {
+class _YearsCalendarPageState extends State<YearsCalendarPage> {
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
       body: SafeArea(
         child: Center(
           child: YearsCalendar(
@@ -29,4 +39,5 @@ class _YearsCalendarViewState extends State<YearsCalendarView> {
       ),
     );
   }
+  
 }

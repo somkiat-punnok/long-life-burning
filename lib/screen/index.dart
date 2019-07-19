@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/constants/icons.dart';
-import 'package:long_life_burning/constants/platform.dart';
 import 'package:long_life_burning/routes/route.dart';
 
 class Index extends StatefulWidget {
@@ -23,62 +23,43 @@ class _IndexState extends State<Index> {
 
   @override
   Widget build(BuildContext context) {
-    if ( Platforms.isIOS ) {
-      return CupertinoTabScaffold(
+    return PlatformScaffold(
+      android: (_) => MaterialScaffoldData(
         resizeToAvoidBottomInset: true,
-        tabBar: CupertinoTabBar(
-          currentIndex: pageIndex,
-          onTap: onChanged,
-          items: [
-            navBarItem('', IconsiOS.home),
-            navBarItem('', IconsiOS.near_me),
-            navBarItem('', IconsiOS.marathon),
-            navBarItem('', IconsiOS.group),
-            navBarItem('', IconsiOS.others),
-          ],
-          activeColor: CupertinoColors.activeBlue,
-          inactiveColor: CupertinoColors.inactiveGray,
-          backgroundColor: CupertinoColors.lightBackgroundGray,
-          iconSize: 30.0,
-          border: Border(
-            top: BorderSide(
-              color: Color(0x4C000000),
-              width: 0.0, // One physical pixel.
-              style: BorderStyle.solid,
-            ),
-          ),
-        ),
-        tabBuilder: (BuildContext context, int index) {
-          return CupertinoPageScaffold(
-            child: currentPage,
-            resizeToAvoidBottomInset: true,
-          );
-        },
-      );
-    }
-    return Scaffold(
-      resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomPadding: true,
+      ),
+      ios: (_) => CupertinoPageScaffoldData(
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInsetTab: true,
+      ),
       body: currentPage,
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        clipBehavior: Clip.none,
-        child: BottomNavigationBar(
-          items: [
-            navBarItem('', IconsAndroid.home),
-            navBarItem('', IconsAndroid.near_me),
-            navBarItem('', IconsAndroid.marathon),
-            navBarItem('', IconsAndroid.group),
-            navBarItem('', IconsAndroid.others),
-          ],
-          currentIndex: pageIndex,
-          onTap: onChanged,
-          iconSize: 28.0,
+      bottomNavBar: PlatformNavBar(
+        currentIndex: pageIndex,
+        itemChanged: onChanged,
+        android: (_) => MaterialNavBarData(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.black54,
           showSelectedLabels: false,
           showUnselectedLabels: false,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          items: [
+            navBarItem('Home', IconsAndroid.home),
+            navBarItem('Nearby', IconsAndroid.near_me),
+            navBarItem('Event', IconsAndroid.marathon),
+            navBarItem('Group', IconsAndroid.group),
+            navBarItem('', IconsAndroid.others),
+          ],
+        ),
+        ios: (_) => CupertinoTabBarData(
+          activeColor: CupertinoColors.activeBlue,
+          inactiveColor: CupertinoColors.inactiveGray,
+          items: [
+            navBarItem('Home', IconsiOS.home),
+            navBarItem('Nearby', IconsiOS.near_me),
+            navBarItem('Event', IconsiOS.marathon),
+            navBarItem('Group', IconsiOS.group),
+            navBarItem('', IconsiOS.others),
+          ],
         ),
       ),
     );
