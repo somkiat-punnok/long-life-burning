@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/calendar/years_calendar.dart';
 
 class YearsCalendarPage extends StatefulWidget {
@@ -11,15 +10,9 @@ class _YearsCalendarPageState extends State<YearsCalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
-      ),
-      ios: (_) => CupertinoPageScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomInsetTab: true,
-      ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomPadding: true,
       body: SafeArea(
         child: Center(
           child: YearsCalendar(

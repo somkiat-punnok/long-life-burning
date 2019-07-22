@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/widgets/platform_widgets.dart';
 
 class GroupPage extends StatefulWidget {
   @override
@@ -10,18 +9,11 @@ class _GroupPageState extends State<GroupPage> {
   
   @override
   Widget build(BuildContext context) {
-
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
-      ),
-      ios: (_) => CupertinoPageScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomInsetTab: true,
-      ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.black87,
-      appBar: PlatformAppBar(
+      appBar: AppBar(
         title: Text(
           'Group',
           style: TextStyle(
@@ -29,9 +21,7 @@ class _GroupPageState extends State<GroupPage> {
           ),
         ),
         backgroundColor: Colors.white,
-        android: (_) => MaterialAppBarData(
-          brightness: Brightness.light,
-        ),
+        brightness: Brightness.light,
       ),
       body: Center(
         child: Column(
@@ -45,7 +35,6 @@ class _GroupPageState extends State<GroupPage> {
         ),
       ),
     );
-
   }
 
 }

@@ -1,3 +1,9 @@
+export 'package:long_life_burning/widgets/platform.dart'
+  show
+    isMaterial,
+    isCupertino;
+export 'package:long_life_burning/widgets/size_config.dart';
+
 class Constants {
 
   Constants._();

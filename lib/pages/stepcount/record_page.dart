@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/widgets/platform_widgets.dart';
+import 'package:long_life_burning/constants/constant.dart' show Constants;
 import 'package:long_life_burning/modules/stepcount/record/records.dart';
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
 
@@ -63,15 +63,9 @@ class _RecordPageState extends State<RecordPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
-      ),
-      ios: (_) => CupertinoPageScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomInsetTab: true,
-      ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomPadding: true,
       body: Column(
         children: <Widget>[
           Calendar(

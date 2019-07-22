@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:long_life_burning/constants/constant.dart' show SizeConfig;
 import 'package:long_life_burning/modules/stepcount/forecast/background/background_with_rings.dart';
 import 'package:long_life_burning/modules/stepcount/forecast/radial_list.dart';
 
@@ -16,34 +17,34 @@ class Forecast extends StatelessWidget {
   Widget _dayText() {
     DateTime time = DateTime.now();
     return Padding(
-        padding: EdgeInsets.only(top: 0.0, left: 10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '${time.day}',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 80.0,
-              ),
+      padding: EdgeInsets.only(top: 0.0, left: SizeConfig.setWidth(10.0)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            '${time.day}',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: SizeConfig.setWidth(80.0),
             ),
-            Text(
-              month(time.month),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40.0,
-              ),
+          ),
+          Text(
+            month(time.month),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: SizeConfig.setWidth(45.0),
             ),
-            Text(
-              '${time.year}',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 40.0,
-              ),
+          ),
+          Text(
+            '${time.year}',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: SizeConfig.setWidth(45.0),
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 
   String month(int month) {

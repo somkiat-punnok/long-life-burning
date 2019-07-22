@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:long_life_burning/widgets/date_utils.dart';
 import 'package:long_life_burning/widgets/gesture_detector.dart';
-import 'package:long_life_burning/widgets/platform_widgets.dart';
 import 'package:long_life_burning/modules/calendar/customization/customization.dart';
 import 'package:long_life_burning/modules/calendar/logic/calendar_logic.dart';
 import 'package:long_life_burning/modules/calendar/widgets/widgets.dart';
@@ -235,9 +234,12 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       ),
     );
     return widget.headerStyle.centerHeaderTitle
-      ? PlatformAppBar(
+      ? AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
+        brightness: Brightness.light,
+        elevation: 0.0,
+        centerTitle: true,
         leading: CustomIconButton(
           icon: widget.headerStyle.leftChevronIcon,
           onTap: _selectPrevious,
@@ -253,97 +255,42 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           ),
           onTap: widget.onTitleText,
         ),
-        android: (_) => MaterialAppBarData(
-          brightness: Brightness.light,
-          elevation: 0.0,
-          centerTitle: true,
-          actions: <Widget>[
-            CustomIconButton(
-              icon: widget.headerStyle.rightChevronIcon,
-              onTap: _selectNext,
-              margin: widget.headerStyle.rightChevronMargin,
-              padding: widget.headerStyle.rightChevronPadding,
-            ),
-          ],
-        ),
-        ios: (_) => CupertinoNavigationBarData(
-          actionsForegroundColor: Colors.transparent,
-          border: Border.all(
-            color: Colors.transparent,
-            width: 0.0,
-            style: BorderStyle.none
-          ),
-          trailing: CustomIconButton(
+        actions: <Widget>[
+          CustomIconButton(
             icon: widget.headerStyle.rightChevronIcon,
             onTap: _selectNext,
             margin: widget.headerStyle.rightChevronMargin,
             padding: widget.headerStyle.rightChevronPadding,
           ),
-        ),
+        ],
       )
-      : PlatformAppBar(
+      : AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        android: (_) => MaterialAppBarData(
-          brightness: Brightness.light,
-          elevation: 0.0,
-          title: title,
-          actions: <Widget>[
-            CustomIconButton(
-              icon: widget.headerStyle.rightIcon1,
-              onTap: widget.onIcon1 ?? () => print('on Icon 1'),
-              margin: widget.headerStyle.rightMargin1,
-              padding: widget.headerStyle.rightPadding1,
-            ),
-            CustomIconButton(
-              icon: widget.headerStyle.rightIcon2,
-              onTap: widget.onIcon2 ?? () => print('on Icon 2'),
-              margin: widget.headerStyle.rightMargin2,
-              padding: widget.headerStyle.rightPadding2,
-            ),
-            CustomIconButton(
-              icon: widget.headerStyle.rightIcon3,
-              onTap: widget.onIcon3 ?? () => print('on Icon 3'),
-              margin: widget.headerStyle.rightMargin3,
-              padding: widget.headerStyle.rightPadding3,
-            ),
-            SizedBox(width: 10.0,),
-          ],
-        ),
-        ios: (_) => CupertinoNavigationBarData(
-          actionsForegroundColor: Colors.transparent,
-          automaticallyImplyMiddle: false,
-          border: Border.all(
-            color: Colors.transparent,
-            width: 0.0,
-            style: BorderStyle.none
+        brightness: Brightness.light,
+        elevation: 0.0,
+        title: title,
+        actions: <Widget>[
+          CustomIconButton(
+            icon: widget.headerStyle.rightIcon1,
+            onTap: widget.onIcon1 ?? () => print('on Icon 1'),
+            margin: widget.headerStyle.rightMargin1,
+            padding: widget.headerStyle.rightPadding1,
           ),
-          leading: title,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CustomIconButton(
-                icon: widget.headerStyle.rightIcon1,
-                onTap: widget.onIcon1 ?? () => print('on Icon 1'),
-                margin: widget.headerStyle.rightMargin1,
-                padding: widget.headerStyle.rightPadding1,
-              ),
-              CustomIconButton(
-                icon: widget.headerStyle.rightIcon2,
-                onTap: widget.onIcon2 ?? () => print('on Icon 2'),
-                margin: widget.headerStyle.rightMargin2,
-                padding: widget.headerStyle.rightPadding2,
-              ),
-              CustomIconButton(
-                icon: widget.headerStyle.rightIcon3,
-                onTap: widget.onIcon3 ?? () => print('on Icon 3'),
-                margin: widget.headerStyle.rightMargin3,
-                padding: widget.headerStyle.rightPadding3,
-              ),
-              SizedBox(width: 10.0,),
-            ],
+          CustomIconButton(
+            icon: widget.headerStyle.rightIcon2,
+            onTap: widget.onIcon2 ?? () => print('on Icon 2'),
+            margin: widget.headerStyle.rightMargin2,
+            padding: widget.headerStyle.rightPadding2,
           ),
-        ),
+          CustomIconButton(
+            icon: widget.headerStyle.rightIcon3,
+            onTap: widget.onIcon3 ?? () => print('on Icon 3'),
+            margin: widget.headerStyle.rightMargin3,
+            padding: widget.headerStyle.rightPadding3,
+          ),
+          SizedBox(width: 10.0,),
+        ],
       );
   }
 

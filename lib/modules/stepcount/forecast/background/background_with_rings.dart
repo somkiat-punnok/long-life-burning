@@ -1,12 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/constants/constant.dart';
 
 class BackgroundWithRings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double radius = MediaQuery.of(context).size.width / 3;
+    final double radius = SizeConfig.setWidth(120.0);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -72,7 +73,7 @@ class CircleClipper extends CustomClipper<Rect> {
 
 class WhiteCircleCutoutPainter extends CustomPainter {
 
-  final Color overlayColor = Colors.grey;
+  final Color overlayColor = isMaterial ? Colors.grey : CupertinoColors.lightBackgroundGray;
   final List<Circle> circles;
   final Offset centerOffset;
   final Paint whitePaint;
@@ -139,6 +140,7 @@ class WhiteCircleCutoutPainter extends CustomPainter {
 }
 
 class Circle {
+
   final double radius;
   final int alpha;
 
@@ -146,4 +148,5 @@ class Circle {
     this.radius,
     this.alpha = 0xFF,
   });
+  
 }

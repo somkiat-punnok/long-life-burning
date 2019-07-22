@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/widgets/platform_widgets.dart';
 
 class AboutPage extends StatefulWidget {
   @override
@@ -10,17 +9,11 @@ class _AboutPageState extends State<AboutPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
-      ),
-      ios: (_) => CupertinoPageScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomInsetTab: true,
-      ),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.black87,
-      appBar: PlatformAppBar(
+      appBar: AppBar(
         title: Text(
           'About',
           style: TextStyle(
@@ -28,9 +21,7 @@ class _AboutPageState extends State<AboutPage> {
           ),
         ),
         backgroundColor: Colors.black,
-        android: (_) => MaterialAppBarData(
-          brightness: Brightness.dark,
-        ),
+        brightness: Brightness.dark,
       ),
       body: Center(
         child: Column(

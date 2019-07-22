@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/widgets/platform_widgets.dart';
+import 'package:long_life_burning/constants/constant.dart';
 import 'package:long_life_burning/modules/loader/dot_loader.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,15 +18,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      android: (_) => MaterialScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
-      ),
-      ios: (_) => CupertinoPageScaffoldData(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomInsetTab: true,
-      ),
+    SizeConfig.init(context);
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomPadding: true,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -50,11 +45,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 flex: 2,
                 child: Center(
                   child: DotLoader(
-                    radius: 20.0,
-                    dotRadius: 10.0,
+                    radius: SizeConfig.setWidth(30.0),
+                    dotRadius: SizeConfig.setWidth(12.0),
                   ),
                 ),
-              )
+              ),
             ],
           )
         ],

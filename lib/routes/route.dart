@@ -1,17 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:long_life_burning/constants/constant.dart';
 import 'package:long_life_burning/screen/index.dart';
-
-// Page
-import 'package:long_life_burning/pages/about/about_page.dart';
-import 'package:long_life_burning/pages/announce/announce_page.dart';
-import 'package:long_life_burning/pages/chart/chart_page.dart';
-import 'package:long_life_burning/pages/common/year_page.dart';
-import 'package:long_life_burning/pages/group/group_page.dart';
-import 'package:long_life_burning/pages/nearby/nearby_page.dart';
-import 'package:long_life_burning/pages/notify/notify_page.dart';
-import 'package:long_life_burning/pages/stepcount/stepcount_page.dart';
-import 'package:long_life_burning/pages/stepcount/record_page.dart';
+import 'package:long_life_burning/pages/all.dart';
 
 class Routes {
 
