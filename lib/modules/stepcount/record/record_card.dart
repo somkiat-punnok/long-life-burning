@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'record_info.dart';
+import 'records.dart';
 
 class RecordCard extends StatelessWidget {
 
-  final RecordInfo record;
+  final Record record;
   final void Function() onClick;
 
   RecordCard({

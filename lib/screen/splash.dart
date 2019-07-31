@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/constants/constant.dart';
+import 'package:long_life_burning/utils/constants.dart';
 import 'package:long_life_burning/modules/loader/dot_loader.dart';
+import 'index.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -13,7 +14,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () async => Navigator.of(context).pushReplacementNamed('/index'));
+    Timer(
+      Duration(seconds: 5),
+      () async => Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) => Index(),
+        )
+      )
+    );
   }
 
   @override

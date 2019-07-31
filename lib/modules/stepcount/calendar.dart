@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
 typedef void OnDaySelected(DateTime day, List events);
@@ -54,7 +55,28 @@ class Calendar extends StatelessWidget {
       ),
       headerStyle: HeaderStyle(
         centerHeaderTitle: true,
-        titleTextStyle: TextStyle(color: Colors.black),
+        titleTextStyle: TextStyle(
+          color: Colors.black,
+          fontSize: SizeConfig.setWidth(20.0),
+        ),
+        leftChevronIcon: Icon(
+          Icons.navigate_before,
+          color: Colors.black,
+          size: SizeConfig.setWidth(28.0),
+        ),
+        rightChevronIcon: Icon(
+          Icons.navigate_next,
+          color: Colors.black,
+          size: SizeConfig.setWidth(28.0),
+        ),
+        leftChevronPadding: EdgeInsets.all(SizeConfig.setWidth(12.0)),
+        rightChevronPadding: EdgeInsets.all(SizeConfig.setWidth(12.0)),
+        leftChevronMargin: EdgeInsets.symmetric(
+          horizontal: SizeConfig.setWidth(8.0),
+        ),
+        rightChevronMargin: EdgeInsets.symmetric(
+          horizontal: SizeConfig.setWidth(8.0),
+        ),
       ),
       builders: CalendarBuilders(
         todayDayBuilder: (context, date, events) {

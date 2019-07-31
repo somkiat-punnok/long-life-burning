@@ -3,6 +3,7 @@ import 'package:long_life_burning/modules/nearby/nearby.dart';
 import 'package:long_life_burning/modules/nearby/map.dart';
 
 class NearbyPage extends StatefulWidget {
+  static const String routeName = '/';
   @override
   _NearbyPageState createState() => _NearbyPageState();
 }

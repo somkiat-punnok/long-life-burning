@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:long_life_burning/widgets/date_utils.dart';
+import 'package:long_life_burning/utils/widgets/date_utils.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
 const double _dxMax = 1.2;

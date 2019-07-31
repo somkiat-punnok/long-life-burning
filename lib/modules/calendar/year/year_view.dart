@@ -5,7 +5,7 @@ import 'package:long_life_burning/modules/calendar/month/month_view.dart';
 import 'package:long_life_burning/modules/calendar/year/year_title.dart';
 
 class YearView extends StatelessWidget {
-  const YearView({
+  YearView({
     @required this.context,
     @required this.year,
     this.isToyear,
@@ -60,7 +60,7 @@ class YearView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: getYearViewHeight(context),
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: EdgeInsets.only(top: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

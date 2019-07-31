@@ -6,7 +6,7 @@ import 'package:long_life_burning/modules/calendar/day/day_number.dart';
 
 class MonthView extends StatelessWidget {
 
-  const MonthView({
+  MonthView({
     @required this.context,
     @required this.year,
     @required this.month,
@@ -70,7 +70,7 @@ class MonthView extends StatelessWidget {
             tomonthColor: todayColor,
           ),
           Container(
-            margin: const EdgeInsets.only(top: 8.0),
+            margin: EdgeInsets.only(top: 8.0),
             child: buildMonthDays(context),
           ),
         ],
@@ -85,7 +85,7 @@ class MonthView extends StatelessWidget {
           child: buildMonthView(context),
         )
       : InkWell(
-          onTap: () => this.onMonthTap(year, month),
+          onTap: () => onMonthTap(year, month),
           child: buildMonthView(context),
         );
   }

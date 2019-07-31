@@ -1,39 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/announce/event/event_info.dart';
-import 'package:long_life_burning/modules/announce/event/event_card.dart';
-
-export 'package:long_life_burning/modules/announce/event/event_info.dart';
+import 'event_card.dart';
 
 class Event {
 
+  final String id,detail;
+  
+  Event({
+    this.id,
+    this.detail,
+  });
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+    return Event(
+      id: json["id"],
+      detail: json["detail"],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    var map = Map<String, dynamic>();
+    map["id"] = id;
+    map["detail"] = detail;
+    return map;
+  }
+
+  factory Event.fromDB(Map<String, dynamic> map) {
+    return Event(
+      id: map["id"],
+      detail: map["detail"],
+    );
+  }
+
+}
+
+class EventList {
+
   static final Map<DateTime, List> events = {
-    DateTime(2019, 5, 29): [EventInfo(detail: 'Event A0'), EventInfo(detail: 'Event B0'), EventInfo(detail: 'Event C0')],
-    DateTime(2019, 6, 1): [EventInfo(detail: 'Event A1')],
-    DateTime(2019, 6, 8): [EventInfo(detail: 'Event A2'), EventInfo(detail: 'Event B2'), EventInfo(detail: 'Event C2'), EventInfo(detail: 'Event D2')],
-    DateTime(2019, 6, 12): [EventInfo(detail: 'Event A3'), EventInfo(detail: 'Event B3')],
-    DateTime(2019, 6, 18): [EventInfo(detail: 'Event A4'), EventInfo(detail: 'Event B4'), EventInfo(detail: 'Event C4')],
-    DateTime(2019, 6, 24): [EventInfo(detail: 'Event A5'), EventInfo(detail: 'Event B5'), EventInfo(detail: 'Event C5')],
-    DateTime(2019, 6, 26): [EventInfo(detail: 'Event A6'), EventInfo(detail: 'Event B6')],
-    DateTime(2019, 6, 28): [EventInfo(detail: 'Event A7'), EventInfo(detail: 'Event B7'), EventInfo(detail: 'Event C7'), EventInfo(detail: 'Event D7')],
-    DateTime(2019, 6, 29): [EventInfo(detail: 'Event A8'), EventInfo(detail: 'Event B8'), EventInfo(detail: 'Event C8'), EventInfo(detail: 'Event D8')],
-    DateTime(2019, 6, 30): [EventInfo(detail: 'Event SK1'), EventInfo(detail: 'Event SK2'), EventInfo(detail: 'Event SK3'), EventInfo(detail: 'Event SK4')],
-    DateTime(2019, 7, 1): [EventInfo(detail: 'Event A9'), EventInfo(detail: 'Event B9'), EventInfo(detail: 'Event C9')],
-    DateTime(2019, 7, 5): [EventInfo(detail: 'Event A10'), EventInfo(detail: 'Event B10'), EventInfo(detail: 'Event C10')],
-    DateTime(2019, 7, 8): [EventInfo(detail: 'Event A11'), EventInfo(detail: 'Event B11')],
-    DateTime(2019, 7, 15): [EventInfo(detail: 'Event A12'), EventInfo(detail: 'Event B12'), EventInfo(detail: 'Event C12'), EventInfo(detail: 'Event D12')],
-    DateTime(2019, 7, 20): [EventInfo(detail: 'Event A13'), EventInfo(detail: 'Event B13')],
-    DateTime(2019, 7, 24): [EventInfo(detail: 'Event A14'), EventInfo(detail: 'Event B14'), EventInfo(detail: 'Event C14')],
+    DateTime(2019, 5, 29): [Event(detail: 'Event A0'), Event(detail: 'Event B0'), Event(detail: 'Event C0')],
+    DateTime(2019, 6, 1): [Event(detail: 'Event A1')],
+    DateTime(2019, 6, 8): [Event(detail: 'Event A2'), Event(detail: 'Event B2'), Event(detail: 'Event C2'), Event(detail: 'Event D2')],
+    DateTime(2019, 6, 12): [Event(detail: 'Event A3'), Event(detail: 'Event B3')],
+    DateTime(2019, 6, 18): [Event(detail: 'Event A4'), Event(detail: 'Event B4'), Event(detail: 'Event C4')],
+    DateTime(2019, 6, 24): [Event(detail: 'Event A5'), Event(detail: 'Event B5'), Event(detail: 'Event C5')],
+    DateTime(2019, 6, 26): [Event(detail: 'Event A6'), Event(detail: 'Event B6')],
+    DateTime(2019, 6, 28): [Event(detail: 'Event A7'), Event(detail: 'Event B7'), Event(detail: 'Event C7'), Event(detail: 'Event D7')],
+    DateTime(2019, 6, 29): [Event(detail: 'Event A8'), Event(detail: 'Event B8'), Event(detail: 'Event C8'), Event(detail: 'Event D8')],
+    DateTime(2019, 6, 30): [Event(detail: 'Event SK1'), Event(detail: 'Event SK2'), Event(detail: 'Event SK3'), Event(detail: 'Event SK4')],
+    DateTime(2019, 7, 1): [Event(detail: 'Event A9'), Event(detail: 'Event B9'), Event(detail: 'Event C9')],
+    DateTime(2019, 7, 5): [Event(detail: 'Event A10'), Event(detail: 'Event B10'), Event(detail: 'Event C10')],
+    DateTime(2019, 7, 8): [Event(detail: 'Event A11'), Event(detail: 'Event B11')],
+    DateTime(2019, 7, 15): [Event(detail: 'Event A12'), Event(detail: 'Event B12'), Event(detail: 'Event C12'), Event(detail: 'Event D12')],
+    DateTime(2019, 7, 20): [Event(detail: 'Event A13'), Event(detail: 'Event B13')],
+    DateTime(2019, 7, 24): [Event(detail: 'Event A14'), Event(detail: 'Event B14'), Event(detail: 'Event C14')],
   };
   
 }
 
-class EventList extends StatelessWidget {
+class EventToList extends StatelessWidget {
 
   final List events;
+  final VoidCallback onClick;
 
-  EventList({
+  EventToList({
     Key key,
     this.events,
+    this.onClick,
   }) : super(key: key);
 
   @override
@@ -42,10 +73,11 @@ class EventList extends StatelessWidget {
       child: ListView(
         children: events.map((event) => EventCard(
           event: event,
-          onClick: () => print('${event.detail} tapped!'),
+          onClick: onClick,
         ))
         .toList(),
       ),
     );
   }
+  
 }

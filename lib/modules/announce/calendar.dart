@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 
 class Calendar extends StatelessWidget {
@@ -59,7 +60,37 @@ class Calendar extends StatelessWidget {
         weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
       ),
       headerStyle: HeaderStyle(
-        titleTextStyle: TextStyle(color: Colors.black),
+        titleTextStyle: TextStyle(
+          color: Colors.black,
+          fontSize: SizeConfig.setWidth(20.0),
+        ),
+        rightPadding1: EdgeInsets.all(SizeConfig.setWidth(8.0)),
+        rightPadding2: EdgeInsets.all(SizeConfig.setWidth(8.0)),
+        rightPadding3: EdgeInsets.all(SizeConfig.setWidth(8.0)),
+        rightMargin1: EdgeInsets.symmetric(
+          horizontal: SizeConfig.setWidth(8.0),
+        ),
+        rightMargin2: EdgeInsets.symmetric(
+          horizontal: SizeConfig.setWidth(8.0),
+        ),
+        rightMargin3: EdgeInsets.symmetric(
+          horizontal: SizeConfig.setWidth(8.0),
+        ),
+        rightIcon1: Icon(
+          Icons.search,
+          color: Colors.black,
+          size: SizeConfig.setWidth(24.0),
+        ),
+        rightIcon2: Icon(
+          Icons.notifications,
+          color: Colors.black,
+          size: SizeConfig.setWidth(24.0),
+        ),
+        rightIcon3: Icon(
+          Icons.settings,
+          color: Colors.black,
+          size: SizeConfig.setWidth(24.0),
+        ),
       ),
       builders: CalendarBuilders(
         todayDayBuilder: (context, date, events) {

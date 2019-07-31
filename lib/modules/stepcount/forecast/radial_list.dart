@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/constants/constant.dart' show SizeConfig;
+import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/stepcount/generic_widgets/radial_position.dart';
 
 class SlidingRadialList extends StatelessWidget {
@@ -14,30 +14,29 @@ class SlidingRadialList extends StatelessWidget {
     this.controller,
   });
 
-  List<Widget> _radialListItems(double height, double width) {
+  List<Widget> _radialListItems() {
     int index = 0;
     return radialList.items.map((RadialListItemViewModel viewModel) {
       final listItem = _radialListItem(
         viewModel,
         controller.getItemAngle(index),
         controller.getItemOpacity(index),
-        height,
-        width,
       );
       ++index;
       return listItem;
     }).toList();
   }
 
-  Widget _radialListItem(RadialListItemViewModel viewModel, double angle, double opacity, double height, double width) {
+  Widget _radialListItem(RadialListItemViewModel viewModel, double angle, double opacity) {
+    final double radius = 140.0;
     return Transform(
       transform: Matrix4.translationValues(
-        width / 18.0,
-        height / 2.175,
+        SizeConfig.setWidth(45.0),
+        SizeConfig.setHeight(315.0),
         0.0,
       ),
       child: RadialPosition(
-        radius: width / 3 + 75.0,
+        radius: SizeConfig.setWidth(radius + 75.0),
         angle: angle,
         child: Opacity(
           opacity: opacity,
@@ -55,10 +54,7 @@ class SlidingRadialList extends StatelessWidget {
       animation: controller,
       builder: (BuildContext context, Widget child) {
         return Stack(
-          children: _radialListItems(
-            SizeConfig.screenHeight,
-            SizeConfig.screenWidth,
-          ),
+          children: _radialListItems(),
         );
       },
     );
@@ -216,8 +212,8 @@ class RadialListItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            height: SizeConfig.setHeight(60.0),
-            width: SizeConfig.setWidth(60.0),
+            height: SizeConfig.setHeight(58.0),
+            width: SizeConfig.setWidth(58.0),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.transparent,

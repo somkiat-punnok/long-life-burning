@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:long_life_burning/constants/constant.dart';
-import 'package:long_life_burning/routes/route.dart';
+import 'package:long_life_burning/utils/constants.dart';
 import 'splash.dart';
 
 class App extends StatelessWidget {
@@ -23,9 +22,9 @@ class App extends StatelessWidget {
         ),
       ),
       home: SplashScreen(),
-      routes: Routes.route,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: [

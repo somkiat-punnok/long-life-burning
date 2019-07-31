@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
-import 'package:long_life_burning/widgets/date_utils.dart';
-import 'package:long_life_burning/widgets/gesture_detector.dart';
+import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
+import 'package:long_life_burning/utils/widgets/date_utils.dart';
+import 'package:long_life_burning/utils/widgets/gesture_detector.dart';
 import 'package:long_life_burning/modules/calendar/customization/customization.dart';
 import 'package:long_life_burning/modules/calendar/logic/calendar_logic.dart';
 import 'package:long_life_burning/modules/calendar/widgets/widgets.dart';
@@ -214,25 +215,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   Widget _buildHeader() {
-    var title = GestureDetector(
-      onTap: widget.onTitleText,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Icon(
-            Icons.chevron_left,
-            color: Colors.black,
-            size: 35.0,
-          ),
-          Text(
-            widget.headerStyle.titleTextBuilder != null
-                ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
-                : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
-            style: widget.headerStyle.titleTextStyle,
-          ),
-        ],
-      ),
-    );
     return widget.headerStyle.centerHeaderTitle
       ? AppBar(
         backgroundColor: Colors.transparent,
@@ -247,13 +229,13 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           padding: widget.headerStyle.leftChevronPadding,
         ),
         title: GestureDetector(
+          onTap: widget.onTitleText,
           child: Text(
             widget.headerStyle.titleTextBuilder != null
                 ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
                 : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
             style: widget.headerStyle.titleTextStyle,
           ),
-          onTap: widget.onTitleText,
         ),
         actions: <Widget>[
           CustomIconButton(
@@ -269,7 +251,25 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         automaticallyImplyLeading: false,
         brightness: Brightness.light,
         elevation: 0.0,
-        title: title,
+        title: GestureDetector(
+          onTap: widget.onTitleText,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.navigate_before,
+                color: Colors.black,
+                size: SizeConfig.setWidth(32.0),
+              ),
+              Text(
+                widget.headerStyle.titleTextBuilder != null
+                    ? widget.headerStyle.titleTextBuilder(_calendarLogic.focusedDay, widget.locale)
+                    : DateFormat.yMMMM(widget.locale).format(_calendarLogic.focusedDay),
+                style: widget.headerStyle.titleTextStyle,
+              ),
+            ],
+          ),
+        ),
         actions: <Widget>[
           CustomIconButton(
             icon: widget.headerStyle.rightIcon1,
@@ -289,7 +289,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             margin: widget.headerStyle.rightMargin3,
             padding: widget.headerStyle.rightPadding3,
           ),
-          SizedBox(width: 10.0,),
+          SizedBox(width: SizeConfig.setWidth(10.0),),
         ],
       );
   }

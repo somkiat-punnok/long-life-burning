@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:long_life_burning/constants/constant.dart';
+import 'package:long_life_burning/utils/constants.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
+import 'record_page.dart';
 
 class StepCountPage extends StatefulWidget {
+  static const String routeName = '/';
   @override
   _StepCountPageState createState() => _StepCountPageState();
 }
@@ -77,7 +79,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.setWidth(8.0)),
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed(Constants.recordRoute),
+                    onTap: () => Navigator.of(context).pushNamed(RecordPage.routeName),
                     child: Icon(
                       Icons.event_note,
                       color: Colors.white,

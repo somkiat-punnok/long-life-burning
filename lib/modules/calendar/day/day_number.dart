@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/calendar/utils/screen_sizes.dart';
 
 class DayNumber extends StatelessWidget {
-  const DayNumber({
+  DayNumber({
     @required this.day,
     this.isToday,
     this.todayColor = Colors.blue,
@@ -19,7 +19,7 @@ class DayNumber extends StatelessWidget {
       width: size,
       height: size,
       alignment: Alignment.center,
-      decoration: isToday
+      decoration: day > 0 && isToday
         ? BoxDecoration(
             color: todayColor,
             borderRadius: BorderRadius.circular(size / 2),

@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/constants/constant.dart' show Constants;
+import 'package:long_life_burning/modules/announce/search.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
 import 'package:long_life_burning/modules/announce/event/events.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
+import 'detail_page.dart';
+import '../common/year_page.dart';
 
 class AnnouncePage extends StatefulWidget {
+  static const String routeName = '/';
   @override
   _AnnouncePageState createState() => _AnnouncePageState();
 }
 
 class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMixin {
 
+  final SearchEventDelegate _delegate = SearchEventDelegate();
   int lastMonth;
   DateTime _selectedDay;
   Map<DateTime, List> _events;
-  List _selectedEvents;
+  List _onDayEvents;
+  String _lastSelected;
 
   @override
   void initState() {
     super.initState();
     _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     lastMonth = DateTime.now().month;
-    _selectedEvents = Event.events[_selectedDay] ?? [];
-    _events = Event.events;
+    _onDayEvents = EventList.events[_selectedDay] ?? [];
+    _events = EventList.events;
   }
 
   void _onVisibleDaysChanged(first, last, format) {
@@ -55,12 +60,12 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
         lastMonth = date.month;
       }
       _selectedDay = date;
-      _selectedEvents = events;
+      _onDayEvents = events;
     });
   }
 
   _selection(BuildContext context) {
-    Navigator.of(context).pushNamed(Constants.yearsRoute).then((res) {
+    Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then((res) {
       final result = res as List;
       setState(() {
         if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
@@ -87,13 +92,24 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
             onTitleText: () {
               _selection(context);
             },
-            onIcon1: () => print("search"),
+            onIcon1: () async {
+              final String selected = await showSearch<String>(
+                context: context,
+                delegate: _delegate,
+              );
+              if (selected != null && selected != _lastSelected) {
+                setState(() {
+                  _lastSelected = selected;
+                });
+              }
+            },
             onIcon2: () => print("notify"),
             onIcon3: () => print("settings"),
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
-          EventList(
-            events: _selectedEvents,
+          EventToList(
+            events: _onDayEvents,
+            onClick: () => Navigator.of(context).pushNamed(EventDetailPage.routeName),
           ),
         ],
       ),

@@ -2,14 +2,6 @@ import 'package:flutter/widgets.dart';
 
 class SizeConfig {
 
-  static final double width = 411.0;
-  static final double height = 683.0;
-  // width, height, devicePixelRatio, textScaleFactor
-  // 414.0, 896.0, 2.0, 1.0
-  // 411.42857142857144, 683.4285714285714, 2.625, 1.0
-  // 320.0, 568.0, 2.0, 1.0
-
-  static MediaQueryData _mediaQueryData;
   static double screenWidth;
   static double screenHeight;
   static double pixelRatio;
@@ -26,7 +18,14 @@ class SizeConfig {
   static double scaleHeight;
   
   static void init(BuildContext context) {
-    _mediaQueryData = MediaQuery.of(context);
+    final MediaQueryData _mediaQueryData = MediaQuery.of(context);
+    final double width = 411.42857142857144;
+    final double height = 683.4285714285714;
+    // width, height, devicePixelRatio, textScaleFactor
+    // 414.0, 896.0, 2.0, 1.0
+    // 411.42857142857144, 683.4285714285714, 2.625, 1.0
+    // 360.0, 592.0, 3.0, 1.0
+    // 320.0, 568.0, 2.0, 1.0
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;
     pixelRatio = _mediaQueryData.devicePixelRatio;
@@ -41,9 +40,15 @@ class SizeConfig {
     safeBlockVertical = (screenHeight - safeAreaVertical) / 100;
     scaleWidth = screenWidth / width;
     scaleHeight = screenHeight / height;
+    // print("$screenWidth, $screenHeight, $pixelRatio, $textScaleFactor");
   }
 
   static double setWidth(double _width) => _width * scaleWidth;
   static double setHeight(double _height) => _height * scaleHeight;
+
+  @override
+  String toString() {
+    return '$runtimeType(Width: $screenWidth, Height: $screenHeight, Scale: ($scaleWidth, $scaleHeight))';
+  }
 
 }

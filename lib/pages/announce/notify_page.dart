@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NotifyPage extends StatefulWidget {
+  static const String routeName = '/notify';
   @override
   _NotifyPageState createState() => _NotifyPageState();
 }

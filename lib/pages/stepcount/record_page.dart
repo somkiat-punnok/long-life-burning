@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/constants/constant.dart' show Constants;
 import 'package:long_life_burning/modules/stepcount/record/records.dart';
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
+import '../common/year_page.dart';
 
 class RecordPage extends StatefulWidget {
+  static const String routeName = '/record';
   @override
   _RecordPageState createState() => _RecordPageState();
 }
@@ -20,8 +21,8 @@ class _RecordPageState extends State<RecordPage> with TickerProviderStateMixin {
     super.initState();
     _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     lastMonth = DateTime.now().month;
-    _selectedRecords = Record.records[_selectedDay] ?? [];
-    _records = Record.records;
+    _selectedRecords = RecordList.records[_selectedDay] ?? [];
+    _records = RecordList.records;
   }
 
   void _onVisibleDaysChanged(first, last, format) {
@@ -48,7 +49,7 @@ class _RecordPageState extends State<RecordPage> with TickerProviderStateMixin {
   }
 
   _selection(BuildContext context) {
-    Navigator.of(context).pushNamed(Constants.yearsRoute).then((res) {
+    Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then((res) {
       final result = res as List;
       setState(() {
         if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
@@ -77,7 +78,7 @@ class _RecordPageState extends State<RecordPage> with TickerProviderStateMixin {
             },
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
-          RecordList(
+          RecordToList(
             records: _selectedRecords,
           ),
         ],

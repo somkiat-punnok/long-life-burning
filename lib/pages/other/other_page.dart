@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ChartPage extends StatefulWidget {
+class OtherPage extends StatefulWidget {
+  static const String routeName = '/';
   @override
-  _ChartPageState createState() => _ChartPageState();
+  _OtherPageState createState() => _OtherPageState();
 }
 
-class _ChartPageState extends State<ChartPage> {
+class _OtherPageState extends State<OtherPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class _ChartPageState extends State<ChartPage> {
       backgroundColor: Colors.black87,
       appBar: AppBar(
         title: Text(
-          'Chart',
+          'Other',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -28,7 +29,7 @@ class _ChartPageState extends State<ChartPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Chart Page',
+              'Other Page',
               style: TextStyle(
                 color: Colors.white,
               ),

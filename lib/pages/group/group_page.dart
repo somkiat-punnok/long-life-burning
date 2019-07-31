@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GroupPage extends StatefulWidget {
+  static const String routeName = '/';
   @override
   _GroupPageState createState() => _GroupPageState();
 }
