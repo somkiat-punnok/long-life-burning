@@ -257,9 +257,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Icon(
-                Icons.navigate_before,
+                Icons.arrow_back_ios,
                 color: Colors.black,
-                size: SizeConfig.setWidth(32.0),
               ),
               Text(
                 widget.headerStyle.titleTextBuilder != null

@@ -13,6 +13,7 @@ class StepCountPage extends StatefulWidget {
 class _StepCountPageState extends State<StepCountPage> with TickerProviderStateMixin {
 
   SlidingRadialListController slidingListController;
+  bool initComplete = false;
 
   @override
   void initState() {
@@ -25,6 +26,14 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   }
 
   @override
+  void didChangeDependencies() {
+    if(initComplete) {
+      slidingListController.reopen();
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     slidingListController.dispose();
     super.dispose();
@@ -32,6 +41,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    initComplete = true;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,

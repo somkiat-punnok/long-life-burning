@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/pages/announce/detail_page.dart';
 
 class SearchEventDelegate extends SearchDelegate<String> {
+
   final List<String> _data = List<String>.generate(100001, (int i) => i.toString()).reversed.toList();
   final List<String> _history = <String>[];
 
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      tooltip: 'Back',
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
+      icon: Icon(
+        Icons.arrow_back_ios,
       ),
-      onPressed: () {
-        close(context, null);
-      },
+      onPressed: () async => close(context, null),
     );
   }
 
@@ -27,35 +25,42 @@ class SearchEventDelegate extends SearchDelegate<String> {
 
     return _SuggestionList(
       query: query,
+      history: _history,
       suggestions: suggestions.map<String>((String i) => '$i').toList(),
-      onSelected: (String suggestion) {
+      onSelected: (String suggestion) async {
         query = suggestion;
         showResults(context);
       },
     );
+
   }
 
   @override
   Widget buildResults(BuildContext context) {
+
     final String searched = query.toString();
     if (searched == null || !_data.contains(searched)) {
       return Center(
         child: Text(
-          '"$query"\n is not a valid integer between 0 and 100,000.\nTry again.',
+          '"$query"\nIsn\'t a valid string between 0 and 100,000.\nSearch try again.',
           textAlign: TextAlign.center,
         ),
       );
+    }
+    else {
+      if (_history.indexOf(searched) < 0) _history.add(searched);
     }
 
     return ListView(
       children: <Widget>[
         _ResultCard(
-          title: 'This integer',
-          integer: searched,
+          title: 'This String',
+          string: searched,
           searchDelegate: this,
         ),
       ],
     );
+
   }
 
   @override
@@ -63,32 +68,33 @@ class SearchEventDelegate extends SearchDelegate<String> {
     return <Widget>[
       query.isEmpty
         ? IconButton(
-            tooltip: 'Voice Search',
-            icon: const Icon(Icons.mic),
-            onPressed: () {
-              query = 'TODO: implement voice input';
-            },
+            tooltip: 'Search',
+            icon: const Icon(Icons.search),
+            onPressed: () async => showResults(context),
           )
         : IconButton(
             tooltip: 'Clear',
             icon: const Icon(Icons.clear),
-            onPressed: () {
+            onPressed: () async {
               query = '';
               showSuggestions(context);
             },
           ),
     ];
   }
+
 }
 
 class _ResultCard extends StatelessWidget {
+
   const _ResultCard({
-    this.integer,
+    this.string,
     this.title,
     this.searchDelegate,
+
   });
 
-  final String integer;
+  final String string;
   final String title;
   final SearchDelegate<String> searchDelegate;
 
@@ -96,9 +102,7 @@ class _ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return GestureDetector(
-      onTap: () {
-        searchDelegate.close(context, integer);
-      },
+      onTap: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -106,7 +110,7 @@ class _ResultCard extends StatelessWidget {
             children: <Widget>[
               Text(title),
               Text(
-                '$integer',
+                '$string',
                 style: theme.textTheme.headline.copyWith(fontSize: 72.0),
               ),
             ],
@@ -115,12 +119,20 @@ class _ResultCard extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class _SuggestionList extends StatelessWidget {
-  const _SuggestionList({this.suggestions, this.query, this.onSelected});
+  
+  const _SuggestionList({
+    this.suggestions,
+    this.history,
+    this.query,
+    this.onSelected,
+  });
 
   final List<String> suggestions;
+  final List<String> history;
   final String query;
   final ValueChanged<String> onSelected;
 
@@ -132,11 +144,13 @@ class _SuggestionList extends StatelessWidget {
       itemBuilder: (BuildContext context, int i) {
         final String suggestion = suggestions[i];
         return ListTile(
-          leading: query.isEmpty ? const Icon(Icons.history) : const Icon(null),
+          leading: (query.isEmpty || history.indexOf(suggestion) >= 0) ? Icon(Icons.history) : Icon(Icons.event),
           title: RichText(
             text: TextSpan(
               text: suggestion.substring(0, query.length),
-              style: theme.textTheme.subhead.copyWith(fontWeight: FontWeight.bold),
+              style: theme.textTheme.subhead.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
               children: <TextSpan>[
                 TextSpan(
                   text: suggestion.substring(query.length),
@@ -145,11 +159,10 @@ class _SuggestionList extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () {
-            onSelected(suggestion);
-          },
+          onTap: () async => onSelected(suggestion),
         );
       },
     );
   }
+
 }

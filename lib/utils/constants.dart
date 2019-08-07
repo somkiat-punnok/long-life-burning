@@ -13,6 +13,14 @@ class Constants {
   // Key others
   //static final String API_Key = '';
 
+  static const List<String> province = [
+    'All Province','Phayao','Chaing Mai','Nan'
+  ];
+
+  static const List<String> categories = [
+    'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
+  ];
+
   // image assets
   static const String image = 'assets/images';
   static const String forestImage = '$image/forest.jpg';

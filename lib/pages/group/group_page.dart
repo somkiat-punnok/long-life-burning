@@ -13,7 +13,7 @@ class _GroupPageState extends State<GroupPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Group',
@@ -23,6 +23,7 @@ class _GroupPageState extends State<GroupPage> {
         ),
         backgroundColor: Colors.white,
         brightness: Brightness.light,
+        elevation: 1.0,
       ),
       body: Center(
         child: Column(
@@ -30,7 +31,9 @@ class _GroupPageState extends State<GroupPage> {
           children: <Widget>[
             Text(
               'Group Page',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.black,
+              ),
             ),
           ],
         ),

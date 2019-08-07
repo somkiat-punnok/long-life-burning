@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.initState();
     Timer(
       Duration(seconds: 5),
-      () async => Navigator.of(context).pushReplacement(
+      () async => await Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (BuildContext context) => Index(),
         )
@@ -31,7 +31,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
       body: Stack(
-        fit: StackFit.expand,
         children: <Widget>[
           Container(
             alignment: Alignment.center,
@@ -59,7 +58,18 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 ),
               ),
             ],
-          )
+          ),
+          Positioned(
+            top: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.transparent,
+              brightness: Brightness.dark,
+              elevation: 0.0,
+            ),
+          ),
         ],
       ),
     );

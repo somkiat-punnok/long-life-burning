@@ -4,6 +4,8 @@ import 'package:long_life_burning/modules/announce/calendar.dart';
 import 'package:long_life_burning/modules/announce/event/events.dart';
 import 'package:long_life_burning/modules/calendar/table_calendar.dart';
 import 'detail_page.dart';
+import 'notify_page.dart';
+import 'setting_page.dart';
 import '../common/year_page.dart';
 
 class AnnouncePage extends StatefulWidget {
@@ -64,8 +66,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     });
   }
 
-  _selection(BuildContext context) {
-    Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then((res) {
+  _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
+    (res) {
       final result = res as List;
       setState(() {
         if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
@@ -75,8 +77,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
           _selectedDay = DateTime(result[0], result[1], 1);
         }
       });
-    });
-  }
+    }
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +105,13 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
                 });
               }
             },
-            onIcon2: () => print("notify"),
-            onIcon3: () => print("settings"),
+            onIcon2: () async => await Navigator.of(context).pushNamed(NotifyPage.routeName),
+            onIcon3: () async => await Navigator.of(context).pushNamed(SettingPage.routeName),
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
           EventToList(
             events: _onDayEvents,
-            onClick: () => Navigator.of(context).pushNamed(EventDetailPage.routeName),
+            onClick: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),
           ),
         ],
       ),

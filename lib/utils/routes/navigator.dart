@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'route.dart';
-
-enum CategoryPage { stepCount, nearby, events, groups, others }
+part of routing;
 
 class NavCategory {
 
@@ -62,18 +59,11 @@ class PageNavigate extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Navigator(
     key: nav[index].navigateKey,
-    initialRoute: '/',
+    initialRoute: Navigator.defaultRouteName,
     onGenerateRoute: (RouteSettings settings) => MaterialPageRoute(
       settings: settings,
       builder: _buildRoutePage(nav[index].tag)[settings.name],
     ),
   );
+
 }
-
-
-
-Map<String, WidgetBuilder> _buildRoutePage(CategoryPage i) => Map<String, WidgetBuilder>.fromIterable(
-  listPageCategory[i],
-  key: (dynamic page) => page.routeName,
-  value: (dynamic page) => page.buildRoute,
-);

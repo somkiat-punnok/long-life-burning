@@ -4,6 +4,7 @@ export 'stepcount/record_page.dart';
 export 'nearby/nearby_page.dart';
 
 export 'announce/announce_page.dart';
+export 'announce/setting_page.dart';
 export 'announce/notify_page.dart';
 export 'announce/detail_page.dart';
 

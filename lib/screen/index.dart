@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/utils/constants.dart';
-import 'package:long_life_burning/utils/routes/r.dart';
+import 'package:long_life_burning/utils/routes/routing.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -26,9 +26,14 @@ class _IndexState extends State<Index> {
   }
 
   void onChanged (int index) {
-    setState(() {
-      pageIndex = index;
-    });
+    if(pageIndex != index) {
+      setState(() {
+        pageIndex = index;
+      });
+    }
+    else {
+      nav[pageIndex].navigateKey.currentState.popUntil(ModalRoute.withName('/'));
+    }
   }
 
   @override

@@ -100,7 +100,6 @@ class SlidingRadialListController extends ChangeNotifier {
                 break;
             }
           });
-
         _fadeController
           ..addListener(() => notifyListeners())
           ..addStatusListener((AnimationStatus status) {
@@ -121,16 +120,13 @@ class SlidingRadialListController extends ChangeNotifier {
                 break;
             }
           });
-
         final delayInterval = 0.1;
         final slideInterval = 0.5;
         final angleDeltaPerItem = (lastItemAngle - firstItemAngle) / (itemCount - 1);
         for (var i = 0; i < itemCount; ++i) {
           final start = delayInterval * i;
           final end = start + slideInterval;
-
           final endSlidingAngle = firstItemAngle + (angleDeltaPerItem * i);
-
           _slidePositions.add(
             Tween(
               begin: startSlidingAngle,
@@ -186,6 +182,13 @@ class SlidingRadialListController extends ChangeNotifier {
       return onClosedCompleter.future;
     }
     return null;
+  }
+
+  Future<Null> reopen() {
+    _slideController.reset();
+    _slideController.forward();
+    onOpenedCompleter = Completer();
+    return onOpenedCompleter.future;
   }
 
 }

@@ -13,16 +13,17 @@ class _OtherPageState extends State<OtherPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Other',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.black,
-        brightness: Brightness.dark,
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        elevation: 1.0,
       ),
       body: Center(
         child: Column(
@@ -31,7 +32,7 @@ class _OtherPageState extends State<OtherPage> {
             Text(
               'Other Page',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ],

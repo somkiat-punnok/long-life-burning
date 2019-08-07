@@ -13,16 +13,16 @@ class _ChartPageState extends State<ChartPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Chart',
           style: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.black,
-        brightness: Brightness.dark,
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
       ),
       body: Center(
         child: Column(
@@ -31,7 +31,7 @@ class _ChartPageState extends State<ChartPage> {
             Text(
               'Chart Page',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
           ],
