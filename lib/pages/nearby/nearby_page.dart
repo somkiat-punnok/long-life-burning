@@ -26,7 +26,19 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          MapView(),
+          MapView(
+            center: LatLng(19.027510, 99.900178),
+            listMark: <Marker>[
+              Marker(
+                point: LatLng(19.027510, 99.900178),
+                builder: (_) => Icon(
+                  Icons.location_on,
+                  color: Colors.redAccent,
+                  size: 48.0,
+                ),
+              ),
+            ],
+          ),
           Positioned(
             right: 20.0,
             bottom: _initFabHeight,
@@ -55,9 +67,9 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
             child: Container(
               padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
               child: Text(
-                "SlidingUpPanel",
+                "Nearby Locations",
                 style: TextStyle(
-                  fontWeight: FontWeight.w500
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               decoration: BoxDecoration(
@@ -66,13 +78,14 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 boxShadow: [
                   BoxShadow(
                     color: Color.fromRGBO(0, 0, 0, 0.25),
-                    blurRadius: 16.0
+                    blurRadius: 16.0,
                   ),
                 ],
               ),
             ),
           ),
           SlidePanel(
+            title: 'Place for Runners',
             panelHeightOpen: _panelHeightOpen,
             panelHeightClosed: _panelHeightClosed,
             radius: _radius ?? _initRadius,

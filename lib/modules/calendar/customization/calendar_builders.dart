@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
-typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
-typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events);
+part of calendar;
 
 class CalendarBuilders {
   

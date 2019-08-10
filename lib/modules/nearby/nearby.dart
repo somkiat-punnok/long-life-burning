@@ -8,13 +8,17 @@ class SlidePanel extends StatelessWidget {
   final double panelHeightClosed;
   final double radius;
   final void Function(double) onPanelSlide;
+  final String title;
 
   SlidePanel({
+    Key key,
+    @required this.title,
     this.panelHeightOpen,
     this.panelHeightClosed,
     this.radius,
     this.onPanelSlide,
-  });
+  }) :  assert(title != null && title != ''),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,9 @@ class SlidePanel extends StatelessWidget {
           ],
         ),
       ),
-      panel: Place(),
+      panel: Place(
+        title: title,
+      ),
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(radius),
         topRight: Radius.circular(radius),

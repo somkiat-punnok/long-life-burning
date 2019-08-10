@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/calendar/years_calendar.dart';
+import 'package:long_life_burning/modules/calendar/calendar.dart' show YearsCalendar;
 
 class YearsCalendarPage extends StatefulWidget {
   static const String routeName = '/year';
@@ -25,7 +25,10 @@ class _YearsCalendarPageState extends State<YearsCalendarPage> {
             onMonthTap: (int year, int month) async {
               Navigator.pop(
                 context,
-                [ year, month, ],
+                <int>[
+                  year,
+                  month,
+                ],
               );
             },
           ),

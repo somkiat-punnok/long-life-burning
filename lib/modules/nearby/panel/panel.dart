@@ -111,7 +111,9 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
                 Positioned(
                   top: 0.0,
                   bottom: null,
-                  width:  MediaQuery.of(context).size.width - (widget.margin != null ? widget.margin.horizontal : 0) - (widget.padding != null ? widget.padding.horizontal : 0),
+                  width:  MediaQuery.of(context).size.width
+                          - (widget.margin != null ? widget.margin.horizontal : 0)
+                          - (widget.padding != null ? widget.padding.horizontal : 0),
                   child: Container(
                     height: widget.maxHeight,
                     child: widget.panel,
@@ -120,7 +122,9 @@ class _SlidingUpPanelState extends State<SlidingUpPanel> with SingleTickerProvid
                 Positioned(
                   top: 0.0,
                   bottom: null,
-                  width:  MediaQuery.of(context).size.width - (widget.margin != null ? widget.margin.horizontal : 0) - (widget.padding != null ? widget.padding.horizontal : 0),
+                  width:  MediaQuery.of(context).size.width
+                          - (widget.margin != null ? widget.margin.horizontal : 0)
+                          - (widget.padding != null ? widget.padding.horizontal : 0),
                   child: Container(
                     height: widget.minHeight,
                     child: Opacity(

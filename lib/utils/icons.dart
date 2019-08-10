@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-class IconsAndroid {
+// Icons on Android
+class IconAndroid {
 
-  // Icons on Android
+  IconAndroid._();
+
   static const IconData home = IconData(
     0xe88a,
     fontFamily: 'MaterialIcons'
@@ -23,18 +25,18 @@ class IconsAndroid {
     fontFamily: 'MaterialIcons'
   );
 
-  static const IconData others = IconData(
+  static const IconData menu = IconData(
     0xe5d2,
     fontFamily: 'MaterialIcons'
   );
 
 }
 
-class IconsiOS {
+// Icons on iOS
+class IconiOS {
 
-  IconsiOS._();
+  IconiOS._();
 
-  // Icons on iOS
   static const IconData home = IconData(
     0xf38f,
     fontFamily: 'CupertinoIcons',
@@ -55,7 +57,7 @@ class IconsiOS {
     fontFamily: 'CupertinoIcons',
   );
 
-  static const IconData others = IconData(
+  static const IconData menu = IconData(
     0xf394,
     fontFamily: 'CupertinoIcons',
   );

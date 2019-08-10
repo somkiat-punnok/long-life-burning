@@ -16,7 +16,7 @@ class _IndexState extends State<Index> {
     navBarItem(kNearby.name, kNearby.icon),
     navBarItem(kEvents.name, kEvents.icon),
     navBarItem(kGroups.name, kGroups.icon),
-    navBarItem(kOthers.name, kOthers.icon),
+    navBarItem(kMenu.name, kMenu.icon),
   ];
 
   @override
@@ -59,6 +59,7 @@ class _IndexState extends State<Index> {
     type: BottomNavigationBarType.fixed,
     showSelectedLabels: false,
     showUnselectedLabels: false,
+    backgroundColor: Colors.white,
     selectedItemColor: isMaterial ? Colors.blue : CupertinoColors.activeBlue,
     unselectedItemColor: isMaterial ? Colors.grey : CupertinoColors.inactiveGray,
     iconSize: SizeConfig.setWidth(24.0),

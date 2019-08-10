@@ -21,6 +21,8 @@ class _NotifyPageState extends State<NotifyPage> {
           'Notifications',
           style: TextStyle(
             color: Colors.black,
+            fontSize: 36.0,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: <Widget>[
@@ -28,7 +30,7 @@ class _NotifyPageState extends State<NotifyPage> {
             onTap: () => Navigator.of(context).pop(),
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(18.0),
               child: Text(
                 'Exit',
                 style: TextStyle(
@@ -41,7 +43,7 @@ class _NotifyPageState extends State<NotifyPage> {
         ],
         backgroundColor: Colors.white,
         brightness: Brightness.light,
-        elevation: 1.0,
+        elevation: 0.0,
       ),
       body: Center(
         child: Column(

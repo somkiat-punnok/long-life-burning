@@ -3,7 +3,7 @@ import 'event_card.dart';
 
 class Event {
 
-  final String id,detail;
+  final String id, detail;
   
   Event({
     this.id,
@@ -60,22 +60,41 @@ class EventToList extends StatelessWidget {
 
   final List events;
   final VoidCallback onClick;
+  final void Function(bool) onDown;
+  final ScrollController controller;
 
   EventToList({
     Key key,
-    this.events,
+    @required this.events,
     this.onClick,
+    this.onDown,
+    this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView(
-        children: events.map((event) => EventCard(
-          event: event,
-          onClick: onClick,
-        ))
-        .toList(),
+      child: NotificationListener(
+        onNotification: (Notification notify) {
+          if (notify is UserScrollNotification) {
+            if (notify.direction.toString() == 'ScrollDirection.forward') {
+              onDown(true);
+            }
+            else {
+              onDown(false);
+            }
+          }
+          return true;
+        },
+        child: ListView(
+          controller: controller,
+          physics: BouncingScrollPhysics(),
+          children: events.map((event) => EventCard(
+            event: event,
+            onClick: onClick,
+          ))
+          .toList(),
+        ),
       ),
     );
   }

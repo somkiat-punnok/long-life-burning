@@ -9,42 +9,42 @@ import '../constants.dart';
 part 'route.dart';
 part 'navigator.dart';
 
-enum CategoryPage { stepCount, nearby, events, groups, others }
+enum CategoryPage { stepCount, nearby, events, groups, menu }
 
 final List<NavCategory> nav = [
   kStepCount,
   kNearby,
   kEvents,
   kGroups,
-  kOthers,
+  kMenu,
 ];
 
 final NavCategory kStepCount = NavCategory(
   name: 'Step Count',
-  icon: isMaterial ? IconsAndroid.home : IconsiOS.home,
+  icon: isMaterial ? IconAndroid.home : IconiOS.home,
   tag: CategoryPage.stepCount,
 );
 
 final NavCategory kNearby = NavCategory(
   name: 'Nearby',
-  icon: isMaterial ? IconsAndroid.near_me : IconsiOS.near_me,
+  icon: isMaterial ? IconAndroid.near_me : IconiOS.near_me,
   tag: CategoryPage.nearby,
 );
 
 final NavCategory kEvents = NavCategory(
   name: 'Events',
-  icon: isMaterial ? IconsAndroid.marathon : IconsiOS.marathon,
+  icon: isMaterial ? IconAndroid.marathon : IconiOS.marathon,
   tag: CategoryPage.events,
 );
 
 final NavCategory kGroups = NavCategory(
   name: 'Groups',
-  icon: isMaterial ? IconsAndroid.group : IconsiOS.group,
+  icon: isMaterial ? IconAndroid.group : IconiOS.group,
   tag: CategoryPage.groups,
 );
 
-final NavCategory kOthers = NavCategory(
-  name: 'Others',
-  icon: isMaterial ? IconsAndroid.others : IconsiOS.others,
-  tag: CategoryPage.others,
+final NavCategory kMenu = NavCategory(
+  name: 'Menu',
+  icon: isMaterial ? IconAndroid.menu : IconiOS.menu,
+  tag: CategoryPage.menu,
 );

@@ -80,7 +80,8 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 'Step Counts',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: SizeConfig.setWidth(30.0),
+                  fontSize: SizeConfig.setWidth(36.0),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               brightness: Brightness.dark,

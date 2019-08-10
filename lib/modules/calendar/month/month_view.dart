@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/calendar/utils/dates.dart';
-import 'package:long_life_burning/modules/calendar/utils/screen_sizes.dart';
-import 'package:long_life_burning/modules/calendar/month/month_title.dart';
-import 'package:long_life_burning/modules/calendar/day/day_number.dart';
+part of calendar;
 
 class MonthView extends StatelessWidget {
 
@@ -28,31 +24,50 @@ class MonthView extends StatelessWidget {
 
   Widget buildMonthDays(BuildContext context) {
     final List<Row> dayRows = <Row>[];
-    final List<DayNumber> dayRowChildren = <DayNumber>[];
-    final int daysInMonth = getDaysInMonth(year, month);
-    final int firstWeekdayOfMonth = DateTime(year, month, 1).weekday;
-    for (int day = 2 - firstWeekdayOfMonth; day <= daysInMonth; day++) {
-      final bool isToday = dateIsToday(DateTime(year, month, day));
-      dayRowChildren.add(
-        DayNumber(
-          day: day,
-          isToday: isToday,
-          todayColor: todayColor,
-        ),
-      );
-      if ((day - 1 + firstWeekdayOfMonth) % DateTime.daysPerWeek == 0 || day == daysInMonth) {
-        dayRows.add(
-          Row(
-            children: List<DayNumber>.from(dayRowChildren),
-          ),
-        );
-        dayRowChildren.clear();
-      }
+    final DateTime first = DateTime(year, month, 1);
+    final int firstWeekdayOfMonth = first.weekday;
+    final int daysBefore = firstWeekdayOfMonth % 7;
+    final DateTime firstToDisplay = first.subtract(Duration(days: daysBefore));
+    final DateTime date = month < 12 ? DateTime.utc(year, month + 1, 1, 12) : DateTime.utc(year + 1, 1, 1, 12);
+    final DateTime last = date.subtract(Duration(days: 1));
+    int daysAfter = 7 - last.weekday;
+    if (daysAfter == 0) {
+      daysAfter = 7;
     }
-
+    final DateTime lastToDisplay = last.add(Duration(days: daysAfter));
+    final List<DateTime> daysInMonth = Utils.daysInRange(firstToDisplay, lastToDisplay).toList();
+    final daysInWeek = 7;
+    int x = 0;
+    while (x < daysInMonth.length) {
+      List<DateTime> list = daysInMonth.skip(x).take(daysInWeek).toList();
+      if (list.length % daysInWeek == 0) {
+        dayRows.add(_buildRow(list, x));
+      }
+      x += daysInWeek;
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: dayRows,
+    );
+  }
+
+  Row _buildRow(List<DateTime> days, int i) {
+    return Row(
+      children: days.map((DateTime date) {
+        final bool isToday = dateIsToday(DateTime(date.year, date.month, date.day));
+        int day = 0;
+        if ((i == 0 && date.day > 10) || (i > 20 && date.day < 10)) {
+          day = 0;
+        }
+        else {
+          day = date.day;
+        }
+        return DayNumber(
+          day: day,
+          isToday: isToday,
+          todayColor: todayColor,
+        );
+      }).toList()
     );
   }
 

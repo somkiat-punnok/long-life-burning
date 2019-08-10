@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class GroupPage extends StatefulWidget {
-  static const String routeName = '/';
+class SettingPage extends StatefulWidget {
+  static const String routeName = '/setting';
   @override
-  _GroupPageState createState() => _GroupPageState();
+  _SettingPageState createState() => _SettingPageState();
 }
 
-class _GroupPageState extends State<GroupPage> {
-  
+class _SettingPageState extends State<SettingPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,14 +16,31 @@ class _GroupPageState extends State<GroupPage> {
       resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
-          'Group',
+          'Setting',
           style: TextStyle(
             color: Colors.black,
             fontSize: 36.0,
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(18.0),
+              child: Text(
+                'Exit',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  color: CupertinoColors.activeBlue,
+                ),
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         elevation: 0.0,
@@ -32,7 +50,7 @@ class _GroupPageState extends State<GroupPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Group Page',
+              'Setting Page',
               style: TextStyle(
                 color: Colors.black,
               ),

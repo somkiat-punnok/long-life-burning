@@ -2,7 +2,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
-import 'package:long_life_burning/modules/calendar/table_calendar.dart';
+import 'package:long_life_burning/modules/calendar/calendar.dart';
 
 typedef void OnDaySelected(DateTime day, List events);
 typedef void OnVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format);
@@ -10,27 +10,28 @@ typedef void OnHeader();
 
 class Calendar extends StatelessWidget {
 
+  final CalendarController controller;
   final Map<DateTime, List> records;
-  final DateTime selectedDay;
   final OnDaySelected onDaySelected;
   final OnHeader onTitleText;
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   Calendar({
     Key key,
+    @required this.controller,
     this.records,
-    this.selectedDay,
     this.onDaySelected,
     this.onTitleText,
     this.onVisibleDaysChanged,
-  }) : super(key: key);
+  }) :  
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
+      calendarController: controller,
       locale: 'en_US',
       events: records,
-      selectedDay: selectedDay,
       initialCalendarFormat: CalendarFormat.week,
       startingDayOfWeek: StartingDayOfWeek.sunday,
       availableGestures: AvailableGestures.none,
@@ -40,6 +41,7 @@ class Calendar extends StatelessWidget {
       onDaySelected: onDaySelected,
       onTitleText: onTitleText,
       onVisibleDaysChanged: onVisibleDaysChanged,
+      markerVisible: false,
       calendarStyle: CalendarStyle(
         outsideStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
         outsideWeekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
@@ -57,24 +59,25 @@ class Calendar extends StatelessWidget {
         centerHeaderTitle: true,
         titleTextStyle: TextStyle(
           color: Colors.black,
-          fontSize: SizeConfig.setWidth(20.0),
+          fontSize: SizeConfig.setWidth(24.0),
+          fontWeight: FontWeight.bold,
         ),
-        leftChevronIcon: Icon(
-          Icons.navigate_before,
+        beforeIcon: Icon(
+          Icons.arrow_back_ios,
           color: Colors.black,
           size: SizeConfig.setWidth(28.0),
         ),
-        rightChevronIcon: Icon(
-          Icons.navigate_next,
+        nextIcon: Icon(
+          Icons.arrow_forward_ios,
           color: Colors.black,
           size: SizeConfig.setWidth(28.0),
         ),
-        leftChevronPadding: EdgeInsets.all(SizeConfig.setWidth(12.0)),
-        rightChevronPadding: EdgeInsets.all(SizeConfig.setWidth(12.0)),
-        leftChevronMargin: EdgeInsets.symmetric(
+        beforePadding: EdgeInsets.all(SizeConfig.setWidth(12.0)),
+        nextPadding: EdgeInsets.all(SizeConfig.setWidth(12.0)),
+        beforeMargin: EdgeInsets.symmetric(
           horizontal: SizeConfig.setWidth(8.0),
         ),
-        rightChevronMargin: EdgeInsets.symmetric(
+        nextMargin: EdgeInsets.symmetric(
           horizontal: SizeConfig.setWidth(8.0),
         ),
       ),
@@ -94,8 +97,7 @@ class Calendar extends StatelessWidget {
         selectedDayBuilder: (context, date, events) {
           return Container(
             decoration: BoxDecoration(
-              color:  (date.day == DateTime.now().day && date.month == DateTime.now().month && date.year == DateTime.now().year)
-                      ? Colors.red : Colors.black,
+              color:  controller.isToday(date) ? Colors.red : Colors.black,
               shape: BoxShape.circle,
             ),
             margin: EdgeInsets.all(12.0),

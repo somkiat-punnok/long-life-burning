@@ -41,9 +41,29 @@ class SearchEventDelegate extends SearchDelegate<String> {
     final String searched = query.toString();
     if (searched == null || !_data.contains(searched)) {
       return Center(
-        child: Text(
-          '"$query"\nIsn\'t a valid string between 0 and 100,000.\nSearch try again.',
-          textAlign: TextAlign.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.search,
+              size: 100.0,
+            ),
+            Text(
+              'No Result',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Try a more general keyword.\nSearch try again.',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
         ),
       );
     }

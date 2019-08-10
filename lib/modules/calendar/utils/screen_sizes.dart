@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of calendar;
 
 enum ScreenSizes {
   small,

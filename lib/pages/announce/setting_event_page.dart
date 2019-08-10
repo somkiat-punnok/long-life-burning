@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/utils/constants.dart' show Constants;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
-class SettingPage extends StatefulWidget {
-  static const String routeName = '/setting';
+class SetEventPage extends StatefulWidget {
+  static const String routeName = '/setevent';
   @override
-  _SettingPageState createState() => _SettingPageState();
+  _SetEventPageState createState() => _SetEventPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SetEventPageState extends State<SetEventPage> {
 
   int province = 0;
   int category = 0;
@@ -25,6 +25,8 @@ class _SettingPageState extends State<SettingPage> {
           'Settings',
           style: TextStyle(
             color: Colors.black,
+            fontSize: 36.0,
+            fontWeight: FontWeight.bold,
           ),
         ),
         actions: <Widget>[
@@ -32,7 +34,7 @@ class _SettingPageState extends State<SettingPage> {
             onTap: () => Navigator.of(context).pop(),
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(18.0),
               child: Text(
                 'Done',
                 style: TextStyle(
@@ -43,7 +45,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
         ],
-        elevation: 1.0,
+        elevation: 0.0,
         backgroundColor: Colors.white,
         brightness: Brightness.light,
       ),

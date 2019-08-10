@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/calendar/utils/dates.dart';
+part of calendar;
 
 class MonthTitle extends StatelessWidget {
 

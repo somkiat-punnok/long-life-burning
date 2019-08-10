@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/calendar/utils/dates.dart';
-import 'package:long_life_burning/modules/calendar/utils/screen_sizes.dart';
-import 'package:long_life_burning/modules/calendar/month/month_view.dart';
-import 'package:long_life_burning/modules/calendar/year/year_title.dart';
+part of calendar;
 
 class YearView extends StatelessWidget {
   YearView({

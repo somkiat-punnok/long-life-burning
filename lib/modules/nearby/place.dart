@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Place extends StatelessWidget {
+
+  final String title;
+
+  Place({
+    Key key,
+    @required this.title,
+  }) :  assert(title != null && title != ''),
+        super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -12,9 +21,9 @@ class Place extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Explore Pittsburgh",
+              title.toUpperCase(),
               style: TextStyle(
-                fontWeight: FontWeight.normal,
+                fontWeight: FontWeight.bold,
                 fontSize: 24.0,
               ),
             ),

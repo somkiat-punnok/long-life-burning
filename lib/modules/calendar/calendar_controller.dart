@@ -1,19 +1,25 @@
-import 'package:flutter/foundation.dart';
-import 'package:long_life_burning/utils/widgets/date_utils.dart';
-import 'package:long_life_burning/modules/calendar/table_calendar.dart';
+part of calendar;
 
-const double _dxMax = 1.2;
-const double _dxMin = -1.2;
-
-class CalendarLogic {
+class CalendarController {
 
   DateTime get focusedDay => _focusedDay;
   DateTime get selectedDay => _selectedDay;
   int get pageId => _pageId;
   double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
-  List<DateTime> get visibleDays => _visibleDays.value;
+  List<DateTime> get visibleDays => _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
+  Map<DateTime, List> get visibleEvents => Map.fromEntries(
+    _events.entries.where((entry) {
+      for (final day in visibleDays) {
+        if (Utils.isSameDay(day, entry.key)) {
+          return true;
+        }
+      }
+      return false;
+    }),
+  );
 
+  Map<DateTime, List> _events;
   DateTime _focusedDay;
   DateTime _selectedDay;
   StartingDayOfWeek _startingDayOfWeek;
@@ -24,17 +30,26 @@ class CalendarLogic {
   DateTime _previousLastDay;
   int _pageId;
   double _dx;
+  bool _includeInvisibleDays;
+  _SelectedDayCallback _selectedDayCallback;
 
-  CalendarLogic(
-    this._availableCalendarFormats,
-    this._startingDayOfWeek,
-  {
-    DateTime initialDay,
-    CalendarFormat initialFormat,
-    OnVisibleDaysChanged onVisibleDaysChanged,
-    bool includeInvisibleDays = false,
-  })  : _pageId = 0,
-        _dx = 0 {
+  void _init({
+    @required Map<DateTime, List> events,
+    @required DateTime initialDay,
+    @required CalendarFormat initialFormat,
+    @required Map<CalendarFormat, String> availableCalendarFormats,
+    @required StartingDayOfWeek startingDayOfWeek,
+    @required _SelectedDayCallback selectedDayCallback,
+    @required OnVisibleDaysChanged onVisibleDaysChanged,
+    @required bool includeInvisibleDays,
+  }) {
+    _events = events;
+    _availableCalendarFormats = availableCalendarFormats;
+    _startingDayOfWeek = startingDayOfWeek;
+    _selectedDayCallback = selectedDayCallback;
+    _includeInvisibleDays = includeInvisibleDays;
+    _pageId = 0;
+    _dx = 0;
     final now = DateTime.now();
     _focusedDay = initialDay ?? DateTime(now.year, now.month, now.day);
     _selectedDay = _focusedDay;
@@ -42,11 +57,9 @@ class CalendarLogic {
     _visibleDays = ValueNotifier(_getVisibleDays());
     _previousFirstDay = _visibleDays.value.first;
     _previousLastDay = _visibleDays.value.last;
-
     _calendarFormat.addListener(() {
       _visibleDays.value = _getVisibleDays();
     });
-
     if (onVisibleDaysChanged != null) {
       _visibleDays.addListener(() {
         if (!Utils.isSameDay(_visibleDays.value.first, _previousFirstDay) ||
@@ -54,8 +67,8 @@ class CalendarLogic {
           _previousFirstDay = _visibleDays.value.first;
           _previousLastDay = _visibleDays.value.last;
           onVisibleDaysChanged(
-            _getFirstDay(includeInvisible: includeInvisibleDays),
-            _getLastDay(includeInvisible: includeInvisibleDays),
+            _getFirstDay(includeInvisible: _includeInvisibleDays),
+            _getLastDay(includeInvisible: _includeInvisibleDays),
             _calendarFormat.value,
           );
         }
@@ -68,43 +81,67 @@ class CalendarLogic {
     _visibleDays.dispose();
   }
 
-  void swipeCalendarFormat(bool isSwipeUp) {
+  void toggleCalendarFormat() {
+    _calendarFormat.value = _nextFormat();
+  }
+
+  void swipeCalendarFormat({@required bool isSwipeUp}) {
+    assert(isSwipeUp != null);
     final formats = _availableCalendarFormats.keys.toList();
     int id = formats.indexOf(_calendarFormat.value);
-
     if (isSwipeUp) {
       id = _clamp(0, formats.length - 1, id + 1);
     } else {
       id = _clamp(0, formats.length - 1, id - 1);
     }
-    
     _calendarFormat.value = formats[id];
   }
 
-  bool setSelectedDay(DateTime value, {bool isAnimated = true, bool isProgrammatic = false}) {
-    if (Utils.isSameDay(value, _selectedDay)) {
-      return false;
-    }
+  void setCalendarFormat(CalendarFormat value) {
+    _calendarFormat.value = value;
+  }
 
-    if (isAnimated) {
+  void setSelectedDay(
+    DateTime value, {
+    bool isProgrammatic = true,
+    bool animate = true,
+    bool runCallback = false,
+  }) {
+    if (animate) {
       if (value.isBefore(_getFirstDay(includeInvisible: false))) {
         _decrementPage();
       } else if (value.isAfter(_getLastDay(includeInvisible: false))) {
         _incrementPage();
       }
     }
-
     _selectedDay = value;
     _focusedDay = value;
-
-    if (isProgrammatic) {
-      _visibleDays.value = _getVisibleDays();
+    _updateVisibleDays(isProgrammatic);
+    if (isProgrammatic && runCallback && _selectedDayCallback != null) {
+      _selectedDayCallback(value);
     }
-
-    return true;
   }
 
-  void selectPrevious() {
+  void setFocusedDay(DateTime value) {
+    _focusedDay = value;
+    _updateVisibleDays(true);
+  }
+
+  void _updateVisibleDays(bool isProgrammatic) {
+    if (calendarFormat == CalendarFormat.month || calendarFormat == CalendarFormat.week || isProgrammatic) {
+      _visibleDays.value = _getVisibleDays();
+    }
+  }
+
+  CalendarFormat _nextFormat() {
+    final formats = _availableCalendarFormats.keys.toList();
+    int id = formats.indexOf(_calendarFormat.value);
+    id = (id + 1) % formats.length;
+
+    return formats[id];
+  }
+
+  void _selectPrevious() {
     if (calendarFormat == CalendarFormat.month) {
       _selectPreviousMonth();
     } else {
@@ -115,7 +152,7 @@ class CalendarLogic {
     _decrementPage();
   }
 
-  void selectNext() {
+  void _selectNext() {
     if (calendarFormat == CalendarFormat.month) {
       _selectNextMonth();
     } else {
@@ -144,7 +181,7 @@ class CalendarLogic {
 
   DateTime _getFirstDay({@required bool includeInvisible}) {
     if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
-      return Utils.firstDayOfMonth(_focusedDay);
+      return _firstDayOfMonth(_focusedDay);
     } else {
       return _visibleDays.value.first;
     }
@@ -152,11 +189,7 @@ class CalendarLogic {
 
   DateTime _getLastDay({@required bool includeInvisible}) {
     if (_calendarFormat.value == CalendarFormat.month && !includeInvisible) {
-      var last = Utils.lastDayOfMonth(_focusedDay);
-      if (last.hour == 23) {
-        last = last.add(Duration(hours: 1));
-      }
-      return last;
+      return _lastDayOfMonth(_focusedDay);
     } else {
       return _visibleDays.value.last;
     }
@@ -181,22 +214,11 @@ class CalendarLogic {
   }
 
   List<DateTime> _daysInMonth(DateTime month) {
-    final first = Utils.firstDayOfMonth(month);
+    final first = _firstDayOfMonth(month);
     final daysBefore = _startingDayOfWeek == StartingDayOfWeek.sunday ? first.weekday % 7 : first.weekday - 1;
-    var firstToDisplay = first.subtract(Duration(days: daysBefore));
-
-    if (firstToDisplay.hour == 23) {
-      firstToDisplay = firstToDisplay.add(Duration(hours: 1));
-    }
-
-    var last = Utils.lastDayOfMonth(month);
-
-    if (last.hour == 23) {
-      last = last.add(Duration(hours: 1));
-    }
-
+    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    final last = _lastDayOfMonth(month);
     var daysAfter = 7 - last.weekday;
-
     if (_startingDayOfWeek == StartingDayOfWeek.sunday) {
       if (daysAfter == 0) {
         daysAfter = 7;
@@ -204,36 +226,35 @@ class CalendarLogic {
     } else {
       daysAfter++;
     }
-
-    var lastToDisplay = last.add(Duration(days: daysAfter));
-
-    if (lastToDisplay.hour == 1) {
-      lastToDisplay = lastToDisplay.subtract(Duration(hours: 1));
-    }
-
+    final lastToDisplay = last.add(Duration(days: daysAfter));
     return Utils.daysInRange(firstToDisplay, lastToDisplay).toList();
   }
 
   List<DateTime> _daysInWeek(DateTime week) {
     final first = _firstDayOfWeek(week);
     final last = _lastDayOfWeek(week);
-
-    final days = Utils.daysInRange(first, last);
-    return days.map((day) => DateTime(day.year, day.month, day.day)).toList();
+    return Utils.daysInRange(first, last).toList();
   }
 
   DateTime _firstDayOfWeek(DateTime day) {
     day = DateTime.utc(day.year, day.month, day.day, 12);
-
     final decreaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
     return day.subtract(Duration(days: decreaseNum));
   }
 
   DateTime _lastDayOfWeek(DateTime day) {
     day = DateTime.utc(day.year, day.month, day.day, 12);
-
     final increaseNum = _startingDayOfWeek == StartingDayOfWeek.sunday ? day.weekday % 7 : day.weekday - 1;
     return day.add(Duration(days: 7 - increaseNum));
+  }
+
+  DateTime _firstDayOfMonth(DateTime month) {
+    return DateTime.utc(month.year, month.month, 1, 12);
+  }
+
+  DateTime _lastDayOfMonth(DateTime month) {
+    final date = month.month < 12 ? DateTime.utc(month.year, month.month + 1, 1, 12) : DateTime.utc(month.year + 1, 1, 1, 12);
+    return date.subtract(const Duration(days: 1));
   }
 
   bool isSelected(DateTime day) {
@@ -244,11 +265,11 @@ class CalendarLogic {
     return Utils.isSameDay(day, DateTime.now());
   }
 
-  bool isWeekend(DateTime day) {
+  bool _isWeekend(DateTime day) {
     return day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
   }
 
-  bool isExtraDay(DateTime day) {
+  bool _isExtraDay(DateTime day) {
     return _isExtraDayBefore(day) || _isExtraDayAfter(day);
   }
 

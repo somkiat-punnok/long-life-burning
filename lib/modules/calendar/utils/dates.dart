@@ -1,3 +1,5 @@
+part of calendar;
+
 bool dateIsToday(DateTime date) {
   final DateTime now = DateTime.now();
   return date.isAtSameMomentAs(DateTime(now.year, now.month, now.day));

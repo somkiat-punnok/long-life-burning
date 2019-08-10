@@ -43,10 +43,10 @@ List<Pages> _buildPage() => <Pages>[
     buildRoute: (BuildContext context) => GroupPage(),
   ),
   Pages(
-    name: kOthers.name,
-    tag: CategoryPage.others,
-    routeName: OtherPage.routeName,
-    buildRoute: (BuildContext context) => OtherPage(),
+    name: kMenu.name,
+    tag: CategoryPage.menu,
+    routeName: MenuPage.routeName,
+    buildRoute: (BuildContext context) => MenuPage(),
   ),
   Pages(
     name: 'Record',
@@ -79,15 +79,27 @@ List<Pages> _buildPage() => <Pages>[
     buildRoute: (BuildContext context) => NotifyPage(),
   ),
   Pages(
-    name: 'Setting',
+    name: 'Setting Event',
     tag: CategoryPage.events,
+    routeName: SetEventPage.routeName,
+    buildRoute: (BuildContext context) => SetEventPage(),
+  ),
+  Pages(
+    name: 'Statistic',
+    tag: CategoryPage.menu,
+    routeName: StatisticPage.routeName,
+    buildRoute: (BuildContext context) => StatisticPage(),
+  ),
+  Pages(
+    name: 'Setting',
+    tag: CategoryPage.menu,
     routeName: SettingPage.routeName,
     buildRoute: (BuildContext context) => SettingPage(),
   ),
   Pages(
-    name: 'Chart',
-    tag: CategoryPage.others,
-    routeName: ChartPage.routeName,
-    buildRoute: (BuildContext context) => ChartPage(),
+    name: 'Marking',
+    tag: CategoryPage.menu,
+    routeName: MarkingPage.routeName,
+    buildRoute: (BuildContext context) => MarkingPage(),
   ),
 ];

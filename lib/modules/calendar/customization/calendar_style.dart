@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of calendar;
 
 class CalendarStyle {
   
@@ -30,7 +30,7 @@ class CalendarStyle {
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
     this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
     this.markersAlignment = Alignment.bottomCenter,
-    this.markersMaxAmount = 4,
+    this.markersMaxAmount = 1,
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
     this.canEventMarkersOverflow = false,

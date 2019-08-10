@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/calendar/utils/screen_sizes.dart';
+part of calendar;
 
 class YearTitle extends StatelessWidget {
   const YearTitle({

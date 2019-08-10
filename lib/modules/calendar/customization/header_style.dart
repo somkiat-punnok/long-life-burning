@@ -1,23 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/calendar/table_calendar.dart';
+part of calendar;
 
 class HeaderStyle {
 
   final bool centerHeaderTitle;
   final TextBuilder titleTextBuilder;
   final TextStyle titleTextStyle;
-  final EdgeInsets leftChevronPadding;
-  final EdgeInsets rightChevronPadding;
-  final EdgeInsets leftChevronMargin;
-  final EdgeInsets rightChevronMargin;
-  final Icon leftChevronIcon;
-  final Icon rightChevronIcon;
+  final EdgeInsets beforePadding;
+  final EdgeInsets nextPadding;
   final EdgeInsets rightPadding1;
   final EdgeInsets rightPadding2;
   final EdgeInsets rightPadding3;
+  final EdgeInsets beforeMargin;
+  final EdgeInsets nextMargin;
   final EdgeInsets rightMargin1;
   final EdgeInsets rightMargin2;
   final EdgeInsets rightMargin3;
+  final Icon beforeIcon;
+  final Icon nextIcon;
   final Icon rightIcon1;
   final Icon rightIcon2;
   final Icon rightIcon3;
@@ -26,21 +25,21 @@ class HeaderStyle {
     this.centerHeaderTitle = false,
     this.titleTextBuilder,
     this.titleTextStyle = const TextStyle(fontSize: 18.0),
-    this.leftChevronPadding = const EdgeInsets.all(12.0),
-    this.rightChevronPadding = const EdgeInsets.all(12.0),
-    this.leftChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.rightChevronMargin = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.leftChevronIcon = const Icon(Icons.chevron_left, color: Colors.black),
-    this.rightChevronIcon = const Icon(Icons.chevron_right, color: Colors.black),
+    this.beforePadding = const EdgeInsets.all(12.0),
+    this.nextPadding = const EdgeInsets.all(12.0),
     this.rightPadding1 = const EdgeInsets.all(8.0),
     this.rightPadding2 = const EdgeInsets.all(8.0),
     this.rightPadding3 = const EdgeInsets.all(8.0),
+    this.beforeMargin = const EdgeInsets.symmetric(horizontal: 8.0),
+    this.nextMargin = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightMargin1 = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightMargin2 = const EdgeInsets.symmetric(horizontal: 8.0),
     this.rightMargin3 = const EdgeInsets.symmetric(horizontal: 8.0),
-    this.rightIcon1 = const Icon(Icons.search, color: Colors.black),
-    this.rightIcon2 = const Icon(Icons.notifications, color: Colors.black),
-    this.rightIcon3 = const Icon(Icons.settings, color: Colors.black),
+    this.beforeIcon = const Icon(Icons.chevron_left, color: Colors.black),
+    this.nextIcon = const Icon(Icons.chevron_right, color: Colors.black),
+    this.rightIcon1 = const Icon(Icons.add, color: Colors.black),
+    this.rightIcon2 = const Icon(Icons.add, color: Colors.black),
+    this.rightIcon3 = const Icon(Icons.add, color: Colors.black),
   });
   
 }
