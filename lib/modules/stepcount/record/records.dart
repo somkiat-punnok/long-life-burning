@@ -1,73 +1,280 @@
+import 'dart:async';
+// import 'dart:convert';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/stepcount/record/record_card.dart';
 
+final String tableName = 'record';
+final String columnId = 'id';
+final String columnDay = 'day';
+final String columnStep = 'step';
+final String columnCal = 'cal';
+final String columnDist = 'dist';
+
 class Record {
 
-  final String id,detail;
+  int id;
+  String day;
+  int step;
+  double cal;
+  double dist;
+  String detail;
   
   Record({
     this.id,
+    this.day,
+    this.step,
+    this.cal,
+    this.dist,
     this.detail,
   });
 
-  Record.fromJson(Map<String, dynamic> json)
-    : id = json["id"],
-      detail = json["detail"];
-
   Map<String, dynamic> toMap() {
-    var map = Map<String, dynamic>();
-    map["id"] = id;
-    map["detail"] = detail;
-    return map;
+    return <String, dynamic>{
+      columnDay: day ?? '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}',
+      columnStep: step ?? 0,
+      columnCal: cal ?? 0.0,
+      columnDist: dist ?? 0.0,
+      "detail": detail,
+    };
   }
 
   Record.fromDB(Map<String, dynamic> map)
-    : id = map["id"],
+    : id = map[columnId],
+      day = map[columnDay],
+      step = map[columnStep],
+      cal = map[columnCal],
+      dist = map[columnDist],
       detail = map["detail"];
 
 }
 
+class RecordProvider {
+
+  RecordProvider._internal();
+
+  static RecordProvider _shared = RecordProvider._internal();
+  static RecordProvider get shared => _shared;
+
+  Database db;
+
+  Future init() async {
+    final String name = 'record.db';
+    final String dbPath = await getDatabasesPath();
+    final String path = join(dbPath, name);
+    Database db = await openDatabase(path, version: 1, onCreate: _create);
+    print('DB INITIATED WITH PATH : $path');
+    this.db = db;
+    return db;
+  }
+
+  Future _create(Database db, int version) async {
+    await db.transaction((t) async {
+      await t.execute('''
+        CREATE TABLE IF NOT EXISTS $tableName (
+          $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $columnDay TEXT NOT NULL,
+          $columnStep INTEGER NOT NULL,
+          $columnCal REAL NOT NULL,
+          $columnDist REAL NOT NULL
+        );
+      ''');
+    });
+  }
+
+  Future<Record> insert(Record record) async {
+    record.id = await db.insert(tableName, record.toMap());
+    return record;
+  }
+
+  Future<Record> getRecord(int id) async {
+    List<Map> maps = await db.query(
+      tableName,
+      columns: [columnDay, columnStep, columnCal, columnDist],
+      where: '$columnId = ?',
+      whereArgs: [id]
+    );
+    if (maps.length > 0) {
+      return Record.fromDB(maps.first);
+    }
+    return null;
+  }
+
+  Future<int> update(Record record) async => await db.update(
+    tableName,
+    record.toMap(),
+    where: '$columnId = ?',
+    whereArgs: [record.id]
+  );
+
+  Future<int> delete(int id) async => await db.delete(
+    tableName,
+    where: '$columnId = ?',
+    whereArgs: [id]
+  );
+
+  Future close() async => db.close();
+
+}
+
+// import 'dart:async';
+// import 'dart:convert';
+// import 'dart:io' show Directory;
+// import 'package:sqflite/sqflite.dart';
+// import 'package:uuid/uuid.dart';
+// import 'package:path/path.dart';
+// import 'package:path_provider/path_provider.dart';
+
+// class DatabaseManage {
+
+//   DatabaseManage._internal();
+
+//   static DatabaseManage _shared = DatabaseManage._internal();
+//   static DatabaseManage get shared => _shared;
+
+//   Database db;
+
+//   Future init({
+//     String name = 'test.db',
+//     int version = 1,
+//     String create = '''
+//       CREATE TABLE IF NOT EXISTS run (
+//         id INT PRIMARY KEY,
+//         data_uint BLOB NOT NULL,
+//         data_utf BLOB NOT NULL
+//       );
+//     ''',
+//   }) async {
+//     final Directory documentsDirectory = await getApplicationDocumentsDirectory();
+//     final String path = join(documentsDirectory.path, name);
+//     if (version != 1) {
+//       await deleteDatabase(path);
+//     }
+//     Database db = await openDatabase(path, version: version, onCreate: _create);
+//     print('DB INITIATED WITH PATH : $path');
+//     this.db = db;
+//     return db;
+//   }
+
+//   Future _create(Database db, int version) async {
+//     await db.transaction((t) async {
+//       await t.execute('''
+//         CREATE TABLE IF NOT EXISTS run (
+//           id TEXT PRIMARY KEY,
+//           data_uint BLOB NOT NULL,
+//           data_utf BLOB NOT NULL
+//       );
+//       ''');
+//     });
+//   }
+
+//   Future close() async => await db.close();
+
+//   Future<bool> saveData() async {
+//     final id = Uuid().v1();
+//     final dataUtf = utf8.encode(id);
+//     print('$id - $dataUtf');
+//     try {
+//       print('$id - $dataUtf');
+//       final _ = await db.rawQuery('''
+//         INSERT OR REPLACE INTO run
+//         (id, data_uint, data_utf) VALUES (?, ?, ?)''', [id, dataUtf, dataUtf]);
+//       print(' DATA SAVED');
+//       return true;
+//     } catch (e) {
+//       print('FAILED SAVING DATA: ${e.toString()}');
+//       return false;
+//     }
+//   }
+
+//   Future<List<Map<String, dynamic>>> fetchData() async {
+//     try {
+//       final res = db.rawQuery('SELECT * FROM run');
+//       return res;
+//     } catch (e) {
+//       print('FAILED FETCH DATA: ${e.toString()}');
+//       return [];
+//     }
+//   }
+
+// }
 class RecordList {
 
   static final Map<DateTime, List<Record>> records = {
-    DateTime(2019, 7, 29): [Record(detail: 'STEP A0'), Record(detail: 'STEP B0'), Record(detail: 'STEP C0')],
-    DateTime(2019, 8, 1): [Record(detail: 'STEP A1')],
-    DateTime(2019, 8, 8): [Record(detail: 'STEP A2'), Record(detail: 'STEP B2'), Record(detail: 'STEP C2'), Record(detail: 'STEP D2')],
-    DateTime(2019, 8, 12): [Record(detail: 'STEP A3'), Record(detail: 'STEP B3')],
-    DateTime(2019, 8, 18): [Record(detail: 'STEP A4'), Record(detail: 'STEP B4'), Record(detail: 'STEP C4')],
-    DateTime(2019, 8, 24): [Record(detail: 'STEP A5'), Record(detail: 'STEP B5'), Record(detail: 'STEP C5')],
-    DateTime(2019, 8, 26): [Record(detail: 'STEP A6'), Record(detail: 'STEP B6')],
-    DateTime(2019, 8, 28): [Record(detail: 'STEP A7'), Record(detail: 'STEP B7'), Record(detail: 'STEP C7'), Record(detail: 'STEP D7')],
-    DateTime(2019, 8, 29): [Record(detail: 'STEP A8'), Record(detail: 'STEP B8'), Record(detail: 'STEP C8'), Record(detail: 'STEP D8')],
-    DateTime(2019, 8, 30): [Record(detail: 'STEP SK1'), Record(detail: 'STEP SK2'), Record(detail: 'STEP SK3'), Record(detail: 'STEP SK4')],
-    DateTime(2019, 9, 1): [Record(detail: 'STEP A9'), Record(detail: 'STEP B9'), Record(detail: 'STEP C9')],
-    DateTime(2019, 9, 5): [Record(detail: 'STEP A10'), Record(detail: 'STEP B10'), Record(detail: 'STEP C10')],
-    DateTime(2019, 9, 8): [Record(detail: 'STEP A11'), Record(detail: 'STEP B11')],
-    DateTime(2019, 9, 15): [Record(detail: 'STEP A12'), Record(detail: 'STEP B12'), Record(detail: 'STEP C12'), Record(detail: 'STEP D12')],
-    DateTime(2019, 9, 20): [Record(detail: 'STEP A13'), Record(detail: 'STEP B13')],
-    DateTime(2019, 9, 24): [Record(detail: 'STEP A14'), Record(detail: 'STEP B14'), Record(detail: 'STEP C14')],
+    _buildSub(1): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(2): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(3): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(4): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(5): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(6): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(7): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(8): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(9): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildSub(10): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(1): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(2): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(3): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(4): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(5): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(6): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(7): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(8): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(9): [Record(step: 0, cal: 0.0, dist: 0.0)],
+    _buildAdd(10): [Record(step: 0, cal: 0.0, dist: 0.0)],
   };
+
+  static DateTime _buildSub(int i) {
+    DateTime temp = DateTime.now().subtract(Duration(days: i));
+    return DateTime(temp.year, temp.month, temp.day);
+  }
+
+  static DateTime _buildAdd(int i) {
+    DateTime temp = DateTime.now().add(Duration(days: i));
+    return DateTime(temp.year, temp.month, temp.day);
+  }
   
 }
 
 class RecordToList extends StatelessWidget {
 
   final List records;
+  final int step;
+  final double cal;
+  final double dist;
 
   RecordToList({
     Key key,
     this.records,
+    this.step,
+    this.cal,
+    this.dist,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView(
-        children: records.map((record) => RecordCard(
-          record: record,
-          onClick: () => Navigator.pop(context),
-        ))
-        .toList(),
+        children: (records != null && records.isNotEmpty) || (step != null && cal != null && dist != null)
+            ? <Widget>[
+              RecordCard(
+                value: step != null ? step.toString() : records.first.step.toString(),
+                name: 'steps',
+                unit: 'step',
+              ),
+              RecordCard(
+                value: cal != null ? cal.toString() : records.first.cal.toString(),
+                name: 'calories',
+                unit: 'kCal',
+              ),
+              RecordCard(
+                value: dist != null ? dist.toString() : records.first.dist.toString(),
+                name: 'distances',
+                unit: 'km',
+              ),
+            ]
+          : <Widget>[],
       ),
     );
   }

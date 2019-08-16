@@ -1,5 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart'
+  show
+    runApp,
+    Colors;
+import 'package:flutter/services.dart'
+  show
+    SystemChrome,
+    SystemUiOverlayStyle,
+    DeviceOrientation;
 import 'package:long_life_burning/screen/app.dart';
 
 void main() => SystemChrome.setPreferredOrientations([

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/stepcount/forecast/background/background_with_rings.dart';
 import 'package:long_life_burning/modules/stepcount/forecast/radial_list.dart';
 

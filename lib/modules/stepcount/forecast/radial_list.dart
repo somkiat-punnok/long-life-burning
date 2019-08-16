@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/stepcount/generic_widgets/radial_position.dart';
 
 class SlidingRadialList extends StatelessWidget {

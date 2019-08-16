@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:long_life_burning/utils/constants.dart';
+import 'package:flutter/cupertino.dart' show CupertinoColors;
+import 'package:flutter_localizations/flutter_localizations.dart'
+  show
+    GlobalMaterialLocalizations,
+    GlobalCupertinoLocalizations,
+    GlobalWidgetsLocalizations;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    Constants,
+    isMaterial;
 import 'splash.dart';
 
 class App extends StatelessWidget {
@@ -16,20 +23,21 @@ class App extends StatelessWidget {
         primaryColor: isMaterial ? Colors.blue : CupertinoColors.activeBlue,
         textTheme: TextTheme(
           display1: TextStyle(
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.normal,
             fontStyle: FontStyle.normal,
           ),
         ),
       ),
       home: SplashScreen(),
-      localizationsDelegates: [
+      localizationsDelegates: <LocalizationsDelegate>[
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales: <Locale>[
         Locale("en", "US"),
       ],
     );
   }
+
 }

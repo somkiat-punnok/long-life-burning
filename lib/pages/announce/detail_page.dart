@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/utils/constants.dart';
+import 'package:long_life_burning/utils/helper/constants.dart';
 
 class EventDetailPage extends StatefulWidget {
   static const String routeName = '/event';
@@ -18,18 +18,18 @@ class _EventDetailPageState extends State<EventDetailPage> {
         children: <Widget>[
           Stack(
             children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(left: 10.0),
-                height: SizeConfig.screenHeight * 0.5,
-                decoration: new BoxDecoration(
-                  image: new DecorationImage(
-                    image: new AssetImage(Constants.forestImage),
-                    fit: BoxFit.cover,
-                  ),
+              Positioned(
+                top: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  automaticallyImplyLeading: false,
+                  brightness: Brightness.dark,
+                  elevation: 0.0,
                 ),
               ),
               Container(
-                height: SizeConfig.screenHeight * 0.5,
                 padding: EdgeInsets.all(40.0),
                 width: SizeConfig.screenWidth,
                 decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, .9)),

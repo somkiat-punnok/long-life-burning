@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:long_life_burning/utils/constants.dart';
+import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/utils/widgets/date_utils.dart';
 import 'package:long_life_burning/utils/widgets/gesture_detector.dart';
 

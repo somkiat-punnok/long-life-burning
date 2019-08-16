@@ -1,3 +1,5 @@
+// import 'package:flutter/material.dart';
+
 export 'package:long_life_burning/utils/widgets/platform.dart'
   show
     isMaterial,
@@ -11,7 +13,7 @@ class Constants {
   static const String appName = 'Long Burn';
 
   // Key others
-  //static final String API_Key = '';
+  // static final String API_Key = '';
 
   static const List<String> province = [
     'All Province','Phayao','Chaing Mai','Nan'

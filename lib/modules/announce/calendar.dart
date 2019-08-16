@@ -1,7 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:long_life_burning/utils/constants.dart' show SizeConfig;
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/calendar/calendar.dart';
 
 class Calendar extends StatelessWidget {

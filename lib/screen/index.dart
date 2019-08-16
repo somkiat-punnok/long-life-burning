@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/utils/constants.dart';
-import 'package:long_life_burning/utils/routes/routing.dart';
+import 'package:flutter/cupertino.dart' show CupertinoColors;
+import 'package:long_life_burning/utils/helper/constants.dart';
+import 'package:long_life_burning/utils/routes/routing.dart'
+  show
+    nav,
+    kStepCount,
+    kNearby,
+    kEvents,
+    kGroups,
+    kMenu,
+    PageNavigate;
 
 class Index extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/utils/constants.dart';
+import 'package:long_life_burning/utils/helper/constants.dart';
 
 class BackgroundWithRings extends StatelessWidget {
 

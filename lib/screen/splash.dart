@@ -1,8 +1,11 @@
-import 'dart:async';
+import 'dart:async' show Timer;
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/utils/constants.dart';
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    Constants,
+    SizeConfig;
 import 'package:long_life_burning/modules/loader/dot_loader.dart';
-import 'index.dart';
+import 'index.dart' show Index;
 
 class SplashScreen extends StatefulWidget {
   @override
