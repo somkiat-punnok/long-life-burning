@@ -3,8 +3,8 @@ library routing;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:long_life_burning/pages/all.dart';
-import '../helper/icons.dart';
-import '../helper/constants.dart';
+import 'package:long_life_burning/utils/helper/icons.dart';
+import 'package:long_life_burning/utils/helper/constants.dart';
 
 part 'route.dart';
 part 'navigator.dart';

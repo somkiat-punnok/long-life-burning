@@ -25,6 +25,7 @@ class Constants {
 
   // image assets
   static const String image = 'assets/images';
+  static const String loginImage = '$image/77314-OF1N1Y-610.jpg';
   static const String forestImage = '$image/forest.jpg';
   static const String oceanImage = '$image/ocean.jpg';
 

@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         MaterialPageRoute(
           builder: (BuildContext context) => Index(),
         )
-      )
+      ),
     );
   }
 
