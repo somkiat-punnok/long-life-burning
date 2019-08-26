@@ -8,7 +8,6 @@ void main() {
     FlutterDriver driver;
 
     setUpAll(() async {
-      // Connect to a running Flutter application instance.
       driver = await FlutterDriver.connect();
     });
 
