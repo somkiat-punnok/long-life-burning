@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
+
   show
     Constants,
     SizeConfig;
@@ -7,6 +8,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
 class SignUpPage extends StatelessWidget {
 
   SignUpPage({
+    
     Key key,
   }) : super(key: key);
 

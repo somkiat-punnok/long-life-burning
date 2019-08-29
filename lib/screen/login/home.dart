@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           Container(
-            padding: EdgeInsets.only(top: 150.0),
+            padding: EdgeInsets.only(top: 75.0),
             child: Center(
               child: Icon(
                 Icons.directions_run,

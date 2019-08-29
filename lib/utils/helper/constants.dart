@@ -23,6 +23,10 @@ class Constants {
     'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
   ];
 
+  static const List<String> group_categories = [
+    'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
+  ];
+
   // image assets
   static const String image = 'assets/images';
   static const String loginImage = '$image/77314-OF1N1Y-610.jpg';

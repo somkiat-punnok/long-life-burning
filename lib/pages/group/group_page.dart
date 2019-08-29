@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import './creategroup.dart';
 
 class GroupPage extends StatefulWidget {
   static const String routeName = '/';
@@ -174,13 +175,13 @@ class _GroupPageState extends State<GroupPage> {
               ],
             ),
             Positioned(
-              right: 150.0,
+              right: 300.0,
               bottom: 10.0,
               child: CupertinoButton(
                 color: Colors.blueGrey,
                 disabledColor: Colors.grey,
                 padding: EdgeInsets.all(8.0),
-                onPressed: () =>gotoCreate(),
+                onPressed: () =>gotoCreate(context),
                 child: Text(
                   "Create group",
                   style: TextStyle(fontSize: 15.0),                                   
@@ -195,11 +196,8 @@ class _GroupPageState extends State<GroupPage> {
 
 }
 
-gotoCreate() {
-    _controller.animateToPage(
-      0,
-      duration: Duration(milliseconds: 800),
-      curve: Curves.bounceOut,
-    );
-  }
-   PageController _controller = new PageController(initialPage: 1, viewportFraction: 1.0);
+gotoCreate(context) {
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (context) => CreateGroup(),
+  ));
+}
