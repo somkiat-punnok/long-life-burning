@@ -10,11 +10,10 @@ class SettingPicker extends StatefulWidget {
   SettingPicker({
     Key key,
     @required this.items,
-    @required this.title,
+    this.title,
     this.currentIndex = 0,
     this.onSelect,
   }) :  assert(items != null),
-        assert(title != null),
         assert(0 <= currentIndex && currentIndex < items.length),
         super(key: key);
 
@@ -73,14 +72,14 @@ class _PickerState extends State<SettingPicker> {
                       );
                     }),
                   ),
-                  title: widget.title,
+                  title: widget.title ?? ' ',
                   context: context,
                 ),
               ),
               child: _buildMenu(
                 <Widget>[
                   Text(
-                    widget.title,
+                    widget.title ?? ' ',
                     style: TextStyle(
                       color: Colors.black,
                     ),
@@ -102,41 +101,70 @@ class _PickerState extends State<SettingPicker> {
 
 }
 
-class SettingCountdownTimerPicker extends StatefulWidget {
-  @override
-  _CountdownTimerPickerState createState() => _CountdownTimerPickerState();
-}
+class TimerPicker extends StatelessWidget {
 
-class _CountdownTimerPickerState extends State<SettingCountdownTimerPicker> {
+  final String title;
+  final Duration currentTimer;
+  final TimerCallback onSelect;
 
-  Duration timer = Duration();
+  TimerPicker({
+    Key key,
+    this.title,
+    this.currentTimer,
+    this.onSelect,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showCupertinoModalPopup<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return _buildBottomPicker(
-              CupertinoTimerPicker(
-                initialTimerDuration: timer,
-                onTimerDurationChanged: (Duration newTimer) {
-                  setState(() => timer = newTimer);
-                },
+    return Container(
+      height: SETTING_ITEM_HEIGHT,
+      padding: SETTING_ITEM_PADDING,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: SETTING_BORDER_COLOR,
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () async => await showCupertinoModalPopup<void>(
+                context: context,
+                builder: (BuildContext context) => _buildBottomPicker(
+                  CupertinoTimerPicker(
+                    initialTimerDuration: currentTimer ?? Duration(),
+                    mode: CupertinoTimerPickerMode.hms,
+                    onTimerDurationChanged: onSelect,
+                  ),
+                  title: title ?? ' ',
+                  context: context,
+                ),
               ),
-            );
-          },
-        );
-      },
-      child: _buildMenu(
-        <Widget>[
-          const Text('Countdown Timer'),
-          Text(
-            '${timer.inHours}:'
-            '${(timer.inMinutes % 60).toString().padLeft(2,'0')}:'
-            '${(timer.inSeconds % 60).toString().padLeft(2,'0')}',
-            style: const TextStyle(color: CupertinoColors.inactiveGray),
+              child: _buildMenu(
+                <Widget>[
+                  Text(
+                    title ?? ' ',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    '${(currentTimer.inHours).toString().padLeft(2,'0')}:'
+                    '${(currentTimer.inMinutes % 60).toString().padLeft(2,'0')}:'
+                    '${(currentTimer.inSeconds % 60).toString().padLeft(2,'0')}',
+                    style: TextStyle(
+                      color: CupertinoColors.inactiveGray,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -145,82 +173,66 @@ class _CountdownTimerPickerState extends State<SettingCountdownTimerPicker> {
 
 }
 
-class SettingDatePicker extends StatefulWidget {
-  @override
-  _DatePickerState createState() => _DatePickerState();
-}
+class DatePicker extends StatelessWidget {
 
-class _DatePickerState extends State<SettingDatePicker> {
+  final String title;
+  final DateTime currentDate;
+  final DateCallback onSelect;
 
-  DateTime date = DateTime.now();
+  DatePicker({
+    Key key,
+    this.title,
+    this.currentDate,
+    this.onSelect,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showCupertinoModalPopup<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return _buildBottomPicker(
-              CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                initialDateTime: date,
-                onDateTimeChanged: (DateTime newDateTime) {
-                  setState(() => date = newDateTime);
-                },
-              ),
-            );
-          },
-        );
-      },
-      child: _buildMenu(
-        <Widget>[
-          const Text('Date'),
-          Text(
-            DateFormat.yMMMMd().format(date),
-            style: const TextStyle(color: CupertinoColors.inactiveGray),
+    return Container(
+      height: SETTING_ITEM_HEIGHT,
+      padding: SETTING_ITEM_PADDING,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: SETTING_BORDER_COLOR,
+            width: 1.0,
           ),
-        ]
+        ),
       ),
-    );
-  }
-
-}
-
-class SettingTimePicker extends StatefulWidget {
-  @override
-  _TimePickerState createState() => _TimePickerState();
-}
-
-class _TimePickerState extends State<SettingTimePicker> {
-
-  DateTime time = DateTime.now();
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showCupertinoModalPopup<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return _buildBottomPicker(
-              CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.time,
-                initialDateTime: time,
-                onDateTimeChanged: (DateTime newDateTime) {
-                  setState(() => time = newDateTime);
-                },
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () async => await showCupertinoModalPopup<void>(
+                context: context,
+                builder: (BuildContext context) => _buildBottomPicker(
+                  CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    initialDateTime: currentDate ?? DateTime.now(),
+                    onDateTimeChanged: onSelect,
+                  ),
+                  title: title ?? ' ',
+                  context: context,
+                ),
               ),
-            );
-          },
-        );
-      },
-      child: _buildMenu(
-        <Widget>[
-          const Text('Time'),
-          Text(
-            DateFormat.jm().format(time),
-            style: const TextStyle(color: CupertinoColors.inactiveGray),
+              child: _buildMenu(
+                <Widget>[
+                  Text(
+                    title ?? ' ',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    DateFormat.yMMMMd().format(currentDate),
+                    style: const TextStyle(color: CupertinoColors.inactiveGray),
+                  ),
+                ]
+              ),
+            ),
           ),
         ],
       ),
@@ -229,40 +241,136 @@ class _TimePickerState extends State<SettingTimePicker> {
 
 }
 
-class SettingDateAndTimePicker extends StatefulWidget {
-  @override
-  _DateAndTimePickerState createState() => _DateAndTimePickerState();
-}
+class TimePicker extends StatelessWidget {
 
-class _DateAndTimePickerState extends State<SettingDateAndTimePicker> {
+  final String title;
+  final DateTime currentTime;
+  final DateCallback onSelect;
 
-  DateTime dateTime = DateTime.now();
+  TimePicker({
+    Key key,
+    this.title,
+    this.currentTime,
+    this.onSelect,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showCupertinoModalPopup<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return _buildBottomPicker(
-              CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.dateAndTime,
-                initialDateTime: dateTime,
-                onDateTimeChanged: (DateTime newDateTime) {
-                  setState(() => dateTime = newDateTime);
-                },
+    return Container(
+      height: SETTING_ITEM_HEIGHT,
+      padding: SETTING_ITEM_PADDING,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: SETTING_BORDER_COLOR,
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () async => await showCupertinoModalPopup<void>(
+                context: context,
+                builder: (BuildContext context) => _buildBottomPicker(
+                  CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.time,
+                    initialDateTime: currentTime ?? DateTime.now(),
+                    onDateTimeChanged: onSelect,
+                  ),
+                  title: title ?? ' ',
+                  context: context,
+                ),
               ),
-            );
-          },
-        );
-      },
-      child: _buildMenu(
-        <Widget>[
-          const Text('Date and Time'),
-          Text(
-            DateFormat.yMMMd().add_jm().format(dateTime),
-            style: const TextStyle(color: CupertinoColors.inactiveGray),
+              child: _buildMenu(
+                <Widget>[
+                  Text(
+                    title ?? ' ',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    DateFormat.jm().format(currentTime),
+                    style: TextStyle(
+                      color: CupertinoColors.inactiveGray,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}
+
+class DateAndTimePicker extends StatelessWidget {
+
+  final String title;
+  final DateTime currentDateAndTime;
+  final DateCallback onSelect;
+
+  DateAndTimePicker({
+    Key key,
+    this.title,
+    this.currentDateAndTime,
+    this.onSelect,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: SETTING_ITEM_HEIGHT,
+      padding: SETTING_ITEM_PADDING,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: SETTING_BORDER_COLOR,
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Flex(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Expanded(
+            child: CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () async => await showCupertinoModalPopup<void>(
+                context: context,
+                builder: (BuildContext context) => _buildBottomPicker(
+                  CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.dateAndTime,
+                    initialDateTime: currentDateAndTime ?? DateTime.now(),
+                    onDateTimeChanged: onSelect,
+                  ),
+                  title: title ?? ' ',
+                  context: context,
+                ),
+              ),
+              child: _buildMenu(
+                <Widget>[
+                  Text(
+                    title ?? ' ',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    DateFormat.yMMMd().add_jm().format(currentDateAndTime),
+                    style: const TextStyle(color: CupertinoColors.inactiveGray),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -289,7 +397,13 @@ Widget _buildMenu(List<Widget> children) {
 Widget _buildBottomPicker(Widget picker, {String title, BuildContext context}) {
   return Container(
     height: _kPickerSheetHeight,
-    color: Colors.white,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(18.0),
+        topRight: Radius.circular(18.0),
+      ),
+    ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -302,7 +416,11 @@ Widget _buildBottomPicker(Widget picker, {String title, BuildContext context}) {
             ),
             child: Container(
               alignment: Alignment.topCenter,
-              padding: EdgeInsets.all(14.0),
+              padding: EdgeInsets.only(
+                top: 18.0,
+                left: 24.0,
+                right: 24.0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[

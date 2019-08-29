@@ -1,16 +1,16 @@
-import 'dart:async';
-// import 'dart:convert';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/stepcount/record/record_card.dart';
+library record;
 
-final String tableName = 'record';
-final String columnId = 'id';
-final String columnDay = 'day';
-final String columnStep = 'step';
-final String columnCal = 'cal';
-final String columnDist = 'dist';
+import 'dart:async';
+import 'dart:convert';
+// import 'dart:io' show Directory;
+import 'package:flutter/material.dart';
+// import 'package:uuid/uuid.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+// import 'package:path_provider/path_provider.dart';
+
+part 'db.dart';
+part 'record_card.dart';
 
 class Record {
 
@@ -30,175 +30,35 @@ class Record {
     this.detail,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      columnDay: day ?? '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}',
-      columnStep: step ?? 0,
-      columnCal: cal ?? 0.0,
-      columnDist: dist ?? 0.0,
-      "detail": detail,
-    };
+  factory Record.fromMap(Map<String, dynamic> map) => Record(
+    id: map[columnId],
+    day: map[columnDay],
+    step: map[columnStep],
+    cal: map[columnCal],
+    dist: map[columnDist],
+    detail: map["detail"],
+  );
+
+  factory Record.fromJson(String str) {
+    final jsonData = json.decode(str);
+    return Record.fromMap(jsonData);
   }
 
-  Record.fromDB(Map<String, dynamic> map)
-    : id = map[columnId],
-      day = map[columnDay],
-      step = map[columnStep],
-      cal = map[columnCal],
-      dist = map[columnDist],
-      detail = map["detail"];
+  Map<String, dynamic> toMap() => {
+    columnDay: day ?? '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}',
+    columnStep: step ?? 0,
+    columnCal: cal ?? 0.0,
+    columnDist: dist ?? 0.0,
+    "detail": detail,
+  };
+
+  String toJson(Record data) {
+    final Map<String, dynamic> dyn = data.toMap();
+    return json.encode(dyn);
+  }
 
 }
 
-class RecordProvider {
-
-  RecordProvider._internal();
-
-  static RecordProvider _shared = RecordProvider._internal();
-  static RecordProvider get shared => _shared;
-
-  Database db;
-
-  Future init() async {
-    final String name = 'record.db';
-    final String dbPath = await getDatabasesPath();
-    final String path = join(dbPath, name);
-    Database db = await openDatabase(path, version: 1, onCreate: _create);
-    print('DB INITIATED WITH PATH : $path');
-    this.db = db;
-    return db;
-  }
-
-  Future _create(Database db, int version) async {
-    await db.transaction((t) async {
-      await t.execute('''
-        CREATE TABLE IF NOT EXISTS $tableName (
-          $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
-          $columnDay TEXT NOT NULL,
-          $columnStep INTEGER NOT NULL,
-          $columnCal REAL NOT NULL,
-          $columnDist REAL NOT NULL
-        );
-      ''');
-    });
-  }
-
-  Future<Record> insert(Record record) async {
-    record.id = await db.insert(tableName, record.toMap());
-    return record;
-  }
-
-  Future<Record> getRecord(int id) async {
-    List<Map> maps = await db.query(
-      tableName,
-      columns: [columnDay, columnStep, columnCal, columnDist],
-      where: '$columnId = ?',
-      whereArgs: [id]
-    );
-    if (maps.length > 0) {
-      return Record.fromDB(maps.first);
-    }
-    return null;
-  }
-
-  Future<int> update(Record record) async => await db.update(
-    tableName,
-    record.toMap(),
-    where: '$columnId = ?',
-    whereArgs: [record.id]
-  );
-
-  Future<int> delete(int id) async => await db.delete(
-    tableName,
-    where: '$columnId = ?',
-    whereArgs: [id]
-  );
-
-  Future close() async => db.close();
-
-}
-
-// import 'dart:async';
-// import 'dart:convert';
-// import 'dart:io' show Directory;
-// import 'package:sqflite/sqflite.dart';
-// import 'package:uuid/uuid.dart';
-// import 'package:path/path.dart';
-// import 'package:path_provider/path_provider.dart';
-
-// class DatabaseManage {
-
-//   DatabaseManage._internal();
-
-//   static DatabaseManage _shared = DatabaseManage._internal();
-//   static DatabaseManage get shared => _shared;
-
-//   Database db;
-
-//   Future init({
-//     String name = 'test.db',
-//     int version = 1,
-//     String create = '''
-//       CREATE TABLE IF NOT EXISTS run (
-//         id INT PRIMARY KEY,
-//         data_uint BLOB NOT NULL,
-//         data_utf BLOB NOT NULL
-//       );
-//     ''',
-//   }) async {
-//     final Directory documentsDirectory = await getApplicationDocumentsDirectory();
-//     final String path = join(documentsDirectory.path, name);
-//     if (version != 1) {
-//       await deleteDatabase(path);
-//     }
-//     Database db = await openDatabase(path, version: version, onCreate: _create);
-//     print('DB INITIATED WITH PATH : $path');
-//     this.db = db;
-//     return db;
-//   }
-
-//   Future _create(Database db, int version) async {
-//     await db.transaction((t) async {
-//       await t.execute('''
-//         CREATE TABLE IF NOT EXISTS run (
-//           id TEXT PRIMARY KEY,
-//           data_uint BLOB NOT NULL,
-//           data_utf BLOB NOT NULL
-//       );
-//       ''');
-//     });
-//   }
-
-//   Future close() async => await db.close();
-
-//   Future<bool> saveData() async {
-//     final id = Uuid().v1();
-//     final dataUtf = utf8.encode(id);
-//     print('$id - $dataUtf');
-//     try {
-//       print('$id - $dataUtf');
-//       final _ = await db.rawQuery('''
-//         INSERT OR REPLACE INTO run
-//         (id, data_uint, data_utf) VALUES (?, ?, ?)''', [id, dataUtf, dataUtf]);
-//       print(' DATA SAVED');
-//       return true;
-//     } catch (e) {
-//       print('FAILED SAVING DATA: ${e.toString()}');
-//       return false;
-//     }
-//   }
-
-//   Future<List<Map<String, dynamic>>> fetchData() async {
-//     try {
-//       final res = db.rawQuery('SELECT * FROM run');
-//       return res;
-//     } catch (e) {
-//       print('FAILED FETCH DATA: ${e.toString()}');
-//       return [];
-//     }
-//   }
-
-// }
 class RecordList {
 
   static final Map<DateTime, List<Record>> records = {

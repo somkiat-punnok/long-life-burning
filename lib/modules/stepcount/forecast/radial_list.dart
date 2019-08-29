@@ -222,7 +222,7 @@ class RadialListItem extends StatelessWidget {
               color: Colors.transparent,
               border: Border.all(
                 color: Colors.white,
-                width: SizeConfig.setWidth(1.0),
+                width: SizeConfig.setWidth(2.0),
               ),
             ),
             child: Padding(
@@ -243,7 +243,7 @@ class RadialListItem extends StatelessWidget {
                   listItem.title,
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.bold,
                     fontSize: SizeConfig.setWidth(20.0),
                   ),
                 ),
@@ -251,7 +251,7 @@ class RadialListItem extends StatelessWidget {
                   listItem.subtitle,
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.bold,
                     fontSize: SizeConfig.setWidth(18.0),
                   ),
                 ),

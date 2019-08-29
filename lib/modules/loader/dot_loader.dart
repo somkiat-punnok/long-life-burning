@@ -74,9 +74,6 @@ class _DotLoaderState extends State<DotLoader> with SingleTickerProviderStateMix
           radius = widget.radius * animationRadiusOUT.value;
       });
     });
-    controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {}
-    });
     controller.repeat();
   }
 

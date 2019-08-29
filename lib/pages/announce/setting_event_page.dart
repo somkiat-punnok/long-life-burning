@@ -13,6 +13,10 @@ class _SetEventPageState extends State<SetEventPage> {
 
   int province = 0;
   int category = 0;
+  Duration timer = Duration();
+  DateTime date = DateTime.now();
+  DateTime time = DateTime.now();
+  DateTime datetime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +73,39 @@ class _SetEventPageState extends State<SetEventPage> {
             onSelect: (int i) {
               setState(() {
                 category = i;
+              });
+            },
+          ),
+          SettingHeader(''),
+          TimerPicker(
+            currentTimer: timer,
+            onSelect: (Duration t) {
+              setState(() {
+                timer = t;
+              });
+            },
+          ),
+          DatePicker(
+            currentDate: date,
+            onSelect: (DateTime t) {
+              setState(() {
+                date = t;
+              });
+            },
+          ),
+          TimePicker(
+            currentTime: time,
+            onSelect: (DateTime t) {
+              setState(() {
+                time = t;
+              });
+            },
+          ),
+          DateAndTimePicker(
+            currentDateAndTime: datetime,
+            onSelect: (DateTime t) {
+              setState(() {
+                datetime = t;
               });
             },
           ),

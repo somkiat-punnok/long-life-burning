@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
+library login;
 
-import './home.dart';
-import './signin.dart';
-import './signup.dart';
+import 'package:flutter/material.dart';
+import 'package:long_life_burning/utils/helper/constants.dart';
+
+part './home.dart';
+part './signin.dart';
+part './signup.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

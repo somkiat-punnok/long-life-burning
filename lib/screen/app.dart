@@ -9,7 +9,9 @@ import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Constants,
     isMaterial;
-import 'splash.dart';
+
+import 'login/login_screen.dart';
+import 'index.dart';
 
 class App extends StatelessWidget {
 
@@ -28,7 +30,11 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      home: SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (BuildContext context) => Index(),
+        '/login': (BuildContext context) => LoginScreen(),
+      },
       localizationsDelegates: <LocalizationsDelegate>[
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

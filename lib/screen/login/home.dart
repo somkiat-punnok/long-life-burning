@@ -1,10 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/utils/helper/constants.dart'
-  show
-    Constants,
-    SizeConfig;
-
-import '../index.dart';
+part of login;
 
 class HomePage extends StatelessWidget {
 
@@ -43,11 +37,7 @@ class HomePage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.clear),
                 color: Colors.black,
-                onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Index(),
-                  )
-                ),
+                onPressed: () => Navigator.of(context).pushReplacementNamed('/index'),
               ),
             ],
           ),

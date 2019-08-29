@@ -1,34 +1,38 @@
+library event;
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'event_card.dart';
+
+part 'event_card.dart';
 
 class Event {
 
-  final String id, detail;
+  final String id;
+  final String detail;
   
   Event({
     this.id,
     this.detail,
   });
 
-  factory Event.fromJson(Map<String, dynamic> json) {
-    return Event(
-      id: json["id"],
-      detail: json["detail"],
-    );
+  factory Event.fromMap(Map<String, dynamic> map) => Event(
+    id: map["id"],
+    detail: map["detail"],
+  );
+
+  factory Event.fromJson(String str) {
+    final jsonData = json.decode(str);
+    return Event.fromMap(jsonData);
   }
 
-  Map<String, dynamic> toMap() {
-    var map = Map<String, dynamic>();
-    map["id"] = id;
-    map["detail"] = detail;
-    return map;
-  }
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "detail": detail,
+  };
 
-  factory Event.fromDB(Map<String, dynamic> map) {
-    return Event(
-      id: map["id"],
-      detail: map["detail"],
-    );
+  String toJson(Event data) {
+    final Map<String, dynamic> dyn = data.toMap();
+    return json.encode(dyn);
   }
 
 }
