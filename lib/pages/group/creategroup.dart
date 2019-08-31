@@ -1,36 +1,39 @@
-part of login;
+import 'package:flutter/material.dart';
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    Constants,
+    SizeConfig;
+import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
-class SignUpPage extends StatelessWidget {
+class CreateGroup extends StatefulWidget {
 
-  SignUpPage({
-    
+  CreateGroup({
     Key key,
   }) : super(key: key);
+
+  @override
+  _CreateGroupState createState() => _CreateGroupState();
+}
+
+class _CreateGroupState extends State<CreateGroup> {
+
+  int category = 0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: SizeConfig.screenHeight,
-      decoration: BoxDecoration(
-        color: Colors.lightBlue[50],
-        image: DecorationImage(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.05),
-            BlendMode.dstATop,
-          ),
-          image: AssetImage(Constants.loginImage),
-          fit: BoxFit.cover,
-        ),
+      decoration: BoxDecoration(       
       ),
       child: Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(70.0),
+            padding: EdgeInsets.all(SizeConfig.setWidth(50.0)),
             child: Center(
               child: Icon(
-                Icons.accessibility_new,
+                Icons.border_color,
                 color: Colors.blue,
-                size: 50.0,
+                size: 30.0,
               ),
             ),
           ),
@@ -38,9 +41,9 @@ class SignUpPage extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
+                  padding: const EdgeInsets.only(left: 10.0),
                   child: Text(
-                    "EMAIL",
+                    "GROUP NAME",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -53,7 +56,7 @@ class SignUpPage extends StatelessWidget {
           ),
           Container(
             width: SizeConfig.screenWidth,
-            margin: EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+            margin: EdgeInsets.only(left: 10.0, right: 40.0, top: 10.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               border: Border(
@@ -75,24 +78,24 @@ class SignUpPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'samarthagarwal@live.com',
+                      hintText: 'AVENGER',
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          Divider(
-            height: 24.0,
-          ),
+          ),      
+           Divider(
+            height: 20.0,
+          ),  
           Row(
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
+                  padding: const EdgeInsets.only(left: 10.0),
                   child: Text(
-                    "PASSWORD",
+                    "LOCATION",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
@@ -103,9 +106,10 @@ class SignUpPage extends StatelessWidget {
               ),
             ],
           ),
+         
           Container(
             width: SizeConfig.screenWidth,
-            margin: EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
+            margin: EdgeInsets.only(left: 10.0, right: 40.0, top: 10.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               border: Border(
@@ -127,7 +131,7 @@ class SignUpPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: '*********',
+                      hintText: 'เจอกันที่รถเมล์ PKY รอบอ่างหลวง ม.พะเยา',
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -138,102 +142,47 @@ class SignUpPage extends StatelessWidget {
           Divider(
             height: 24.0,
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 40.0),
-                  child: Text(
-                    "CONFIRM PASSWORD",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 15.0,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          TimePicker(),
+          Divider(
+            height: 24.0,
           ),
-          Container(
-            width: SizeConfig.screenWidth,
-            margin: EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.redAccent,
-                  width: 0.5,
-                  style: BorderStyle.solid,
-                ),
-              ),
-            ),
-            padding: EdgeInsets.only(left: 0.0, right: 10.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    obscureText: true,
-                    textAlign: TextAlign.left,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: '*********',
-                      hintStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          SettingPicker(
+            title: 'Category',
+            items: Constants.group_categories,
+            currentIndex: category,
+            onSelect: (int i) {
+              setState(() {
+                category = i;
+              });
+            },
           ),
           Divider(
             height: 24.0,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: FlatButton(
-                  child: Text(
-                    "Already have an account?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 15.0,
-                    ),
-                    textAlign: TextAlign.end,
-                  ),
-                  onPressed: () => {},
-                ),
-              ),
-            ],
-          ),
           Container(
             width: SizeConfig.screenWidth,
-            margin: EdgeInsets.only(left: 30.0, right: 30.0, top: 50.0),
+            margin: EdgeInsets.only(left: 100.0, right: 100.0, top: 50.0),
             alignment: Alignment.center,
             child: Row(
               children: <Widget>[
                 Expanded(
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                     color: Colors.blue,
                     onPressed: () => {},
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                        vertical: 20.0,
-                        horizontal: 20.0,
+                        vertical: 10.0,
+                        horizontal: 10.0,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Expanded(
                             child: Text(
-                              "SIGN UP",
+                              "Create",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
@@ -255,3 +204,6 @@ class SignUpPage extends StatelessWidget {
   }
   
 }
+
+
+ 
