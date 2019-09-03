@@ -49,9 +49,9 @@ class Calendar extends StatelessWidget {
         weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        dowTextBuilder: (date, locale) {
-          return DateFormat.E(locale).format(date).substring(0, 3).toUpperCase();
-        },
+        dowTextBuilder: (date, locale) => SizeConfig.screenWidth < 400
+            ? DateFormat.E(locale).format(date).substring(0, 1).toUpperCase()
+            : DateFormat.E(locale).format(date).substring(0, 3).toUpperCase(),
         weekdayStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
         weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
       ),

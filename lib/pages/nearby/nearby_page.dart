@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/nearby/nearby.dart';
 import 'package:long_life_burning/modules/nearby/map.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
 class NearbyPage extends StatefulWidget {
   static const String routeName = '/';
@@ -63,7 +64,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
             ),
           ),
           Positioned(
-            top: 40.0,
+            top: SizeConfig.statusBarHeight,
             child: Container(
               padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
               child: Text(
@@ -89,6 +90,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
             panelHeightOpen: _panelHeightOpen,
             panelHeightClosed: _panelHeightClosed,
             radius: _radius ?? _initRadius,
+            fullscreen: _radius == 0,
             onPanelSlide: (value) {
               setState(() {
                 _radius = _initRadius * (1 - value);

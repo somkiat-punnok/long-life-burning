@@ -336,8 +336,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   TableRow _buildDaysOfWeek() {
     return TableRow(
-      children: widget.calendarController._visibleDays.value.take(7).map((date) {
-        return Center(
+      children: widget.calendarController._visibleDays.value.take(7).map(
+        (date) => Center(
           child: Text(
             widget.daysOfWeekStyle.dowTextBuilder != null
                 ? widget.daysOfWeekStyle.dowTextBuilder(date, widget.locale)
@@ -346,8 +346,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
                 ? widget.daysOfWeekStyle.weekendStyle
                 : widget.daysOfWeekStyle.weekdayStyle,
           ),
-        );
-      }).toList(),
+        )
+      ).toList(),
     );
   }
 

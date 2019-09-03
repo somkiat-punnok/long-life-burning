@@ -53,6 +53,7 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
+    print(SizeConfig.printData());
     return WillPopScope(
       onWillPop: () async => !await nav[pageIndex].navigateKey.currentState.maybePop(),
       child: Scaffold(
@@ -77,7 +78,7 @@ class _IndexState extends State<Index> {
     backgroundColor: Colors.white,
     selectedItemColor: isMaterial ? Colors.blue : CupertinoColors.activeBlue,
     unselectedItemColor: isMaterial ? Colors.grey : CupertinoColors.inactiveGray,
-    iconSize: SizeConfig.setWidth(24.0),
+    iconSize: SizeConfig.setSize(24.0),
     items: navBarItems,
   );
 
