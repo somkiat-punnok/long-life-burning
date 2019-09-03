@@ -175,7 +175,7 @@ class _GroupPageState extends State<GroupPage> {
               ],
             ),
             Positioned(
-              right: 300.0,
+              right: 150.0,
               bottom: 10.0,
               child: CupertinoButton(
                 color: Colors.blueGrey,

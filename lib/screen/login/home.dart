@@ -62,10 +62,10 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 20.0),
+            padding: EdgeInsets.only(top: 20.0),           
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: <Widget>[              
                 Text(
                   "Long Life Burning",
                   style: TextStyle(
@@ -74,7 +74,9 @@ class HomePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontSize: 30.0,
-                  ),
+                    decoration: TextDecoration.none,
+                    decorationStyle: TextDecorationStyle.dashed,  
+                ),
                 ),                
               ],
             ),
