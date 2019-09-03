@@ -21,8 +21,7 @@ class _MarkingPageState extends State<MarkingPage> {
           MapView(
             center: LatLng(13.437167, 101.484685),
             zoom: 5.8,
-            maxZoom: 5.8,
-            active: false,
+            maxZoom: 18,
             listMark: _buildMarker(),
           ),
           Positioned(

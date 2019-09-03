@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of record;
 
 class RecordCard extends StatelessWidget {
 

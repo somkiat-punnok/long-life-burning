@@ -150,7 +150,7 @@ class _CreateGroupState extends State<CreateGroup> {
           Divider(
             height: 30.0,
           ),
-          SettingTimePicker(),
+          TimePicker(),
           Divider(
             height: 30.0,
           ),
@@ -167,7 +167,6 @@ class _CreateGroupState extends State<CreateGroup> {
           Divider(
             height: 30.0,
           ),
-         
           Container(
             width: SizeConfig.screenWidth,
             margin: EdgeInsets.only(left: 100.0, right: 100.0, top: 50.0),

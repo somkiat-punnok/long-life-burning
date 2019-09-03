@@ -1,10 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:long_life_burning/screen/index.dart';
-import 'package:long_life_burning/utils/helper/constants.dart'
 
-  show
-    Constants,
-    SizeConfig;
+part of login;
+
 
 class SignUpPage extends StatelessWidget {
    final fromKey = new GlobalKey<FormState>();

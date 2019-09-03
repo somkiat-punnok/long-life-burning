@@ -26,7 +26,9 @@ const Color SETTING_CHECK_COLOR = Colors.blue;
 const double SETTING_CHECK_SIZE = 16.0;
 const SettingWidgetStyle DEFAULT_STYLE = SettingWidgetStyle();
 
-double _kPickerSheetHeight = SizeConfig.setHeight(250.0);
-double _kPickerItemHeight = SizeConfig.setHeight(38.0);
+double _kPickerSheetHeight = SizeConfig.setHeight(268.0);
+double _kPickerItemHeight = SizeConfig.setHeight(42.0);
 
 typedef void SelectionCallback(int selected);
+typedef void TimerCallback(Duration timer);
+typedef void DateCallback(DateTime date);
