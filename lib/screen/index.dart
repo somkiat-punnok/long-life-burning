@@ -53,7 +53,7 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    print(SizeConfig.printData());
+    // print(SizeConfig.printData());
     return WillPopScope(
       onWillPop: () async => !await nav[pageIndex].navigateKey.currentState.maybePop(),
       child: Scaffold(

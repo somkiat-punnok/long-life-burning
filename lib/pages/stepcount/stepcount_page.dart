@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
-import 'record_page.dart';
+import './record_page.dart';
 
 class StepCountPage extends StatefulWidget {
   static const String routeName = '/';
@@ -13,11 +16,15 @@ class StepCountPage extends StatefulWidget {
 class _StepCountPageState extends State<StepCountPage> with TickerProviderStateMixin {
 
   SlidingRadialListController slidingListController;
+  num _step = 0;
+  num _distence = 0;
+  num _calories = 0;
   bool initComplete = false;
 
   @override
   void initState() {
     super.initState();
+    readAll();
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
@@ -28,6 +35,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     if(initComplete) {
+      readAll();
       slidingListController.reopen();
     }
     super.didChangeDependencies();
@@ -37,6 +45,44 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   void dispose() {
     slidingListController.dispose();
     super.dispose();
+  }
+
+  Future<void> readAll() async {
+    try {
+      final permissions = await FitKit.requestPermissions(DataType.values);
+      if (!permissions) {
+        print("User declined permissions");
+      } else {
+        final now = DateTime.now();
+        _step = 0;
+        _distence = 0;
+        for (DataType type in DataType.values) {
+          if (type == DataType.STEP_COUNT) {
+            await FitKit.read(type, now.subtract(Duration(days: 1)), now)
+            .then((data) => data.forEach((value) {
+              if(value.dateFrom.day == now.day && value.dateTo.day == now.day) {
+                setState(() {
+                  _step = _step + value.value.round();
+                });
+              }
+            }));
+          }
+          if (type == DataType.DISTANCE) {
+            await FitKit.read(type, now.subtract(Duration(days: 1)), now)
+            .then((data) => data.forEach((value) {
+              if(value.dateFrom.day == now.day && value.dateTo.day == now.day) {
+                setState(() {
+                  _distence = _distence + value.value.round();
+                });
+              }
+            }));
+          }
+        }
+      }
+    } catch (e) {
+      print('Failed to read all values. $e');
+    }
+    if (!mounted) return;
   }
 
   @override
@@ -53,17 +99,17 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 RadialListItemViewModel(
                   icon: AssetImage(Constants.runnerIcon),
                   title: 'Steps',
-                  subtitle: '0 step',
+                  subtitle: '${NumberFormat('#,###', 'en_US').format(_step)} step',
                 ),
                 RadialListItemViewModel(
                   icon: AssetImage(Constants.burnIcon),
                   title: 'Calories',
-                  subtitle: '0 kCal',
+                  subtitle: '${_calories} kCal',
                 ),
                 RadialListItemViewModel(
                   icon: AssetImage(Constants.distanceIcon),
                   title: 'Distances',
-                  subtitle: '0 km',
+                  subtitle: '${NumberFormat('#.##', 'en_US').format(_distence/1000)} km',
                 ),
               ],
             ),
