@@ -1,19 +1,17 @@
-
 part of login;
 
-
 class SignUpPage extends StatelessWidget {
-   final fromKey = new GlobalKey<FormState>();
+  final fromKey = new GlobalKey<FormState>();
 
   String _email;
   String _password;
   String _confirmpassword;
 
   SignUpPage({
-    
     Key key,
   }) : super(key: key);
-   void validateAndSave(){
+
+  void validateAndSave(){
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();

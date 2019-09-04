@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:long_life_burning/screen/login/signin.dart';
+import 'package:long_life_burning/screen/login/login_screen.dart';
   
 
 class BaseAuth extends SignInPage {
