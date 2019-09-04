@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Constants,
@@ -21,27 +22,34 @@ class _CreateGroupState extends State<CreateGroup> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: SizeConfig.screenHeight,
-      decoration: BoxDecoration(       
-      ),
-      child: Column(
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Create Group", style: TextStyle(color: Colors.white)),
+           actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.clear),
+                color: Colors.white,
+                onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Index(),
+                  )
+                ),
+              ),
+            ],
+        ),
+      body: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(SizeConfig.setWidth(50.0)),
-            child: Center(
-              child: Icon(
-                Icons.border_color,
-                color: Colors.blue,
-                size: 30.0,
-              ),
+            padding: EdgeInsets.all(SizeConfig.setWidth(10.0)),
+            child: Center(             
             ),
           ),
+        
           Row(
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
+                  padding: const EdgeInsets.only(left: 10.0,top: 30),
                   child: Text(
                     "GROUP NAME",
                     style: TextStyle(
@@ -61,7 +69,7 @@ class _CreateGroupState extends State<CreateGroup> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.redAccent,
+                  color: Colors.black,
                   width: 0.5,
                   style: BorderStyle.solid,
                 ),
@@ -87,7 +95,7 @@ class _CreateGroupState extends State<CreateGroup> {
             ),
           ),      
            Divider(
-            height: 20.0,
+            height: 24.0,
           ),  
           Row(
             children: <Widget>[
@@ -114,13 +122,13 @@ class _CreateGroupState extends State<CreateGroup> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.redAccent,
+                  color: Colors.black,
                   width: 0.5,
                   style: BorderStyle.solid,
                 ),
               ),
             ),
-            padding: EdgeInsets.only(left: 0.0, right: 10.0),
+            padding: EdgeInsets.only(left: 0.0, right: 20.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -140,11 +148,11 @@ class _CreateGroupState extends State<CreateGroup> {
             ),
           ),
           Divider(
-            height: 24.0,
+            height: 30.0,
           ),
           TimePicker(),
           Divider(
-            height: 24.0,
+            height: 30.0,
           ),
           SettingPicker(
             title: 'Category',
@@ -157,7 +165,7 @@ class _CreateGroupState extends State<CreateGroup> {
             },
           ),
           Divider(
-            height: 24.0,
+            height: 30.0,
           ),
           Container(
             width: SizeConfig.screenWidth,
