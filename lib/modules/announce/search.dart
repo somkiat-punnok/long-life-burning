@@ -3,7 +3,7 @@ import 'package:long_life_burning/pages/announce/detail_page.dart';
 
 class SearchEventDelegate extends SearchDelegate<String> {
 
-  final List<String> _data = List<String>.generate(100001, (int i) => i.toString()).reversed.toList();
+  final List<String> _data = List<String>.generate(1001, (int i) => i.toString()).toList();
   final List<String> _history = <String>[];
 
   @override
