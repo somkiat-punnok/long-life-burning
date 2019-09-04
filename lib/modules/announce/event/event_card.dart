@@ -13,12 +13,16 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(width: 0.8),
+    return Card(
+      elevation: 4.0,
+      shape: OutlineInputBorder(
+        borderSide: BorderSide(width: 1.0),
         borderRadius: BorderRadius.circular(12.0),
       ),
-      margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      margin: EdgeInsets.symmetric(
+        horizontal: 8.0,
+        vertical: 4.0,
+      ),
       child: ListTile(
         title: Text(event.detail.toString()),
         onTap: onClick,
