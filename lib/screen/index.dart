@@ -11,7 +11,7 @@ import 'package:long_life_burning/utils/routes/routing.dart'
     kMenu,
     PageNavigate;
 
-// import './login/login_screen.dart';
+ import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -37,9 +37,9 @@ class _IndexState extends State<Index> {
   }
 
   void onChanged (int index) async {
-    // if(navBarItems.length - 1 == index && !login) {
-    //   await Navigator.of(context).pushReplacementNamed('/login');
-    // }
+    if(navBarItems.length - 1 == index && !login) {
+      await Navigator.of(context).pushReplacementNamed('/login');
+    }
     if(pageIndex != index) {
       setState(() {
         pageIndex = index;

@@ -1,18 +1,17 @@
 
 part of login;
 
-
 class SignUpPage extends StatelessWidget {
    final fromKey = new GlobalKey<FormState>();
 
   String _email;
   String _password;
-  String _confirmpassword;
+ 
 
   SignUpPage({
-    
     Key key,
   }) : super(key: key);
+
    void validateAndSave(){
     final form = fromKey.currentState;
     if (form.validate()){
@@ -23,6 +22,17 @@ class SignUpPage extends StatelessWidget {
     }
      
   }
+
+  //  String emailValidator(String value) {
+  //     Pattern pattern =
+  //         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  //     RegExp regex = new RegExp(pattern);
+  //     if (value.isEmpty) return '*Required';
+  //     if (!regex.hasMatch(value))
+  //       return '*Enter a valid email';
+  //     else
+  //       return null;
+  //   }
 
   @override
  Widget build(BuildContext context) {
@@ -46,7 +56,7 @@ class SignUpPage extends StatelessWidget {
         
         body: Container(
         
-            color: Colors.grey[200],
+            color: Colors.blueGrey[200],
             child: Center(
               child: Container(
                   decoration: BoxDecoration(

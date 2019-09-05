@@ -19,6 +19,7 @@ class CreateGroup extends StatefulWidget {
 class _CreateGroupState extends State<CreateGroup> {
 
   int category = 0;
+  DateTime time = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +151,14 @@ class _CreateGroupState extends State<CreateGroup> {
           Divider(
             height: 30.0,
           ),
-          TimePicker(),
+          TimePicker(
+            currentTime: time,
+            onSelect: (DateTime t) {
+              setState(() {
+                time = t;
+              });
+            },
+          ),
           Divider(
             height: 30.0,
           ),
