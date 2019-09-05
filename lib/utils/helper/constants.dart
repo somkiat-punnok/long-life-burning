@@ -6,6 +6,11 @@ export 'package:long_life_burning/utils/widgets/platform.dart'
     isCupertino;
 export 'package:long_life_burning/utils/widgets/size_config.dart';
 
+enum Gender {
+  MALE,
+  FEMALE,
+}
+
 class Constants {
 
   Constants._();

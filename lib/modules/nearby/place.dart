@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
 class Place extends StatelessWidget {
 
   final String title;
+  final bool fullscreen;
 
   Place({
     Key key,
     @required this.title,
+    this.fullscreen,
   }) :  assert(title != null && title != ''),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(height: 40.0,),
+        SizedBox(height: fullscreen ? SizeConfig.statusBarHeight + 10.0 : 40.0,),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -41,7 +43,7 @@ class Place extends StatelessWidget {
         ),
         SizedBox(height: 40.0,),
         Container(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -74,7 +76,7 @@ class Place extends StatelessWidget {
         ),
         SizedBox(height: 36.0,),
         Container(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding: EdgeInsets.only(left: 24.0, right: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -112,7 +114,7 @@ Widget _button(String label, IconData icon, Color color){
   return Column(
     children: <Widget>[
       Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Icon(
           icon,
           color: Colors.white,

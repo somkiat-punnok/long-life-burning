@@ -12,5 +12,8 @@ void main() {
       'check flutter driver health',
       () async => await driver.checkHealth().then((health) => print(health.status.toString())),
     );
+    test('starts page at Step Counts page', () async {
+      expect(await driver.getText(find.text('Step Counts')), 'Step Counts');
+    });
   });
 }

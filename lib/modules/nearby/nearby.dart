@@ -8,6 +8,7 @@ class SlidePanel extends StatelessWidget {
   final double panelHeightClosed;
   final double radius;
   final void Function(double) onPanelSlide;
+  final bool fullscreen;
   final String title;
 
   SlidePanel({
@@ -15,6 +16,7 @@ class SlidePanel extends StatelessWidget {
     @required this.title,
     this.panelHeightOpen,
     this.panelHeightClosed,
+    this.fullscreen,
     this.radius,
     this.onPanelSlide,
   }) :  assert(title != null && title != ''),
@@ -45,6 +47,7 @@ class SlidePanel extends StatelessWidget {
       ),
       panel: Place(
         title: title,
+        fullscreen: fullscreen,
       ),
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(radius),

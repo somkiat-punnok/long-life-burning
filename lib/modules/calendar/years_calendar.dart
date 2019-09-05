@@ -44,7 +44,7 @@ class YearsCalendar extends StatelessWidget {
     final double _initialOffset = (initialDate.year - firstDate.year) * getYearViewHeight(context);
     final ScrollController _scrollController = ScrollController(initialScrollOffset: _initialOffset);
     return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: EdgeInsets.only(bottom: 16.0),
       controller: _scrollController,
       itemCount: _itemCount,
       itemBuilder: (BuildContext context, int index) {

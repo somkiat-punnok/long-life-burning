@@ -53,9 +53,9 @@ class Calendar extends StatelessWidget {
         weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        dowTextBuilder: (date, locale) {
-          return DateFormat.E(locale).format(date).substring(0, 3).toUpperCase();
-        },
+        dowTextBuilder: (date, locale) => SizeConfig.screenWidth < 400
+            ? DateFormat.E(locale).format(date).substring(0, 1).toUpperCase()
+            : DateFormat.E(locale).format(date).substring(0, 3).toUpperCase(),
         weekdayStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
         weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
       ),
@@ -69,13 +69,13 @@ class Calendar extends StatelessWidget {
         rightPadding2: EdgeInsets.all(SizeConfig.setWidth(8.0)),
         rightPadding3: EdgeInsets.all(SizeConfig.setWidth(8.0)),
         rightMargin1: EdgeInsets.symmetric(
-          horizontal: SizeConfig.setWidth(8.0),
+          horizontal: SizeConfig.setWidth(2.0),
         ),
         rightMargin2: EdgeInsets.symmetric(
-          horizontal: SizeConfig.setWidth(8.0),
+          horizontal: SizeConfig.setWidth(2.0),
         ),
         rightMargin3: EdgeInsets.symmetric(
-          horizontal: SizeConfig.setWidth(8.0),
+          horizontal: SizeConfig.setWidth(2.0),
         ),
         rightIcon1: Icon(
           Icons.search,

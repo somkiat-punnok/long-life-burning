@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/modules/nearby/map.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
 class MarkingPage extends StatefulWidget {
   static const String routeName = '/marking';
@@ -36,7 +37,7 @@ class _MarkingPageState extends State<MarkingPage> {
             ),
           ),
           Positioned(
-            top: 30.0,
+            top: SizeConfig.statusBarHeight,
             child: Container(
               padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
               child: Text(
@@ -59,7 +60,7 @@ class _MarkingPageState extends State<MarkingPage> {
           ),
           Positioned(
             left: 18.0,
-            top: 30.0,
+            top: SizeConfig.statusBarHeight,
             child: InkWell(
               onTap: () => Navigator.of(context).pop(),
               child: Container(
@@ -80,7 +81,7 @@ class _MarkingPageState extends State<MarkingPage> {
           ),
           Positioned(
             right: 18.0,
-            top: 30.0,
+            top: SizeConfig.statusBarHeight,
             child: InkWell(
               onTap: () => print('share'),
               child: Container(

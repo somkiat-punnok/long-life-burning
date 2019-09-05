@@ -55,7 +55,8 @@ dependencies:
   #geolocator: ^5.0.0
 
   # Pedometer
-  #pedometer: ^0.0.5
+  fit_kit: ^0.0.5
+  pedometer: ^0.0.5
 
 dev_dependencies:
   flutter_test:
