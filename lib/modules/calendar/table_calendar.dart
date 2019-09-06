@@ -33,7 +33,7 @@ class TableCalendar extends StatefulWidget {
     Key key,
     @required this.calendarController,
     this.locale,
-    this.events = const {},
+    this.events,
     this.onDaySelected,
     this.onTitleText,
     this.onIcon1,
@@ -75,6 +75,8 @@ class TableCalendar extends StatefulWidget {
 
 class _TableCalendarState extends State<TableCalendar> with SingleTickerProviderStateMixin {
 
+  bool eventHave = false;
+
   @override
   void initState() {
     super.initState();
@@ -88,12 +90,15 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
     );
+    eventHave = (widget.events != null && widget.events.isNotEmpty);
   }
 
   void _selectedDayCallback(DateTime day) {
     if (widget.onDaySelected != null) {
-      final key = widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null);
-      widget.onDaySelected(day, widget.calendarController.visibleEvents[key] ?? []);
+      final key = eventHave
+          ? widget.calendarController.visibleEvents.keys.firstWhere((it) => Utils.isSameDay(it, day), orElse: () => null)
+          : null;
+      widget.onDaySelected(day, eventHave ? widget.calendarController.visibleEvents[key] ?? [] : []);
     }
   }
 
@@ -136,8 +141,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   }
 
   DateTime _getEventKey(DateTime date) {
-    return widget.calendarController.visibleEvents.keys
-        .firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null);
+    return eventHave ? widget.calendarController.visibleEvents.keys
+        .firstWhere((it) => Utils.isSameDay(it, date), orElse: () => null) : null;
   }
 
   @override
@@ -430,21 +435,21 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend;
     final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend;
     if (isUnavailable) {
-      return widget.builders.unavailableDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.unavailableDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (isSelected && widget.calendarStyle.renderSelectedFirst) {
-      return widget.builders.selectedDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.selectedDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (isToday) {
-      return widget.builders.todayDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.todayDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (isSelected) {
-      return widget.builders.selectedDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.selectedDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (isOutsideWeekend) {
-      return widget.builders.outsideWeekendDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.outsideWeekendDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (isOutside) {
-      return widget.builders.outsideDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.outsideDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (isWeekend) {
-      return widget.builders.weekendDayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.weekendDayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else if (widget.builders.dayBuilder != null) {
-      return widget.builders.dayBuilder(context, date, widget.events[eventKey]);
+      return widget.builders.dayBuilder(context, date, eventHave ? widget.events[eventKey] ?? [] : []);
     } else {
       return _CellWidget(
         text: '${date.day}',
