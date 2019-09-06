@@ -1,16 +1,24 @@
 part of login;
 
-class SignUpPage extends StatelessWidget {
-  final fromKey = new GlobalKey<FormState>();
+enum SingingCharacter { lafayette, jefferson }
+SingingCharacter _character = SingingCharacter.lafayette;
 
-  String _email;
-  String _password;
- 
-
+class SignUpPage extends StatefulWidget {
+  
   SignUpPage({
     Key key,
   }) : super(key: key);
 
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+
+  final fromKey = new GlobalKey<FormState>();
+
+  String _email;
+  String _password;
 
    void validateAndSave(){
 
@@ -23,6 +31,7 @@ class SignUpPage extends StatelessWidget {
     }
      
   }
+  
 
   //  String emailValidator(String value) {
   //     Pattern pattern =
@@ -36,6 +45,7 @@ class SignUpPage extends StatelessWidget {
   //   }
 
   @override
+
  Widget build(BuildContext context) {
   
     return Scaffold(    
@@ -75,24 +85,35 @@ class SignUpPage extends StatelessWidget {
                       buildTextFieldEmail(),
                       buildTextFieldPassword(),
                       buildTextFieldConfirmPassword(),
-                      buildButtonSignIn()                                          
+                      ListTile(
+                        title: const Text('Male',),
+                      leading : Radio(
+                        value:SingingCharacter.lafayette,
+                        groupValue: _character,
+                        onChanged: (SingingCharacter value){
+                          setState(() {
+                           _character = value; 
+                          });
+                        }
+                      ),
+                      ),
+                      ListTile(
+                        title: const Text('Female'),
+                        leading: Radio(
+                          value: SingingCharacter.jefferson,
+                          groupValue: _character,
+                          onChanged: (SingingCharacter value){
+                            setState(() {
+                             _character = value; 
+                            });
+                          }
+                        ),
+                      ),
+                      buildButtonSignIn(),
                     ],
-                  ))),
+                  )
+                  )),
             )));
-  }
-  
-  
-
-  RaisedButton buildButtonSignIn() {
-    return RaisedButton(
-        child: Text("sing in",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black)),
-            onPressed: validateAndSave,
-            padding: EdgeInsets.all(12)
-            );           
-       
-          
   }
   
   Container buildTextFieldEmail() {
@@ -104,6 +125,7 @@ class SignUpPage extends StatelessWidget {
             decoration: InputDecoration.collapsed(hintText: "Email"),
             validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
             style: TextStyle(fontSize: 18)));
+            
   }
  
   Container buildTextFieldPassword() {
@@ -129,6 +151,16 @@ class SignUpPage extends StatelessWidget {
             decoration: InputDecoration.collapsed(hintText: "Confirm Password"),
             validator: (value) => value.isEmpty ? 'Confirm Password can\'t be empty' : null,
             style: TextStyle(fontSize: 18)));
+  }
+  RaisedButton buildButtonSignIn() {
+    return RaisedButton(
+        child: Text("sign up",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.black)),
+            onPressed: validateAndSave,
+            padding: EdgeInsets.all(12)
+            );           
+      
   }
   
 }

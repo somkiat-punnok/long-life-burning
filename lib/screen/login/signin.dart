@@ -12,17 +12,27 @@ class SignInPage extends StatelessWidget {
   SignInPage({
     Key key,
   }) : super(key: key);
-  void validateAndSave(){
+  bool validateAndSave(){
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();
-      print('Form is valid. Email : $_email, password :$_password');
+     return true;
     }else{
-      print('Form is valid. Email : $_email, password :$_password');
+      return false;
     }
   }
 
-
+void validateAndSubmit() async{
+    if(validateAndSave()){
+      try {
+      final  AuthResult authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email,password: _password);
+      final FirebaseUser user = authResult.user;
+      print('signin : ${user.uid}');
+      }catch (e){
+        print('Error : $e');
+      }
+    }
+  }
 
   @override
  Widget build(BuildContext context) {
@@ -79,7 +89,7 @@ class SignInPage extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18, color: Colors.black)           
             ),
-        onPressed: validateAndSave,
+        onPressed: validateAndSubmit,
         padding: EdgeInsets.all(12),
     );
   }
