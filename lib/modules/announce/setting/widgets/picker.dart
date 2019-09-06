@@ -280,7 +280,7 @@ class TimePicker extends StatelessWidget {
                   CupertinoDatePicker(
                     mode: CupertinoDatePickerMode.time,
                     initialDateTime: currentTime ?? DateTime.now(),
-                    onDateTimeChanged: onSelect,
+                    onDateTimeChanged: onSelect ?? DateCallback,
                   ),
                   title: title ?? ' ',
                   context: context,
@@ -295,7 +295,7 @@ class TimePicker extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateFormat.jm().format(currentTime),
+                    DateFormat.jm().format(currentTime ?? DateTime.now()),
                     style: TextStyle(
                       color: CupertinoColors.inactiveGray,
                     ),

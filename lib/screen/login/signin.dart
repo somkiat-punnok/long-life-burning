@@ -2,11 +2,11 @@ part of login;
 
 @immutable
 class SignInPage extends StatelessWidget {
-
+  
   final fromKey = new GlobalKey<FormState>();
 
-  // String _email;
-  // String _password;
+  String _email;
+  String _password;
 
   SignInPage({
     Key key,
@@ -16,9 +16,9 @@ class SignInPage extends StatelessWidget {
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();
-      // print('Form is valid. Email : $_email, password :$_password');
+      print('Form is valid. Email : $_email, password :$_password');
     }else{
-      // print('Form is valid. Email : $_email, password :$_password');
+      print('Form is valid. Email : $_email, password :$_password');
     }
   }
 
@@ -45,20 +45,22 @@ class SignInPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        color: Colors.grey[200],
+        color: Colors.blueGrey[200],
         child: Center(
           child: Container(
             decoration: BoxDecoration(
+              // image: DecorationImage(
+              // image: AssetImage("lib/image/fabio-comparelli-uq2E2V4LhCY-unsplash.jpg"),
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
                 colors: [
                   Colors.grey[300],
                   Colors.blue[300],
-                ],
-              ),
+                ]
+              )
             ),
-            margin: EdgeInsets.all(32),
-            padding: EdgeInsets.all(24),
+            margin: EdgeInsets.all(40),
+            padding: EdgeInsets.all(30),
             child: Form(
               key: fromKey,
               child: Column(
@@ -70,8 +72,8 @@ class SignInPage extends StatelessWidget {
                   buildButtonSignIn(),
                 ],
               ),
-            ),
-          ),
+            ),            
+          ),        
         ),
       ),
     );
@@ -127,4 +129,5 @@ class SignInPage extends StatelessWidget {
       ),
     );
   }
+  
 }
