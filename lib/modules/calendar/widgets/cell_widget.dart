@@ -13,12 +13,12 @@ class _CellWidget extends StatelessWidget {
   const _CellWidget({
     Key key,
     @required this.text,
+    @required this.calendarStyle,
     this.isUnavailable = false,
     this.isSelected = false,
     this.isToday = false,
     this.isWeekend = false,
     this.isOutsideMonth = false,
-    @required this.calendarStyle,
   })  : assert(text != null),
         assert(calendarStyle != null),
         super(key: key);
@@ -26,9 +26,9 @@ class _CellWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
+      duration: Duration(milliseconds: 250),
       decoration: _buildCellDecoration(),
-      margin: const EdgeInsets.all(6.0),
+      margin: EdgeInsets.all(6.0),
       alignment: Alignment.center,
       child: Text(
         text,

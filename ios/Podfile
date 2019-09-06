@@ -36,11 +36,17 @@ target 'Runner' do
   use_frameworks!
   
   # Pods for Runner
+  pod 'Firebase/Auth'
+  pod 'Firebase/Analytics'
   pod 'Firebase/Core'
+  pod 'Firebase/Firestore'
   
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
   system('rm -rf .symlinks')
+  system('rm -rf Pods')
+  system('rm -rf Podfile.lock')
+  system('rm -rf ServiceDefinitions.json')
   system('mkdir -p .symlinks/plugins')
   
   # Flutter Pods

@@ -100,9 +100,9 @@ class RecordList {
 class RecordToList extends StatelessWidget {
 
   final List records;
-  final int step;
-  final double cal;
-  final double dist;
+  final num step;
+  final num cal;
+  final num dist;
 
   RecordToList({
     Key key,
@@ -116,7 +116,7 @@ class RecordToList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView(
-        children: (records != null && records.isNotEmpty) || (step != null && cal != null && dist != null)
+        children: (records != null && records.isNotEmpty) || ((step != null && step != 0) && (cal != null && cal != 0) && (dist != null && dist != 0))
             ? <Widget>[
               RecordCard(
                 value: step != null ? step.toString() : records.first.step.toString(),
