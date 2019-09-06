@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
+import 'package:long_life_burning/modules/stepcount/calculate.dart';
 import './record_page.dart';
 
 class StepCountPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   num _step = 0;
   num _distence = 0;
   num _calories = 0;
+  num _second = 0;
   bool initComplete = false;
 
   @override
@@ -56,6 +58,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
         final now = DateTime.now();
         _step = 0;
         _distence = 0;
+        _second = 0;
         for (DataType type in DataType.values) {
           if (type == DataType.STEP_COUNT) {
             await FitKit.read(type, now.subtract(Duration(days: 1)), now)
@@ -63,6 +66,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
               if(value.dateFrom.day == now.day && value.dateTo.day == now.day) {
                 setState(() {
                   _step = _step + value.value.round();
+                  if (value.value != 0) {
+                    _second = _second + (((value.dateTo.hour-value.dateFrom.hour)*60*60)+((value.dateTo.minute-value.dateFrom.minute)*60)+(value.dateTo.second-value.dateFrom.second));
+                  }
                 });
               }
             }));
@@ -88,6 +94,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     initComplete = true;
+    _calories = calculateEnergyExpenditure(1.7,DateTime(1998,1,1),70,Gender.MALE,_second,_step);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
@@ -104,7 +111,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 RadialListItemViewModel(
                   icon: AssetImage(Constants.burnIcon),
                   title: 'Calories',
-                  subtitle: '${_calories} kCal',
+                  subtitle: '${NumberFormat('#,###.##', 'en_US').format(_calories)} kCal',
                 ),
                 RadialListItemViewModel(
                   icon: AssetImage(Constants.distanceIcon),

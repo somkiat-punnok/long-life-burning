@@ -11,7 +11,7 @@ import 'package:long_life_burning/utils/routes/routing.dart'
     kMenu,
     PageNavigate;
 
- import './login/login_screen.dart';
+// import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   int pageIndex;
-  bool login = false;
+  // bool login = false;
   final List<BottomNavigationBarItem> navBarItems = [
     navBarItem(kStepCount.name, kStepCount.icon),
     navBarItem(kNearby.name, kNearby.icon),
@@ -37,9 +37,13 @@ class _IndexState extends State<Index> {
   }
 
   void onChanged (int index) async {
-    if(navBarItems.length - 1 == index && !login) {
-      await Navigator.of(context).pushReplacementNamed('/login');
-    }
+    // if(navBarItems.length - 1 == index && !login) {
+    //   await Navigator.of(context).pushReplacement(
+    //     MaterialPageRoute(
+    //       builder: (BuildContext context) => LoginScreen(),
+    //     )
+    //   );
+    // }
     if(pageIndex != index) {
       setState(() {
         pageIndex = index;
@@ -78,7 +82,6 @@ class _IndexState extends State<Index> {
     backgroundColor: Colors.white,
     selectedItemColor: isMaterial ? Colors.blue : CupertinoColors.activeBlue,
     unselectedItemColor: isMaterial ? Colors.grey : CupertinoColors.inactiveGray,
-    iconSize: SizeConfig.setSize(24.0),
     items: navBarItems,
   );
 

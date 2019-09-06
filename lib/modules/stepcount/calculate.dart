@@ -1,27 +1,28 @@
 import 'package:long_life_burning/utils/helper/constants.dart' show Gender;
 
-double calculateEnergyExpenditure(
+num calculateEnergyExpenditure(
   double height,
   DateTime age,
   double weight,
   Gender gender,
-  int durationInSeconds,
-  int stepsTaken,
+  int seconds,
+  int steps,
 ) => ( getMetForActivity(
       kilometersToMiles(
         calculateDistanceTravelledInKM(
-          stepsTaken,
+          steps,
           calculateStepToMeters(1, height, gender)
         )
-      ) / secondsToHours(durationInSeconds)) * (3.5 / convertKilocaloriesToMlKmin(
-      harrisBenedictRmr(
-        gender,
-        weight,
-        getAgeFromDateOfBirth(age),
-        height
-      ),
-      weight
-    ))) * secondsToHours(durationInSeconds) * weight;
+      ) / secondsToHours(seconds)) * (3.5 / convertKilocaloriesToMlKmin(
+        harrisBenedictRmr(
+          gender,
+          weight,
+          getAgeFromDateOfBirth(age),
+          height
+        ),
+        weight
+      ))
+    ) * secondsToHours(seconds) * weight;
 
 int getAgeFromDateOfBirth(DateTime dateOfBirth) {
   DateTime currentDate = DateTime.now();

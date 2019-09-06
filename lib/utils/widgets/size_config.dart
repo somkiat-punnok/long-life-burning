@@ -22,7 +22,7 @@ class SizeConfig {
     final double width = 411.42857142857144;
     final double height = 683.4285714285714;
     // width, height, devicePixelRatio, textScaleFactor
-    // 414.0, 896.0, 2.0, 1.0
+    // iPhoneXr 414.0, 896.0, 2.0, 1.0
     // 411.42857142857144, 683.4285714285714, 2.625, 1.0
     // 360.0, 592.0, 3.0, 1.0
     // 320.0, 568.0, 2.0, 1.0

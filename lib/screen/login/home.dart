@@ -37,7 +37,11 @@ class HomePage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.clear),
                 color: Colors.black,
-                onPressed: () => Navigator.of(context).pushReplacementNamed('/index'),
+                onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Index(),
+                  )
+                ),
               ),
             ],
           ),
