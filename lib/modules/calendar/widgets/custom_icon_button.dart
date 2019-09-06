@@ -21,7 +21,7 @@ class _CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: margin,
-      child: GestureDetector(
+      child: InkWell(
         onTap: onTap,
         child: Padding(
           padding: padding,

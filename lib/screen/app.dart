@@ -10,7 +10,6 @@ import 'package:long_life_burning/utils/helper/constants.dart'
     Constants,
     isMaterial;
 
-import 'login/login_screen.dart';
 import 'index.dart';
 
 class App extends StatelessWidget {
@@ -30,11 +29,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (BuildContext context) => Index(),
-        '/login': (BuildContext context) => LoginScreen(),
-      },
+      home: Index(),
       localizationsDelegates: <LocalizationsDelegate>[
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

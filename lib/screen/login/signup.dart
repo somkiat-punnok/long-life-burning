@@ -1,17 +1,28 @@
 part of login;
 
-class SignUpPage extends StatelessWidget {
-  final fromKey = new GlobalKey<FormState>();
+enum SingingCharacter { lafayette, jefferson }
+SingingCharacter _character = SingingCharacter.lafayette;
 
-  String _email;
-  String _password;
-  String _confirmpassword;
-
+@immutable
+class SignUpPage extends StatefulWidget {
+  
   SignUpPage({
     Key key,
   }) : super(key: key);
 
-  void validateAndSave(){
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+
+  final fromKey = new GlobalKey<FormState>();
+
+  String _email;
+  String _password;
+
+   void validateAndSave(){
+
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();
@@ -19,67 +30,99 @@ class SignUpPage extends StatelessWidget {
     }else {
       print('Form is invalid. Email : $_email, password :$_password');    
     }
-     
   }
+
+  //  String emailValidator(String value) {
+  //     Pattern pattern =
+  //         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  //     RegExp regex = new RegExp(pattern);
+  //     if (value.isEmpty) return '*Required';
+  //     if (!regex.hasMatch(value))
+  //       return '*Enter a valid email';
+  //     else
+  //       return null;
+  //   }
 
   @override
- Widget build(BuildContext context) {
-  
+  Widget build(BuildContext context) {
     return Scaffold(    
-        appBar: AppBar( 
-          title: Text("Long Life Burning App", style: TextStyle(color: Colors.white)),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.clear),
-                color: Colors.white,
-                onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Index(),
-                  )
-                ),
-              ),
-            ],
-         
+      appBar: AppBar( 
+        title: Text(
+          "Long Life Burning App",
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
-        
-        body: Container(
-        
-            color: Colors.grey[200],
-            child: Center(
-              child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                          colors: [Colors.grey[300], Colors.blue[300]])),
-                  margin: EdgeInsets.all(22),
-                  padding: EdgeInsets.all(14),
-                   child: Form(
-                    key: fromKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[                      
-                      buildTextFieldEmail(),
-                      buildTextFieldPassword(),
-                      buildTextFieldConfirmPassword(),
-                      buildButtonSignIn()                                          
-                    ],
-                  ))),
-            )));
-  }
-  
-  
-
-  RaisedButton buildButtonSignIn() {
-    return RaisedButton(
-        child: Text("sing in",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black)),
-            onPressed: validateAndSave,
-            padding: EdgeInsets.all(12)
-            );           
-       
-          
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.clear),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => Index(),
+              )
+            ),
+          ),
+        ],
+      ),
+      body: Container(
+        color: Colors.blueGrey[200],
+        child: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.grey[300],
+                  Colors.blue[300],
+                ],
+              ),
+            ),
+            margin: EdgeInsets.all(22),
+            padding: EdgeInsets.all(14),
+            child: Form(
+              key: fromKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[                      
+                  buildTextFieldEmail(),
+                  buildTextFieldPassword(),
+                  buildTextFieldConfirmPassword(),
+                  ListTile(
+                    title: const Text(
+                      'Male',
+                    ),
+                    leading : Radio(
+                      value:SingingCharacter.lafayette,
+                      groupValue: _character,
+                      onChanged: (SingingCharacter value) {
+                        setState(() {
+                          _character = value; 
+                        });
+                      }
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Female'),
+                    leading: Radio(
+                      value: SingingCharacter.jefferson,
+                      groupValue: _character,
+                      onChanged: (SingingCharacter value){
+                        setState(() {
+                          _character = value; 
+                        });
+                      }
+                    ),
+                  ),
+                  buildButtonSignIn(),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
   
   Container buildTextFieldEmail() {
@@ -92,30 +135,53 @@ class SignUpPage extends StatelessWidget {
             validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
             style: TextStyle(fontSize: 18)));
   }
- 
-  Container buildTextFieldPassword() {
+
+  Widget buildTextFieldPassword() {
     return Container(
-        padding: EdgeInsets.all(12),
-        margin: EdgeInsets.only(top: 12),
-        decoration: BoxDecoration(
-            color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
-        child: TextFormField(
-            obscureText: true,
-            decoration: InputDecoration.collapsed(hintText: "Password"),
-            validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
-            style: TextStyle(fontSize: 18)));
+      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: TextFormField(
+        obscureText: true,
+        decoration: InputDecoration.collapsed(hintText: "Password"),
+        validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+        style: TextStyle(
+          fontSize: 18,
+        ),
+      ),
+    );
   }
-  Container buildTextFieldConfirmPassword() {
+
+  Widget buildTextFieldConfirmPassword() {
     return Container(
-        padding: EdgeInsets.all(12),
-        margin: EdgeInsets.only(top: 12),
-        decoration: BoxDecoration(
-            color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
-        child: TextFormField(
-            obscureText: true,
-            decoration: InputDecoration.collapsed(hintText: "Confirm Password"),
-            validator: (value) => value.isEmpty ? 'Confirm Password can\'t be empty' : null,
-            style: TextStyle(fontSize: 18)));
+      padding: EdgeInsets.all(12),
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: TextFormField(
+        obscureText: true,
+        decoration: InputDecoration.collapsed(hintText: "Confirm Password"),
+        validator: (value) => value.isEmpty ? 'Confirm Password can\'t be empty' : null,
+        style: TextStyle(
+          fontSize: 18,
+        ),
+      )
+    );
+  }
+  RaisedButton buildButtonSignIn() {
+    return RaisedButton(
+        child: Text("sign up",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.black)),
+            onPressed: validateAndSave,
+            padding: EdgeInsets.all(12)
+            );           
+      
   }
   
 }
