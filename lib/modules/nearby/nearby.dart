@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/nearby/place.dart';
+import 'package:long_life_burning/modules/nearby/place/place.dart';
 import 'package:long_life_burning/modules/nearby/panel/panel.dart';
 
 class SlidePanel extends StatelessWidget {

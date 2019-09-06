@@ -1,17 +1,25 @@
 part of login;
 
+enum SingingCharacter { lafayette, jefferson }
+SingingCharacter _character = SingingCharacter.lafayette;
+
 @immutable
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  
+  SignUpPage({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
 
   final fromKey = new GlobalKey<FormState>();
 
   String _email;
   String _password;
- 
-  SignUpPage({
-    Key key,
-  }) : super(key: key);
-
 
    void validateAndSave(){
 
@@ -39,21 +47,26 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(    
       appBar: AppBar( 
-        title: Text("Long Life Burning App", style: TextStyle(color: Colors.white)),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.clear),
-              color: Colors.white,
-              onPressed: () => Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => Index(),
-                )
-              ),
+        title: Text(
+          "Long Life Burning App",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.clear),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => Index(),
+              )
             ),
-          ],
+          ),
+        ],
       ),
       body: Container(
-        color: Colors.grey[200],
+        color: Colors.blueGrey[200],
         child: Center(
           child: Container(
             decoration: BoxDecoration(
@@ -67,7 +80,7 @@ class SignUpPage extends StatelessWidget {
             ),
             margin: EdgeInsets.all(22),
             padding: EdgeInsets.all(14),
-              child: Form(
+            child: Form(
               key: fromKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -76,7 +89,33 @@ class SignUpPage extends StatelessWidget {
                   buildTextFieldEmail(),
                   buildTextFieldPassword(),
                   buildTextFieldConfirmPassword(),
-                  buildButtonSignIn()                                          
+                  ListTile(
+                    title: const Text(
+                      'Male',
+                    ),
+                    leading : Radio(
+                      value:SingingCharacter.lafayette,
+                      groupValue: _character,
+                      onChanged: (SingingCharacter value) {
+                        setState(() {
+                          _character = value; 
+                        });
+                      }
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Female'),
+                    leading: Radio(
+                      value: SingingCharacter.jefferson,
+                      groupValue: _character,
+                      onChanged: (SingingCharacter value){
+                        setState(() {
+                          _character = value; 
+                        });
+                      }
+                    ),
+                  ),
+                  buildButtonSignIn(),
                 ],
               ),
             ),
@@ -85,37 +124,16 @@ class SignUpPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget buildButtonSignIn() {
-    return RaisedButton(
-      child: Text(
-        "sing in",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.black,
-        ),
-      ),
-      onPressed: validateAndSave,
-      padding: EdgeInsets.all(12),
-    );
-  }
   
-  Widget buildTextFieldEmail() {
+  Container buildTextFieldEmail() {
     return Container(
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextFormField(
-        decoration: InputDecoration.collapsed(hintText: "Email"),
-        validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-        style: TextStyle(
-          fontSize: 18,
-        ),
-      ),
-    );
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+            color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
+        child: TextFormField(
+            decoration: InputDecoration.collapsed(hintText: "Email"),
+            validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+            style: TextStyle(fontSize: 18)));
   }
 
   Widget buildTextFieldPassword() {
@@ -154,6 +172,16 @@ class SignUpPage extends StatelessWidget {
         ),
       )
     );
+  }
+  RaisedButton buildButtonSignIn() {
+    return RaisedButton(
+        child: Text("sign up",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.black)),
+            onPressed: validateAndSave,
+            padding: EdgeInsets.all(12)
+            );           
+      
   }
   
 }
