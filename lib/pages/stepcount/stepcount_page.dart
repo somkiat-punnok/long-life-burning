@@ -6,6 +6,7 @@ import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
 import 'package:long_life_burning/modules/stepcount/calculate.dart';
+
 import './record_page.dart';
 
 class StepCountPage extends StatefulWidget {
@@ -101,6 +102,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
       body: Stack(
         children: <Widget>[
           Forecast(
+            slidingListController: slidingListController,
             radialList: RadialListViewModel(
               items: [
                 RadialListItemViewModel(
@@ -120,7 +122,6 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 ),
               ],
             ),
-            slidingListController: slidingListController,
           ),
           Positioned(
             top: 0.0,
@@ -142,8 +143,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
               actions: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.setWidth(8.0)),
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () => Navigator.of(context).pushNamed(RecordPage.routeName),
+                    customBorder: CircleBorder(),
                     child: Icon(
                       Icons.event_note,
                       color: Colors.white,

@@ -23,6 +23,7 @@ class _CustomIconButton extends StatelessWidget {
       padding: margin,
       child: InkWell(
         onTap: onTap,
+        customBorder: CircleBorder(),
         child: Padding(
           padding: padding,
           child: icon,

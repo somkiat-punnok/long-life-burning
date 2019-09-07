@@ -63,6 +63,7 @@ class _MarkingPageState extends State<MarkingPage> {
             top: SizeConfig.statusBarHeight,
             child: InkWell(
               onTap: () => Navigator.of(context).pop(),
+              customBorder: CircleBorder(),
               child: Container(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(Icons.arrow_back),
@@ -84,6 +85,7 @@ class _MarkingPageState extends State<MarkingPage> {
             top: SizeConfig.statusBarHeight,
             child: InkWell(
               onTap: () => print('share'),
+              customBorder: CircleBorder(),
               child: Container(
                 padding: EdgeInsets.all(8.0),
                 child: Icon(Icons.share),
