@@ -34,8 +34,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     _calendarController = CalendarController();
     _eventController = ScrollController()..addListener(_scrollListener);
     _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    _onDayEvents = EventList.events[_selectedDay] ?? [];
-    _events = EventList.events;
+    _onDayEvents = EventToList.events[_selectedDay] ?? [];
+    _events = EventToList.events;
   }
 
   @override
@@ -108,7 +108,7 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
             onIcon3: () async => await Navigator.of(context).pushNamed(SetEventPage.routeName),
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
-          EventToList(
+          EventView(
             controller: _eventController,
             events: _onDayEvents,
             onClick: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),

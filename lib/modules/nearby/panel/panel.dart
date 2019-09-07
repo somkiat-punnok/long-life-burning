@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'panel_controller.dart';
+part of nearby;
 
 enum SlideDirection{
   UP,
@@ -21,7 +20,7 @@ class SlidingUpPanel extends StatefulWidget {
   final bool renderPanelSheet;
   final bool panelSnapping;
   final PanelController controller;
-  final void Function(double position) onPanelSlide;
+  final PanelSlideCallback onPanelSlide;
   final VoidCallback onPanelOpened;
   final VoidCallback onPanelClosed;
 

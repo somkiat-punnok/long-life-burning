@@ -1,6 +1,6 @@
 part of calendar;
 
-class TableCalendar extends StatefulWidget {
+class TableCalendar<T> extends StatefulWidget {
 
   final CalendarController calendarController;
   final dynamic locale;
@@ -73,7 +73,7 @@ class TableCalendar extends StatefulWidget {
 
 }
 
-class _TableCalendarState extends State<TableCalendar> with SingleTickerProviderStateMixin {
+class _TableCalendarState<T> extends State<TableCalendar<T>> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
@@ -179,8 +179,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           margin: widget.headerStyle.beforeMargin,
           padding: widget.headerStyle.beforePadding,
         ),
-        title: GestureDetector(
-          onTap: widget.onTitleText,
+        title: FlatButton(
+          onPressed: widget.onTitleText,
+          padding: EdgeInsets.zero,
           child: Text(
             widget.headerStyle.titleTextBuilder != null
                 ? widget.headerStyle.titleTextBuilder(widget.calendarController.focusedDay, widget.locale)
@@ -202,8 +203,9 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
         automaticallyImplyLeading: false,
         brightness: Brightness.light,
         elevation: 0.0,
-        title: GestureDetector(
-          onTap: widget.onTitleText,
+        title: FlatButton(
+          onPressed: widget.onTitleText,
+          padding: EdgeInsets.zero,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[

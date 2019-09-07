@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/modules/nearby/map.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
+import 'package:long_life_burning/modules/nearby/nearby.dart'
+  show
+    MapView,
+    Marker,
+    LatLng;
 
 class MarkingPage extends StatefulWidget {
   static const String routeName = '/marking';

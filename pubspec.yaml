@@ -41,9 +41,9 @@ dependencies:
   #flutter_facebook_login: ^2.0.1
 
   # Database
-  cloud_firestore: ^0.12.9+3
+  #cloud_firestore: ^0.12.9+3
   #firebase_storage: ^3.0.6
-  sqflite: ^1.1.6+4
+  #sqflite: ^1.1.6+4
   #shared_preferences: ^0.5.3+4
 
   # Map
@@ -55,7 +55,7 @@ dependencies:
 
   # Pedometer
   fit_kit: ^0.0.5
-  pedometer: ^0.0.5
+  #pedometer: ^0.0.5
 
 dev_dependencies:
   flutter_test:

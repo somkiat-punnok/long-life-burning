@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
-
-export 'package:flutter_map/flutter_map.dart' show Marker;
-export 'package:latlong/latlong.dart' show LatLng;
+part of nearby;
 
 class MapView extends StatelessWidget {
 
@@ -12,10 +7,12 @@ class MapView extends StatelessWidget {
   final double zoom;
   final double maxZoom;
   final bool active;
+  final MapController controller;
 
   MapView({
     Key key,
     @required this.center,
+    this.controller,
     this.zoom = 13.0,
     this.maxZoom = 18.0,
     this.active = true,
@@ -26,6 +23,7 @@ class MapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
+      mapController: controller,
       options: MapOptions(
         interactive: active,
         center: center,
