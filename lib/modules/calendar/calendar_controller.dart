@@ -8,7 +8,7 @@ class CalendarController {
   double get dx => _dx;
   CalendarFormat get calendarFormat => _calendarFormat.value;
   List<DateTime> get visibleDays => _includeInvisibleDays ? _visibleDays.value : _visibleDays.value.where((day) => !_isExtraDay(day)).toList();
-  Map<DateTime, List> get visibleEvents => Map.fromEntries(
+  Map<DateTime, List> get visibleEvents => (_events != null && _events.isNotEmpty) ? Map.fromEntries(
     _events.entries.where((entry) {
       for (final day in visibleDays) {
         if (Utils.isSameDay(day, entry.key)) {
@@ -16,8 +16,8 @@ class CalendarController {
         }
       }
       return false;
-    }),
-  );
+    })
+  ) : null;
 
   Map<DateTime, List> _events;
   DateTime _focusedDay;

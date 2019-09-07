@@ -156,7 +156,7 @@ class _RecordPageState extends State<RecordPage> {
           RecordToList(
             step: _step,
             cal: calculateEnergyExpenditure(1.7, DateTime(1998,1,1), 70, Gender.MALE, _second, _step),
-            dist: _distence,
+            dist: _distence/1000,
           ),
         ],
       ),

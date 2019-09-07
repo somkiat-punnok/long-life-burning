@@ -5,6 +5,7 @@ import 'dart:convert';
 // import 'dart:io' show Directory;
 import 'package:flutter/material.dart';
 // import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 // import 'package:path_provider/path_provider.dart';
@@ -119,17 +120,17 @@ class RecordToList extends StatelessWidget {
         children: (records != null && records.isNotEmpty) || ((step != null && step != 0) && (cal != null && cal != 0) && (dist != null && dist != 0))
             ? <Widget>[
               RecordCard(
-                value: step != null ? step.toString() : records.first.step.toString(),
+                value: '${NumberFormat('#,###', 'en_US').format(step != null ? step : records.first.step)}',
                 name: 'steps',
                 unit: 'step',
               ),
               RecordCard(
-                value: cal != null ? cal.toString() : records.first.cal.toString(),
+                value: '${NumberFormat('#,###.##', 'en_US').format(cal != null ? cal : records.first.cal)}',
                 name: 'calories',
                 unit: 'kCal',
               ),
               RecordCard(
-                value: dist != null ? dist.toString() : records.first.dist.toString(),
+                value: '${NumberFormat('#.##', 'en_US').format(dist != null ? dist : records.first.dist)}',
                 name: 'distances',
                 unit: 'km',
               ),
