@@ -4,15 +4,18 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 part 'event_card.dart';
+part 'event_list.dart';
 
 class Event {
 
   final String id;
   final String detail;
+  final DateTime date;
   
   Event({
     this.id,
     this.detail,
+    this.date,
   });
 
   factory Event.fromMap(Map<String, dynamic> map) => Event(
@@ -37,7 +40,7 @@ class Event {
 
 }
 
-class EventList {
+class EventToList {
 
   static final Map<DateTime, List> events = {
     DateTime(2019, 7, 29): [Event(detail: 'Event A0'), Event(detail: 'Event B0'), Event(detail: 'Event C0')],
@@ -60,14 +63,14 @@ class EventList {
   
 }
 
-class EventToList extends StatelessWidget {
+class EventView extends StatelessWidget {
 
   final List events;
   final VoidCallback onClick;
   final void Function(bool) onDown;
   final ScrollController controller;
 
-  EventToList({
+  EventView({
     Key key,
     @required this.events,
     this.onClick,

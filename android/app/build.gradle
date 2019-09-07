@@ -27,24 +27,20 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdkVersion 28
-
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-
     lintOptions {
         disable 'InvalidPackage'
     }
-
     defaultConfig {
         applicationId "com.gtf.long_life_burning"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             signingConfig signingConfigs.debug
@@ -58,16 +54,16 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
     implementation 'com.google.firebase:firebase-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-firestore:21.0.0'
+    // implementation 'com.google.firebase:firebase-firestore:21.0.0'
+    // implementation 'com.google.android.gms:play-services-fitness:18.0.0'
+    // implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    // implementation 'com.google.gms:google-services:4.3.1'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-    compile 'com.google.android.gms:play-services-fitness:16.0.1'
-    compile 'com.google.android.gms:play-services-auth:16.0.1'
-    compile 'com.google.gms:google-services:4.3.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

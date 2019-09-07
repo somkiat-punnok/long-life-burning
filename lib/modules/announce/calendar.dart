@@ -47,17 +47,17 @@ class Calendar extends StatelessWidget {
       onVisibleDaysChanged: onVisibleDaysChanged,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
-        outsideStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
-        outsideWeekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
-        weekdayStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
-        weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
+        outsideStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,),
+        outsideWeekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold,),
+        weekdayStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,),
+        weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold,),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         dowTextBuilder: (date, locale) => SizeConfig.screenWidth < 400
             ? DateFormat.E(locale).format(date).substring(0, 1).toUpperCase()
             : DateFormat.E(locale).format(date).substring(0, 3).toUpperCase(),
-        weekdayStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
-        weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500,),
+        weekdayStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold,),
+        weekendStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold,),
       ),
       headerStyle: HeaderStyle(
         titleTextStyle: TextStyle(

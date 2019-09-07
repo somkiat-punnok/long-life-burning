@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:long_life_burning/modules/nearby/nearby.dart';
-import 'package:long_life_burning/modules/nearby/map.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
 class NearbyPage extends StatefulWidget {
@@ -11,8 +11,11 @@ class NearbyPage extends StatefulWidget {
 
 class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
 
-  final double _panelHeightClosed = 200.0;
+  final double _panelHeightClosed = SizeConfig.setHeight(200.0);
   final double _initRadius = 20.0;
+  final MapController controller = MapController();
+  double _lat = 19.027510;
+  double _long = 99.900178;
   double _radius;
 
   @override
@@ -28,10 +31,11 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
         alignment: Alignment.topCenter,
         children: [
           MapView(
-            center: LatLng(19.027510, 99.900178),
+            controller: controller,
+            center: LatLng(19.027510 - 0.015, 99.900178),
             listMark: <Marker>[
               Marker(
-                point: LatLng(19.027510, 99.900178),
+                point: LatLng(_lat, _long),
                 builder: (_) => Icon(
                   Icons.location_on,
                   color: Colors.redAccent,
@@ -45,10 +49,16 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
             bottom: _initFabHeight,
             child: FloatingActionButton(
               child: Icon(
-                Icons.gps_fixed,
+                Icons.near_me,
                 color: Theme.of(context).primaryColor,
               ),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _lat = 19.027510;
+                  _long = 99.900178;
+                });
+                controller.move(LatLng(_lat - 0.002, _long), 16.0);
+              },
               backgroundColor: Colors.white,
             ),
           ),
@@ -66,10 +76,11 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
           Positioned(
             top: SizeConfig.statusBarHeight,
             child: Container(
-              padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
+              padding: EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 8.0),
               child: Text(
-                "Nearby Locations",
+                "พะเยา",
                 style: TextStyle(
+                  fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -95,6 +106,13 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
               setState(() {
                 _radius = _initRadius * (1 - value);
               });
+            },
+            onLocate: (double lat, double long) {
+              setState(() {
+                _lat = lat;
+                _long = long;
+              });
+              controller.move(LatLng(_lat - 0.002, _long), 16.0);
             },
           ),
         ],

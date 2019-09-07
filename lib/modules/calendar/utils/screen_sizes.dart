@@ -28,7 +28,7 @@ double getMonthViewHeight(BuildContext context) {
 }
 
 double getYearViewHeight(BuildContext context) {
-  const double topPadding = 16.0;
+  const double topPadding = 8.0;
   final double titleHeight = screenSize(context) == ScreenSizes.small ? 26.0 : 30.0;
   const double dividerHeight = 16.0;
   return topPadding + titleHeight + 8.0 + dividerHeight + (4 * getMonthViewHeight(context) - getDayNumberSize(context));

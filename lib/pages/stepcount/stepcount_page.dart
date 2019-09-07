@@ -143,10 +143,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
               actions: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.setWidth(8.0)),
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).pushNamed(RecordPage.routeName),
-                    customBorder: CircleBorder(),
-                    child: Icon(
+                  child: IconButton(
+                    onPressed: () => Navigator.of(context).pushNamed(RecordPage.routeName),
+                    icon: Icon(
                       Icons.event_note,
                       color: Colors.white,
                       size: SizeConfig.setWidth(30.0),
