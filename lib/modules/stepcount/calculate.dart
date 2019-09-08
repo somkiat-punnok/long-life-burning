@@ -1,12 +1,12 @@
 import 'package:long_life_burning/utils/helper/constants.dart' show Gender;
 
 num calculateEnergyExpenditure(
-  double height,
+  num height,
   DateTime age,
-  double weight,
+  num weight,
   Gender gender,
-  int seconds,
-  int steps,
+  num seconds,
+  num steps,
 ) => ( getMetForActivity(
       kilometersToMiles(
         calculateDistanceTravelledInKM(
@@ -24,19 +24,19 @@ num calculateEnergyExpenditure(
       ))
     ) * secondsToHours(seconds) * weight;
 
-int getAgeFromDateOfBirth(DateTime dateOfBirth) {
+num getAgeFromDateOfBirth(DateTime dateOfBirth) {
   DateTime currentDate = DateTime.now();
   if (dateOfBirth.compareTo(currentDate) > 0) throw ("Can't be born in the future");
-  int currentYear = currentDate.year;
-  int dateOfBirthYear = dateOfBirth.year;
-  int age = currentYear - dateOfBirthYear;
-  int currentMonth = currentDate.month;
-  int dateOfBirthMonth = dateOfBirth.month;
+  num currentYear = currentDate.year;
+  num dateOfBirthYear = dateOfBirth.year;
+  num age = currentYear - dateOfBirthYear;
+  num currentMonth = currentDate.month;
+  num dateOfBirthMonth = dateOfBirth.month;
   if (dateOfBirthMonth > currentMonth) {
     age--;
   } else if (currentMonth == dateOfBirthMonth) {
-    int currentDay = currentDate.day;
-    int dateOfBirthDay = dateOfBirth.day;
+    num currentDay = currentDate.day;
+    num dateOfBirthDay = dateOfBirth.day;
     if (dateOfBirthDay > currentDay) {
       age--;
     }
@@ -44,15 +44,15 @@ int getAgeFromDateOfBirth(DateTime dateOfBirth) {
   return age;
 }
 
-double convertKilocaloriesToMlKmin(double kilocalories, double weightKgs) {
+num convertKilocaloriesToMlKmin(num kilocalories, num weightKgs) {
   return ((((kilocalories / 1440) / 5) / (weightKgs)) * 1000);
 }
 
-double calculateDistanceTravelledInKM(int stepsTaken, double entityStrideLength) {
-  return ((stepsTaken * entityStrideLength) / 1000);
+num calculateDistanceTravelledInKM(num steps, num entityStrideLength) {
+  return ((steps * entityStrideLength) / 1000);
 }
 
-double getMetForActivity(double speedInMph) {
+num getMetForActivity(num speedInMph) {
   if (speedInMph < 2.0) {
     return 2.0;
   } else if (speedInMph.compareTo(2.0) == 0) {
@@ -75,7 +75,7 @@ double getMetForActivity(double speedInMph) {
   return 0;
 }
 
-double harrisBenedictRmr(Gender gender, double weightKg, int age, double heightCm) {
+num harrisBenedictRmr(Gender gender, num weightKg, num age, num heightCm) {
   if (gender == Gender.FEMALE) {
     return 655.0955 + (1.8496 * heightCm) + (9.5634 * weightKg) - (4.6756 * age);
   } else {
@@ -83,22 +83,22 @@ double harrisBenedictRmr(Gender gender, double weightKg, int age, double heightC
   }
 }
 
-double secondsToHours(int seconds) {
+num secondsToHours(num seconds) {
   return seconds / 60 / 60;
 }
 
-double kilometersToMiles(double kilometers) {
+num kilometersToMiles(num kilometers) {
   return kilometers * 0.62137;
 }
 
-double centimeterToMeters(double cm) {
+num centimeterToMeters(num cm) {
   return cm / 100;
 }
 
-double meterToCentimer(double m) {
+num meterToCentimer(num m) {
   return m * 100;
 }
 
-double calculateStepToMeters(int steps, double heightInMeters, Gender gender) {
+num calculateStepToMeters(num steps, num heightInMeters, Gender gender) {
   return steps * centimeterToMeters(gender == Gender.FEMALE ? 0.413 : 0.415 * meterToCentimer(heightInMeters));
 }

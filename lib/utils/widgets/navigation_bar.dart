@@ -53,13 +53,10 @@ class _NavigationBarState extends State<NavigationBar> with SingleTickerProvider
   @override
   void initState() {
     _select(widget.currentIndex);
-
     super.initState();
   }
 
-  double _getIndicatorPosition(int index) {
-    return (-1 + (2 / (items.length - 1) * index));
-  }
+  double _getIndicatorPosition(int index) => (-1 + (2 / (items.length - 1) * index));
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +94,7 @@ class _NavigationBarState extends State<NavigationBar> with SingleTickerProvider
                 top: 0,
                 width: width,
                 child: AnimatedAlign(
-                  alignment:
-                      Alignment(_getIndicatorPosition(widget.currentIndex), 0),
+                  alignment: Alignment(_getIndicatorPosition(widget.currentIndex), 0),
                   curve: curve,
                   duration: duration,
                   child: Container(

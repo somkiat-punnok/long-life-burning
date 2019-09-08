@@ -107,7 +107,7 @@ class SearchEventDelegate extends SearchDelegate<String> {
 
 class _ResultCard extends StatelessWidget {
 
-  const _ResultCard({
+  _ResultCard({
     this.string,
     this.title,
     this.searchDelegate,
@@ -125,7 +125,7 @@ class _ResultCard extends StatelessWidget {
       onTap: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),
       child: Card(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
               Text(title),

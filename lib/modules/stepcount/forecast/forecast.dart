@@ -8,41 +8,54 @@ class Forecast extends StatelessWidget {
 
   final RadialListViewModel radialList;
   final SlidingRadialListController slidingListController;
+  final DateTime date;
+  final VoidCallback onDateText;
 
   Forecast({
+    Key key,
     @required this.radialList,
     @required this.slidingListController,
-  });
+    this.date,
+    this.onDateText,
+  }) : super(key: key);
 
   Widget _dayText() {
-    DateTime time = DateTime.now();
+    DateTime time = date ?? DateTime.now();
     return Padding(
       padding: EdgeInsets.only(top: 0.0, left: SizeConfig.setWidth(15.0)),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            '${time.day}',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: SizeConfig.setWidth(80.0),
-            ),
+      child: GestureDetector(
+        onTap: onDateText,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.transparent,
           ),
-          Text(
-            month(time.month),
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: SizeConfig.setWidth(50.0),
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                '${time.day}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 80.0,
+                ),
+              ),
+              Text(
+                month(time.month),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 50.0,
+                ),
+              ),
+              Text(
+                '${time.year}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 50.0,
+                ),
+              ),
+            ],
           ),
-          Text(
-            '${time.year}',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: SizeConfig.setWidth(50.0),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -95,11 +108,11 @@ class Forecast extends StatelessWidget {
     return Stack(
       children: <Widget>[
         BackgroundWithRings(),
-        _dayText(),
         SlidingRadialList(
           radialList: radialList,
           controller: slidingListController,
         ),
+        _dayText(),
       ],
     );
   }

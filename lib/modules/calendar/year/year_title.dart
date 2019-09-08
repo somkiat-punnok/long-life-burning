@@ -17,8 +17,8 @@ class YearTitle extends StatelessWidget {
       year.toString(),
       style: TextStyle(
         color: isToyear ? toyearColor : Colors.black,
-        fontSize: screenSize(context) == ScreenSizes.small ? 22.0 : 26.0,
-        fontWeight: FontWeight.w600,
+        fontSize: screenSize(context) == ScreenSizes.small ? 36.0 : 44.0,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

@@ -21,8 +21,8 @@ class MonthTitle extends StatelessWidget {
         getMonthName(month, monthNames: monthNames),
         style: TextStyle(
           color: isTomonth ? tomonthColor : Colors.black,
-          fontSize: 18.0,
-          fontWeight: FontWeight.w600,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
         ),
         maxLines: 1,
         overflow: TextOverflow.fade,

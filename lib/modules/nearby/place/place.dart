@@ -80,7 +80,7 @@ class _PlaceState extends State<Place> {
               Text(
                 "Images",
                 style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 12.0,),
@@ -110,7 +110,7 @@ class _PlaceState extends State<Place> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("About", style: TextStyle(fontWeight: FontWeight.w600,)),
+              Text("About", style: TextStyle(fontWeight: FontWeight.bold,)),
               SizedBox(height: 12.0,),
               Text(
                 "Pittsburgh is a city in the Commonwealth of Pennsylvania "

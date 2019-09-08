@@ -6,6 +6,7 @@ import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
 import 'package:long_life_burning/modules/stepcount/calculate.dart';
+import 'package:long_life_burning/utils/widgets/date_utils.dart';
 
 import './record_page.dart';
 
@@ -18,16 +19,17 @@ class StepCountPage extends StatefulWidget {
 class _StepCountPageState extends State<StepCountPage> with TickerProviderStateMixin {
 
   SlidingRadialListController slidingListController;
+  bool initComplete = false;
+  bool _permissions;
   num _step = 0;
   num _distence = 0;
   num _calories = 0;
   num _second = 0;
-  bool initComplete = false;
 
   @override
   void initState() {
     super.initState();
-    readAll();
+    readDate(DateTime.now());
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
@@ -38,7 +40,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     if(initComplete) {
-      readAll();
+      readDate(DateTime.now());
       slidingListController.reopen();
     }
     super.didChangeDependencies();
@@ -50,44 +52,55 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
     super.dispose();
   }
 
-  Future<void> readAll() async {
-    try {
-      final permissions = await FitKit.requestPermissions(DataType.values);
-      if (!permissions) {
-        print("User declined permissions");
-      } else {
-        final now = DateTime.now();
-        _step = 0;
-        _distence = 0;
-        _second = 0;
-        for (DataType type in DataType.values) {
-          if (type == DataType.STEP_COUNT) {
-            await FitKit.read(type, now.subtract(Duration(days: 1)), now)
-            .then((data) => data.forEach((value) {
-              if(value.dateFrom.day == now.day && value.dateTo.day == now.day) {
-                setState(() {
-                  _step = _step + value.value.round();
-                  if (value.value != 0) {
-                    _second = _second + (((value.dateTo.hour-value.dateFrom.hour)*60*60)+((value.dateTo.minute-value.dateFrom.minute)*60)+(value.dateTo.second-value.dateFrom.second));
-                  }
-                });
-              }
-            }));
-          }
-          if (type == DataType.DISTANCE) {
-            await FitKit.read(type, now.subtract(Duration(days: 1)), now)
-            .then((data) => data.forEach((value) {
-              if(value.dateFrom.day == now.day && value.dateTo.day == now.day) {
-                setState(() {
-                  _distence = _distence + value.value.round();
-                });
-              }
-            }));
+  Future<void> readDate(DateTime date) async {
+    final bool before = (date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day);
+    if (before) {
+      try {
+        _permissions = await FitKit.requestPermissions(DataType.values);
+        if (!_permissions) {
+          print("User declined permissions");
+        } else {
+          _step = 0;
+          _distence = 0;
+          _second = 0;
+          final bool now = Utils.isSameDay(date, DateTime.now());
+          for (DataType type in DataType.values) {
+            if (before && type == DataType.STEP_COUNT) {
+              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
+              .then((data) {
+                if (data != null && data.isNotEmpty) {
+                  data.forEach((value) {
+                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
+                      setState(() {
+                        _step = _step + value.value.round() ?? 0;
+                        if (value.value != 0) {
+                          _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+            if (before && type == DataType.DISTANCE) {
+              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
+              .then((data) {
+                if (data != null && data.isNotEmpty) {
+                  data.forEach((value) {
+                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
+                      setState(() {
+                        _distence = _distence + value.value.round() ?? 0;
+                      });
+                    }
+                  });
+                }
+              });
+            }
           }
         }
+      } catch (e) {
+        print('Failed to read all values. $e');
       }
-    } catch (e) {
-      print('Failed to read all values. $e');
     }
     if (!mounted) return;
   }
@@ -103,6 +116,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
         children: <Widget>[
           Forecast(
             slidingListController: slidingListController,
+            onDateText: () => Navigator.of(context).pushNamed(RecordPage.routeName),
             radialList: RadialListViewModel(
               items: [
                 RadialListItemViewModel(
@@ -128,18 +142,19 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
             left: 0.0,
             right: 0.0,
             child: AppBar(
-              backgroundColor: Colors.transparent,
               automaticallyImplyLeading: false,
+              centerTitle: false,
+              backgroundColor: Colors.transparent,
+              brightness: Brightness.dark,
+              elevation: 0.0,
               title: Text(
                 'Step Counts',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: SizeConfig.setWidth(36.0),
+                  fontSize: 36.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              brightness: Brightness.dark,
-              elevation: 0.0,
               actions: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: SizeConfig.setWidth(8.0)),

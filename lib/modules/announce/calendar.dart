@@ -62,7 +62,7 @@ class Calendar extends StatelessWidget {
       headerStyle: HeaderStyle(
         titleTextStyle: TextStyle(
           color: Colors.black,
-          fontSize: SizeConfig.setWidth(24.0),
+          fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
         rightPadding1: EdgeInsets.all(SizeConfig.setWidth(8.0)),
@@ -110,7 +110,7 @@ class Calendar extends StatelessWidget {
                 color: Colors.grey,
                 shape: BoxShape.circle,
               ),
-              margin: EdgeInsets.all(4.0),
+              margin: EdgeInsets.all(1.0),
               width: 5,
               height: 5,
             )
@@ -122,7 +122,7 @@ class Calendar extends StatelessWidget {
               color:  controller.isToday(date) ? Colors.red : Colors.black,
               shape: BoxShape.circle,
             ),
-            margin: EdgeInsets.all(12.0),
+            margin: EdgeInsets.all(8.0),
             width: 100,
             height: 100,
             child: Center(

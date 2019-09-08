@@ -28,15 +28,15 @@ class SlidingRadialList extends StatelessWidget {
   }
 
   Widget _radialListItem(RadialListItemViewModel viewModel, double angle, double opacity) {
-    final double radius = 140.0;
+    final double radius = SizeConfig.setWidth(140.0);
     return Transform(
       transform: Matrix4.translationValues(
-        SizeConfig.setWidth(45.0),
+        SizeConfig.setWidth(50.0),
         SizeConfig.setHeight(315.0),
         0.0,
       ),
       child: RadialPosition(
-        radius: SizeConfig.setWidth(radius + 75.0),
+        radius: radius + SizeConfig.setWidth(75.0),
         angle: angle,
         child: Opacity(
           opacity: opacity,
@@ -244,7 +244,7 @@ class RadialListItem extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: SizeConfig.setWidth(20.0),
+                    fontSize: 18.0,
                   ),
                 ),
                 Text(
@@ -252,7 +252,7 @@ class RadialListItem extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: SizeConfig.setWidth(18.0),
+                    fontSize: 16.0,
                   ),
                 ),
               ],

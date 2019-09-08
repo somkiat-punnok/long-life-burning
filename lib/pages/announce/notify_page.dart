@@ -17,6 +17,7 @@ class _NotifyPageState extends State<NotifyPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        centerTitle: false,
         title: Text(
           'Notifications',
           style: TextStyle(
@@ -27,15 +28,18 @@ class _NotifyPageState extends State<NotifyPage> {
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
+            onTap: () => Navigator.of(context).maybePop(),
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(18.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              padding: EdgeInsets.all(12.0),
               child: Text(
                 'Exit',
                 style: TextStyle(
                   fontSize: 18.0,
-                  color: CupertinoColors.activeBlue,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),

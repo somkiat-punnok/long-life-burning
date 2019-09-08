@@ -63,47 +63,29 @@ class _MarkingPageState extends State<MarkingPage> {
             ),
           ),
           Positioned(
-            left: 18.0,
+            left: 8.0,
             top: SizeConfig.statusBarHeight,
-            child: InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              customBorder: CircleBorder(),
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.arrow_back),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.25),
-                      blurRadius: 16.0,
-                    ),
-                  ],
-                ),
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: Colors.white,
+              onPressed: () => Navigator.of(context).maybePop(),
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
               ),
             ),
           ),
           Positioned(
-            right: 18.0,
+            right: 8.0,
             top: SizeConfig.statusBarHeight,
-            child: InkWell(
-              onTap: () => print('share'),
-              customBorder: CircleBorder(),
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.share),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.25),
-                      blurRadius: 16.0,
-                    ),
-                  ],
-                ),
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: Colors.white,
+              child: Icon(
+                Icons.share,
+                color: Colors.black,
               ),
+              onPressed: () => print('share'),
             ),
           ),
         ],

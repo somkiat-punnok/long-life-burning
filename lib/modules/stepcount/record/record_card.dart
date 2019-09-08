@@ -35,12 +35,14 @@ class RecordCard extends StatelessWidget {
           name.toUpperCase(),
           style: TextStyle(
             color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
         ),
         subtitle: Text(
           value + ' ' + unit,
           style: TextStyle(
-            color: Colors.grey,
+            color: CupertinoColors.inactiveGray,
+            fontWeight: FontWeight.bold,
           ),
         ),
         onTap: onClick ?? () => Navigator.of(context).pop(),

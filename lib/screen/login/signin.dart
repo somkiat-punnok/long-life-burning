@@ -2,33 +2,32 @@ part of login;
 
 @immutable
 class SignInPage extends StatelessWidget {
-  
-  final fromKey = new GlobalKey<FormState>();
-
-  String _email;
-  String _password;
 
   SignInPage({
     Key key,
   }) : super(key: key);
   
+  final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
+  String _email = "";
+  String _password = "";
+  
   bool validateAndSave(){
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();
-     return true;
+      return true;
     }else{
       return false;
     }
   }
 
-  void validateAndSubmit() async{
-    if(validateAndSave()){
+  void validateAndSubmit() async {
+    if (validateAndSave()) {
       try {
-      final  AuthResult authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email,password: _password);
-      final FirebaseUser user = authResult.user;
-      print('signin : ${user.uid}');
-      }catch (e){
+        final  AuthResult authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email,password: _password);
+        final FirebaseUser user = authResult.user;
+        print('signin : ${user.uid}');
+      } catch (e) {
         print('Error : $e');
       }
     }
@@ -117,6 +116,7 @@ class SignInPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
         ),
+        onSaved: (value) => _email = value,
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
       ),
     );
@@ -136,6 +136,7 @@ class SignInPage extends StatelessWidget {
         style: TextStyle(
           fontSize: 18,
         ),
+        onSaved: (value) => _password = value,
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
       ),
     );

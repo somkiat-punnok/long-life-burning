@@ -39,15 +39,16 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 builder: (_) => Icon(
                   Icons.location_on,
                   color: Colors.redAccent,
-                  size: 48.0,
                 ),
               ),
             ],
           ),
           Positioned(
-            right: 20.0,
+            right: 8.0,
             bottom: _initFabHeight,
             child: FloatingActionButton(
+              mini: true,
+              backgroundColor: Colors.white,
               child: Icon(
                 Icons.near_me,
                 color: Theme.of(context).primaryColor,
@@ -59,7 +60,6 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 });
                 controller.move(LatLng(_lat - 0.002, _long), 16.0);
               },
-              backgroundColor: Colors.white,
             ),
           ),
           Positioned(

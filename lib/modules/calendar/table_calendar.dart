@@ -206,6 +206,7 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> with SingleTickerPr
       : AppBar(
         backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
+        centerTitle: false,
         brightness: Brightness.light,
         elevation: 0.0,
         title: FlatButton(
