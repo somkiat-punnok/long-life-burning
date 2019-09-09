@@ -40,7 +40,7 @@ class BackgroundWithRings extends StatelessWidget {
             ]
           ),
           child: Container(),
-        )
+        ),
       ],
     );
   }

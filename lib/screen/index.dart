@@ -61,8 +61,8 @@ class _IndexState extends State<Index> {
     return WillPopScope(
       onWillPop: () async => !await nav[pageIndex].navigateKey.currentState.maybePop(),
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
         body: _buildPageBody(),
         bottomNavigationBar: _buildNavBar(),
       ),

@@ -89,8 +89,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
           Calendar(

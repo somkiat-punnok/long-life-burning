@@ -110,8 +110,8 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
     initComplete = true;
     _calories = calculateEnergyExpenditure(1.7,DateTime(1998,1,1),70,Gender.MALE,_second,_step);
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           Forecast(

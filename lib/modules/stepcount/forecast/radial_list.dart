@@ -63,8 +63,8 @@ class SlidingRadialList extends StatelessWidget {
 
 class SlidingRadialListController extends ChangeNotifier {
 
-  final double firstItemAngle = -pi / 5;
-  final double lastItemAngle = pi / 5;
+  final double firstItemAngle = -pi / SizeConfig.setWidth(5);
+  final double lastItemAngle = pi / SizeConfig.setWidth(5);
   final double startSlidingAngle = 3 * pi / 4;
 
   final int itemCount;

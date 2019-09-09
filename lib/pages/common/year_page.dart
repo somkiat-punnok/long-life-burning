@@ -12,8 +12,8 @@ class _YearsCalendarPageState extends State<YearsCalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Center(
           child: YearsCalendar(

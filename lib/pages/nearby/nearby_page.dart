@@ -25,8 +25,8 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     final double _initFabHeight = _panelHeightClosed + _initRadius;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         alignment: Alignment.topCenter,
         children: [

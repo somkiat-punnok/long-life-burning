@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Constants,
@@ -24,20 +23,22 @@ class _CreateGroupState extends State<CreateGroup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Create Group", style: TextStyle(color: Colors.white)),
-           actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.clear),
-                color: Colors.white,
-                onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Index(),
-                  )
-                ),
-              ),
-            ],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+          "Create Group",
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.clear),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context).maybePop(),
+          ),
+        ],
+      ),
       body: ListView(
         children: <Widget>[
           Container(
