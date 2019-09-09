@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoColors;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/utils/routes/routing.dart'
   show
@@ -11,9 +12,17 @@ import 'package:long_life_burning/utils/routes/routing.dart'
     kMenu,
     PageNavigate;
 
-// import './login/login_screen.dart';
+import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
+  
+  Index({
+     Key key,
+     this.user,
+  }) : super(key: key);
+
+  final FirebaseUser user;
+
   @override
   _IndexState createState() => _IndexState();
 }
@@ -21,7 +30,7 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   int pageIndex;
-  // bool login = false;
+  bool login = false;
   final List<BottomNavigationBarItem> navBarItems = [
     navBarItem(kStepCount.name, kStepCount.icon),
     navBarItem(kNearby.name, kNearby.icon),
@@ -34,16 +43,21 @@ class _IndexState extends State<Index> {
   void initState() {
     super.initState();
     pageIndex = 0;
+    if (widget.user != null) {
+      if (widget.user.uid.isNotEmpty) {
+        login = true;
+      }
+    }
   }
 
   void onChanged (int index) async {
-    // if(navBarItems.length - 1 == index && !login) {
-    //   await Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(
-    //       builder: (BuildContext context) => LoginScreen(),
-    //     )
-    //   );
-    // }
+    if(navBarItems.length - 1 == index && !login) {
+      await Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) => LoginScreen(),
+        )
+      );
+    }
     if(pageIndex != index) {
       setState(() {
         pageIndex = index;

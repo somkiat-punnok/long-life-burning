@@ -24,6 +24,7 @@ class _CreateGroupState extends State<CreateGroup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text("Create Group", style: TextStyle(color: Colors.white)),
            actions: <Widget>[

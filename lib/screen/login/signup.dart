@@ -17,36 +17,64 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
 
   final fromKey = new GlobalKey<FormState>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmController = TextEditingController();
+  // TextEditingController hightController = TextEditingController();
+  // TextEditingController weightController = TextEditingController();
 
   String _email;
   String _password;
 
-   void validateAndSave(){
-
+  bool validateAndSave(){
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();
-      print('Form is valid. Email : $_email, password :$_password');
+     return true;
     }else {
-      print('Form is invalid. Email : $_email, password :$_password');    
+      return false;   
     }
   }
 
-  //  String emailValidator(String value) {
-  //     Pattern pattern =
-  //         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  //     RegExp regex = new RegExp(pattern);
-  //     if (value.isEmpty) return '*Required';
-  //     if (!regex.hasMatch(value))
-  //       return '*Enter a valid email';
-  //     else
-  //       return null;
-  //   }
+  void validateAndSubmit() async{
+    if(validateAndSave()){
+      try {
+        final  AuthResult authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+        final FirebaseUser user = authResult.user;
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Index(user: user)),
+        );
+      }catch (e){
+        print('Error : $e');
+      }
+    }
+  }
+
+  signUp() {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String confirmPassword = confirmController.text.trim();
+    if (password == confirmPassword && password.length >= 8) {
+      _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((user) {
+        print("Sign up user successful.");
+      }).catchError((error) {
+         print(error.message);
+      });
+    } else {
+      print("Password and Confirm-password is not match.");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(    
-      appBar: AppBar( 
+    return Scaffold(
+      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
         title: Text(
           "Long Life Burning App",
           style: TextStyle(
@@ -66,7 +94,17 @@ class _SignUpPageState extends State<SignUpPage> {
         ],
       ),
       body: Container(
-        color: Colors.blueGrey[200],
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[200],
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.1),
+            BlendMode.dstATop,
+          ),
+            image: AssetImage(Constants.loginImage),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
           child: Container(
             decoration: BoxDecoration(
@@ -89,6 +127,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   buildTextFieldEmail(),
                   buildTextFieldPassword(),
                   buildTextFieldConfirmPassword(),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        // buildTextFieldHight(),
+                        // buildTextFieldWeight(),
+                      ],
+                    ),
+                  ),
                   ListTile(
                     title: const Text(
                       'Male',
@@ -99,7 +147,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       onChanged: (SingingCharacter value) {
                         setState(() {
                           _character = value; 
-                        });
+                          }
+                        );
                       }
                     ),
                   ),
@@ -111,11 +160,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       onChanged: (SingingCharacter value){
                         setState(() {
                           _character = value; 
-                        });
+                          }
+                        );
                       }
                     ),
-                  ),
-                  buildButtonSignIn(),
+                  ),                
+                  buildButtonSignup(),
                 ],
               ),
             ),
@@ -131,9 +181,13 @@ class _SignUpPageState extends State<SignUpPage> {
         decoration: BoxDecoration(
             color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
         child: TextFormField(
+          controller: emailController,
             decoration: InputDecoration.collapsed(hintText: "Email"),
             validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-            style: TextStyle(fontSize: 18)));
+            onSaved: (value) =>_email =value,
+            style: TextStyle(fontSize: 18)
+              )
+            );
   }
 
   Widget buildTextFieldPassword() {
@@ -145,9 +199,11 @@ class _SignUpPageState extends State<SignUpPage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextFormField(
+       controller: passwordController,
         obscureText: true,
         decoration: InputDecoration.collapsed(hintText: "Password"),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+        onSaved: (value) =>_password =value,
         style: TextStyle(
           fontSize: 18,
         ),
@@ -164,6 +220,7 @@ class _SignUpPageState extends State<SignUpPage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextFormField(
+       controller: confirmController,
         obscureText: true,
         decoration: InputDecoration.collapsed(hintText: "Confirm Password"),
         validator: (value) => value.isEmpty ? 'Confirm Password can\'t be empty' : null,
@@ -173,16 +230,57 @@ class _SignUpPageState extends State<SignUpPage> {
       )
     );
   }
-  RaisedButton buildButtonSignIn() {
+
+// Widget buildTextFieldHight() {
+//     return Container(
+//       width: 150,
+//       padding: EdgeInsets.all(12),
+//       margin: EdgeInsets.only(top: 12),
+//       decoration: BoxDecoration(
+//         color: Colors.grey[50],
+//         borderRadius: BorderRadius.circular(16),
+//       ),
+//       child: TextFormField(
+//         controller: hightController,
+//         decoration: InputDecoration.collapsed(hintText: "Hight"),
+//         validator: (value) => value.isEmpty ? 'Hight can\'t be empty' : null,
+//         style: TextStyle(
+//           fontSize: 18,
+//         ),
+//       )
+//     );
+//   }
+
+  
+//   Widget buildTextFieldWeight() {
+//     return Container(
+//       width: 150,
+//       padding: EdgeInsets.all(12),
+//       margin: EdgeInsets.only(top: 12),
+//       decoration: BoxDecoration(
+//         color: Colors.grey[50],
+//         borderRadius: BorderRadius.circular(16),
+//       ),
+//       child: TextFormField(
+//        controller: weightController,
+//         decoration: InputDecoration.collapsed(hintText: "Weight"),
+//         validator: (value) => value.isEmpty ? 'Weight can\'t be empty' : null,
+//         style: TextStyle(
+//           fontSize: 18,
+//         ),
+//       )
+//     );
+//   }
+
+  
+  RaisedButton buildButtonSignup() {
     return RaisedButton(
         child: Text("sign up",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18, color: Colors.black)),
-            onPressed: validateAndSave,
+             onPressed:validateAndSubmit,
             padding: EdgeInsets.all(12)
-            );           
-      
+  );           
   }
-  
 }
          
