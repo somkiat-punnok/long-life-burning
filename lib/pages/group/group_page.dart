@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/modules/stepcount/db/model/item.dart';
+import 'package:long_life_burning/screen/index.dart';
 import './creategroup.dart';
 
 class GroupPage extends StatefulWidget {
@@ -17,6 +19,17 @@ class _GroupPageState extends State<GroupPage> {
       resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.add),
+                color: Colors.white,
+                onPressed: () => gotoCreate(context)(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Index(),
+                  )
+                ),
+              ),
+            ],
         title: Text(
           'Group',
           style: TextStyle(
@@ -28,6 +41,7 @@ class _GroupPageState extends State<GroupPage> {
         backgroundColor: Colors.blueAccent,
         brightness: Brightness.dark,
         elevation: 0.0,
+        
       ),
       body: Center(
         child: Stack(
@@ -35,14 +49,12 @@ class _GroupPageState extends State<GroupPage> {
             ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
-
                Icon(                 
                   Icons.search,
                   color: Colors.white,
                   size: 30.0,
                 ),
-                
-                Card(
+                 Card(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -174,20 +186,6 @@ class _GroupPageState extends State<GroupPage> {
                 ),
               ],
             ),
-            Positioned(
-              right: 150.0,
-              bottom: 10.0,
-              child: CupertinoButton(
-                color: Colors.blueGrey,
-                disabledColor: Colors.grey,
-                padding: EdgeInsets.all(8.0),
-                onPressed: () =>gotoCreate(context),
-                child: Text(
-                  "Create group",
-                  style: TextStyle(fontSize: 15.0),                                   
-                ),
-              ),
-            ),      
           ],          
         ),
       ),

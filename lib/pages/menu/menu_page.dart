@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:long_life_burning/screen/login/login_screen.dart';
 import 'marking_page.dart';
 import 'setting_page.dart';
 import 'statistic_page.dart';
@@ -113,8 +114,9 @@ class _MenuPageState extends State<MenuPage> {
             ),
           ),
         ),
-        onPressed: () => print("Logout"),
+        onPressed: () => print(""),//gotologinscreen(context),
       ),
+        
     ]);
 
     return list;

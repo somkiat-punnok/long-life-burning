@@ -1,16 +1,28 @@
 part of login;
 
 @immutable
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   
-  final fromKey = new GlobalKey<FormState>();
-
-  String _email;
-  String _password;
-
   SignInPage({
     Key key,
   }) : super(key: key);
+
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  
+  final fromKey = new GlobalKey<FormState>();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String _email;
+  String _password;
+  
+  @override
+  void initState() { 
+    super.initState();
+    checkAuth(context);
+  }
   
   bool validateAndSave(){
     final form = fromKey.currentState;
@@ -25,8 +37,13 @@ class SignInPage extends StatelessWidget {
   void validateAndSubmit() async{
     if(validateAndSave()){
       try {
-      final  AuthResult authResult = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email,password: _password);
+      final  AuthResult authResult = await _auth.signInWithEmailAndPassword(email: _email, password: _password);
       final FirebaseUser user = authResult.user;
+      user != null;
+       Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => Index(user: user)),
+        );
       print('signin : ${user.uid}');
       }catch (e){
         print('Error : $e');
@@ -34,9 +51,21 @@ class SignInPage extends StatelessWidget {
     }
   }
 
+  Future checkAuth(BuildContext context)async {
+    FirebaseUser user = await _auth.currentUser();
+    if (user != null){
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Index(user: user,)
+          )
+        );
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
+      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
           "Long Life Burning App",
@@ -56,13 +85,21 @@ class SignInPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        color: Colors.blueGrey[200],
+       body: Container(
+        decoration: BoxDecoration(
+          color: Colors.blueGrey[200],
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.1),
+            BlendMode.dstATop,
+          ),
+            image: AssetImage(Constants.loginImage),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
           child: Container(
             decoration: BoxDecoration(
-              // image: DecorationImage(
-              // image: AssetImage("lib/image/fabio-comparelli-uq2E2V4LhCY-unsplash.jpg"),
               borderRadius: BorderRadius.circular(16),
               gradient: LinearGradient(
                 colors: [
@@ -71,8 +108,8 @@ class SignInPage extends StatelessWidget {
                 ]
               )
             ),
-            margin: EdgeInsets.all(40),
-            padding: EdgeInsets.all(30),
+            margin: EdgeInsets.all(22),
+            padding: EdgeInsets.all(14),
             child: Form(
               key: fromKey,
               child: Column(
@@ -91,9 +128,10 @@ class SignInPage extends StatelessWidget {
     );
   }
  
-  Widget buildButtonSignIn() {
+  RaisedButton buildButtonSignIn() {
     return RaisedButton(
-      child: Text("Log in",
+      child: Text(
+        "Log in",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 18,
@@ -105,7 +143,8 @@ class SignInPage extends StatelessWidget {
     );
   }
   
-  Widget buildTextFieldEmail() {
+  
+  Container buildTextFieldEmail() {
     return Container(
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -118,11 +157,12 @@ class SignInPage extends StatelessWidget {
           fontSize: 18,
         ),
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
+        onSaved: (value) =>_email =value,
       ),
     );
   }
 
-  Widget buildTextFieldPassword() {
+  Container buildTextFieldPassword() {
     return Container(
       padding: EdgeInsets.all(12),
       margin: EdgeInsets.only(top: 12),
@@ -137,8 +177,10 @@ class SignInPage extends StatelessWidget {
           fontSize: 18,
         ),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
+        onSaved: (value) =>_password =value,
       ),
     );
   }
+     
   
 }
