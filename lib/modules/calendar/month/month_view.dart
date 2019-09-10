@@ -85,7 +85,7 @@ class MonthView extends StatelessWidget {
             tomonthColor: todayColor,
           ),
           Container(
-            margin: EdgeInsets.only(top: 8.0),
+            margin: EdgeInsets.only(top: 4.0),
             child: buildMonthDays(context),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 import 'marking_page.dart';
 import 'setting_page.dart';
 import 'statistic_page.dart';
@@ -15,10 +16,12 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: false,
         title: Text(
           'Menu',
           style: TextStyle(
@@ -46,9 +49,9 @@ class _MenuPageState extends State<MenuPage> {
     list.addAll([
       Padding(
         padding: EdgeInsets.only(
-          left: 18.0,
-          top: 24.0,
-          bottom: 18.0,
+          left: SizeConfig.setWidth(18.0),
+          top: SizeConfig.setHeight(18.0),
+          bottom: SizeConfig.setHeight(18.0),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,9 +74,9 @@ class _MenuPageState extends State<MenuPage> {
         ),
       ),
       Divider(
-        height: 16.0,
-        indent: 16.0,
-        endIndent: 16.0,
+        height: SizeConfig.setHeight(16.0),
+        indent: SizeConfig.setWidth(16.0),
+        endIndent: SizeConfig.setWidth(16.0),
         color: Colors.grey,
       ),
     ]);
@@ -113,8 +116,9 @@ class _MenuPageState extends State<MenuPage> {
             ),
           ),
         ),
-        onPressed: () => print("Logout"),
+        onPressed: () => print(""),//gotologinscreen(context),
       ),
+        
     ]);
 
     return list;
@@ -129,9 +133,9 @@ class _MenuPageState extends State<MenuPage> {
         onPressed: onTap ?? () => print(name),
         child: Padding(
           padding: EdgeInsets.only(
-            top: 8.0,
-            bottom: 8.0,
-            left: 18.0,
+            top: SizeConfig.setHeight(8.0),
+            bottom: SizeConfig.setHeight(8.0),
+            left: SizeConfig.setWidth(18.0),
           ),
           child: Row(
             children: <Widget>[
@@ -147,7 +151,7 @@ class _MenuPageState extends State<MenuPage> {
                     padding: EdgeInsets.all(2.0),
                     child: Icon(
                       icons,
-                      size: 36.0,
+                      size: SizeConfig.setWidth(36.0),
                       color: Colors.blue,
                     ),
                   ),
@@ -166,9 +170,9 @@ class _MenuPageState extends State<MenuPage> {
         ),
       ),
       Divider(
-        height: 8.0,
-        indent: 68.0,
-        endIndent: 16.0,
+        height: SizeConfig.setHeight(8.0),
+        indent: SizeConfig.setWidth(68.0),
+        endIndent: SizeConfig.setWidth(16.0),
         color: Colors.grey,
       ),
     ];

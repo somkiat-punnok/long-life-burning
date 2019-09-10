@@ -22,6 +22,7 @@ class _RecordPageState extends State<RecordPage> {
 
   CalendarController _calendarController;
   DateTime _selectedDay;
+  bool _permissions;
   num _step = 0;
   num _distence = 0;
   num _second = 0;
@@ -41,32 +42,32 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    bool now = false;
-    bool last = false;
     _calendarController.visibleDays.forEach((d) {
-      if (!now && Utils.isSameDay(d, DateTime.now())) {
-        now = true;
+      if (Utils.isSameDay(d, DateTime.now())) {
+        setState(() {
+          _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+        });
       }
-      if (!last && Utils.isSameDay(d, _selectedDay)) {
-        last = true;
-      }
-    });
-    setState(() {
-      if (now) {
-        _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-      } else if (last) {
-        _selectedDay = _selectedDay;
-      } else {
-        _selectedDay = first;
+      else if (_selectedDay.weekday == d.weekday) {
+        setState(() {
+          _selectedDay = DateTime(d.year, d.month, d.day);
+        });
       }
     });
     _calendarController.setSelectedDay(_selectedDay, runCallback: true);
   }
 
-  void _onDaySelected(DateTime date, List events) {
-    readDate(DateTime(date.year, date.month, date.day));
+  void _onDaySelected(DateTime date, List events) async {
+    ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day))
+    ? await readDate(DateTime(date.year, date.month, date.day))
+    : null;
     setState(() {
       _selectedDay = date;
+      if ((DateTime.now().year <= date.year) && (DateTime.now().month <= date.month) && (DateTime.now().day < date.day)) {
+        _step = 0;
+        _distence = 0;
+        _second = 0;
+      }
     });
   }
 
@@ -88,52 +89,54 @@ class _RecordPageState extends State<RecordPage> {
   );
 
   Future<void> readDate(DateTime date) async {
-    try {
-      final bool permissions = await FitKit.requestPermissions(DataType.values);
-      if (!permissions) {
-        print("User declined permissions");
-      } else {
-        _step = 0;
-        _distence = 0;
-        _second = 0;
-        final bool now = Utils.isSameDay(date, DateTime.now());
-        final bool before = (date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day);
-        for (DataType type in DataType.values) {
-          if (before && type == DataType.STEP_COUNT) {
-            await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
-            .then((data) {
-              if (data != null && data.isNotEmpty) {
-                data.forEach((value) {
-                  if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
-                    setState(() {
-                      _step = _step + value.value.round() ?? 0;
-                      if (value.value != 0) {
-                        _second = _second + (((value.dateTo.hour-value.dateFrom.hour)*60*60)+((value.dateTo.minute-value.dateFrom.minute)*60)+(value.dateTo.second-value.dateFrom.second));
-                      }
-                    });
-                  }
-                });
-              }
-            });
-          }
-          if (before && type == DataType.DISTANCE) {
-            await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
-            .then((data) {
-              if (data != null && data.isNotEmpty) {
-                data.forEach((value) {
-                  if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
-                    setState(() {
-                      _distence = _distence + value.value.round() ?? 0;
-                    });
-                  }
-                });
-              }
-            });
+    final bool before = (date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day);
+    if (before) {
+      try {
+        _permissions = await FitKit.requestPermissions(DataType.values);
+        if (!_permissions) {
+          print("User declined permissions");
+        } else {
+          _step = 0;
+          _distence = 0;
+          _second = 0;
+          final bool now = Utils.isSameDay(date, DateTime.now());
+          for (DataType type in DataType.values) {
+            if (before && type == DataType.STEP_COUNT) {
+              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
+              .then((data) {
+                if (data != null && data.isNotEmpty) {
+                  data.forEach((value) {
+                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
+                      setState(() {
+                        _step = _step + value.value.round() ?? 0;
+                        if (value.value != 0) {
+                          _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+            if (before && type == DataType.DISTANCE) {
+              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
+              .then((data) {
+                if (data != null && data.isNotEmpty) {
+                  data.forEach((value) {
+                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
+                      setState(() {
+                        _distence = _distence + value.value.round() ?? 0;
+                      });
+                    }
+                  });
+                }
+              });
+            }
           }
         }
+      } catch (e) {
+        print('Failed to read all values. $e');
       }
-    } catch (e) {
-      print('Failed to read all values. $e');
     }
     if (!mounted) return;
   }
@@ -141,8 +144,8 @@ class _RecordPageState extends State<RecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
           Calendar(

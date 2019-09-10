@@ -52,7 +52,14 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    _calendarController.setSelectedDay(_selectedDay, runCallback: true);
+    _calendarController.setSelectedDay(
+      (_selectedDay.year != first.year && _selectedDay.month != first.month)
+      ? (DateTime.now().year == first.year && DateTime.now().month == first.month)
+        ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
+        : first
+      : _selectedDay,
+      runCallback: true,
+    );
   }
 
   void _onDaySelected(DateTime date, List events) {
@@ -82,8 +89,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
           Calendar(

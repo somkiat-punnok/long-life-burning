@@ -1,9 +1,11 @@
 library record;
 
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 // import 'dart:io' show Directory;
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 // import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -116,27 +118,49 @@ class RecordToList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView(
-        children: (records != null && records.isNotEmpty) || ((step != null && step != 0) && (cal != null && cal != 0) && (dist != null && dist != 0))
-            ? <Widget>[
-              RecordCard(
-                value: '${NumberFormat('#,###', 'en_US').format(step != null ? step : records.first.step)}',
-                name: 'steps',
-                unit: 'step',
+      child: (records != null && records.isNotEmpty) || ((step != null && step != 0) || (cal != null && cal != 0) || (dist != null && dist != 0))
+          ? ListView(
+              children: <Widget>[
+                RecordCard(
+                  value: '${NumberFormat('#,###', 'en_US').format(step != null ? step : records.first.step)}',
+                  name: 'steps',
+                  unit: 'step',
+                ),
+                RecordCard(
+                  value: '${NumberFormat('#,###.##', 'en_US').format(cal != null ? cal : records.first.cal)}',
+                  name: 'calories',
+                  unit: 'kCal',
+                ),
+                RecordCard(
+                  value: '${NumberFormat('#.##', 'en_US').format(dist != null ? dist : records.first.dist)}',
+                  name: 'distances',
+                  unit: 'km',
+                ),
+              ],
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'No Data',
+                    style: TextStyle(
+                      fontSize: 36.0,
+                      color: CupertinoColors.darkBackgroundGray,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'No data recorded for this day.',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: CupertinoColors.darkBackgroundGray,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
               ),
-              RecordCard(
-                value: '${NumberFormat('#,###.##', 'en_US').format(cal != null ? cal : records.first.cal)}',
-                name: 'calories',
-                unit: 'kCal',
-              ),
-              RecordCard(
-                value: '${NumberFormat('#.##', 'en_US').format(dist != null ? dist : records.first.dist)}',
-                name: 'distances',
-                unit: 'km',
-              ),
-            ]
-          : <Widget>[],
-      ),
+            ),
     );
   }
   

@@ -16,17 +16,19 @@ class DBProvider {
 
   Database db;
 
-  Future init() async {
+  Future<Database> init() async {
     final String name = 'record.db';
-    final String dbPath = await getDatabasesPath();
-    final String path = join(dbPath, name);
-    Database db = await openDatabase(path, version: 1, onCreate: _create);
-    print('DB INITIATED WITH PATH : $path');
-    this.db = db;
+    Database db;
+    await initDeleteDb(name).then(
+      (String path) async {
+        Database db = await openDatabase(path, version: 1, onCreate: _create);
+        this.db = db;
+      }
+    );
     return db;
   }
 
-  Future _create(Database db, int version) async {
+  Future<void> _create(Database db, int version) async {
     await db.transaction((t) async {
       await t.execute('''
         CREATE TABLE IF NOT EXISTS $tableName (
@@ -73,6 +75,21 @@ class DBProvider {
 
   Future<void> close() async => await db.close();
 
+}
+
+Future<String> initDeleteDb(String dbName) async {
+  final String databasePath = await getDatabasesPath();
+  final String path = join(databasePath, dbName);
+  if (await Directory(dirname(path)).exists()) {
+    await deleteDatabase(path);
+  } else {
+    try {
+      await Directory(dirname(path)).create(recursive: true);
+    } catch (e) {
+      print(e);
+    }
+  }
+  return path;
 }
 
 // class DBProvider {

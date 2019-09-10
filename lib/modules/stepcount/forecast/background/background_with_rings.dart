@@ -7,7 +7,7 @@ class BackgroundWithRings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double radius = 140.0;
+    final double radius = SizeConfig.setWidth(140.0);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -33,14 +33,14 @@ class BackgroundWithRings extends StatelessWidget {
           painter: WhiteCircleCutoutPainter(
             centerOffset: Offset(40.0, 0.0),
             circles: [
-              Circle(radius: SizeConfig.setWidth(radius), alpha: 0x10),
-              Circle(radius: SizeConfig.setWidth(radius + 15.0), alpha: 0x28),
-              Circle(radius: SizeConfig.setWidth(radius + 30.0), alpha: 0x38),
-              Circle(radius: SizeConfig.setWidth(radius + 75.0), alpha: 0x50),
+              Circle(radius: radius, alpha: 0x10),
+              Circle(radius: radius + SizeConfig.setWidth(15.0), alpha: 0x28),
+              Circle(radius: radius + SizeConfig.setWidth(30.0), alpha: 0x38),
+              Circle(radius: radius + SizeConfig.setWidth(75.0), alpha: 0x50),
             ]
           ),
           child: Container(),
-        )
+        ),
       ],
     );
   }

@@ -39,22 +39,22 @@ class PlaceDetail extends StatelessWidget {
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
                   shadows: [
-                    Shadow( // bottomLeft
+                    Shadow(
                       offset: Offset(-1.5, -1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
                     ),
-                    Shadow( // bottomRight
+                    Shadow(
                       offset: Offset(1.5, -1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
                     ),
-                    Shadow( // topRight
+                    Shadow(
                       offset: Offset(1.5, 1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
                     ),
-                    Shadow( // topLeft
+                    Shadow(
                       offset: Offset(-1.5, 1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
@@ -69,22 +69,22 @@ class PlaceDetail extends StatelessWidget {
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   shadows: [
-                    Shadow( // bottomLeft
+                    Shadow(
                       offset: Offset(-1.5, -1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
                     ),
-                    Shadow( // bottomRight
+                    Shadow(
                       offset: Offset(1.5, -1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
                     ),
-                    Shadow( // topRight
+                    Shadow(
                       offset: Offset(1.5, 1.5),
                       color: Colors.black,
                       blurRadius: 2.0,
                     ),
-                    Shadow( // topLeft
+                    Shadow(
                       offset: Offset(-1.5, 1.5),
                       color: Colors.black,
                       blurRadius: 2.0,

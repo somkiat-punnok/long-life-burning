@@ -12,8 +12,8 @@ class _EventDetailPageState extends State<EventDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
           Stack(

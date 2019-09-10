@@ -11,7 +11,7 @@ class NearbyPage extends StatefulWidget {
 
 class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
 
-  final double _panelHeightClosed = 200.0;
+  final double _panelHeightClosed = SizeConfig.setHeight(200.0);
   final double _initRadius = 20.0;
   final MapController controller = MapController();
   double _lat = 19.027510;
@@ -25,8 +25,8 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     final double _initFabHeight = _panelHeightClosed + _initRadius;
 
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -39,15 +39,16 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 builder: (_) => Icon(
                   Icons.location_on,
                   color: Colors.redAccent,
-                  size: 48.0,
                 ),
               ),
             ],
           ),
           Positioned(
-            right: 20.0,
+            right: 8.0,
             bottom: _initFabHeight,
             child: FloatingActionButton(
+              mini: true,
+              backgroundColor: Colors.white,
               child: Icon(
                 Icons.near_me,
                 color: Theme.of(context).primaryColor,
@@ -59,7 +60,6 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 });
                 controller.move(LatLng(_lat - 0.002, _long), 16.0);
               },
-              backgroundColor: Colors.white,
             ),
           ),
           Positioned(
