@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
             Colors.black.withOpacity(0.1),
             BlendMode.dstATop,
           ),
-          image: AssetImage(Constants.loginImage),
+          image: AssetImage(SIGNINIMAGE),
           fit: BoxFit.cover,
         ),
       ),

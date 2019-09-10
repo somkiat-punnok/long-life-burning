@@ -14,7 +14,7 @@ class BackgroundWithRings extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: ExactAssetImage(Constants.oceanImage),
+              image: ExactAssetImage(OCEANIMAGE),
               fit: BoxFit.cover,
             ),
           ),
@@ -25,7 +25,7 @@ class BackgroundWithRings extends StatelessWidget {
             offset: Offset(40.0, 0.0),
           ),
           child: Image.asset(
-            Constants.oceanImage,
+            OCEANIMAGE,
             fit: BoxFit.cover,
           ),
         ),

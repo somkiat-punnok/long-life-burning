@@ -1,10 +1,10 @@
 library login;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/login/login.dart';
+// import 'package:long_life_burning/modules/login/login.dart';
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
-import 'package:long_life_burning/modules/login/Register.dart';
+// import 'package:long_life_burning/modules/login/Register.dart';
 
 part './home.dart';
 part './signin.dart';

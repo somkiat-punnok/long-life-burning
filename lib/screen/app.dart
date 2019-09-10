@@ -7,7 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart'
     GlobalWidgetsLocalizations;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
-    Constants,
+    APPNAME,
     isMaterial;
 
 import 'index.dart';
@@ -18,7 +18,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: Constants.appName,
+      title: APPNAME,
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: isMaterial ? Colors.blue : CupertinoColors.activeBlue,

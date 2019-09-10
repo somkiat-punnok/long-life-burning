@@ -1,47 +1,40 @@
-// import 'package:flutter/material.dart';
-
 export 'package:long_life_burning/utils/widgets/platform.dart'
   show
     isMaterial,
     isCupertino;
 export 'package:long_life_burning/utils/widgets/size_config.dart';
+export './options.dart';
 
 enum Gender {
   MALE,
   FEMALE,
 }
 
-class Constants {
+const String APPNAME = 'Long Burn';
 
-  Constants._();
-  
-  static const String appName = 'Long Burn';
+// Key others
+// const String API_Key = '';
 
-  // Key others
-  // static final String API_Key = '';
+const List<String> PROVINCE = [
+  'All Province','Phayao','Chaing Mai','Nan'
+];
 
-  static const List<String> province = [
-    'All Province','Phayao','Chaing Mai','Nan'
-  ];
+const List<String> CATEGORIES = [
+  'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
+];
 
-  static const List<String> categories = [
-    'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
-  ];
+const List<String> GROUP_CATEGORIES = [
+  'All Category','Football','Basketball','Volaball'
+];
 
-  static const List<String> group_categories = [
-    'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
-  ];
+// image assets
+const String IMAGES = 'assets/images';
+const String SIGNINIMAGE = '$IMAGES/77314-OF1N1Y-610.jpg';
+const String FORESTIMAGE = '$IMAGES/forest.jpg';
+const String OCEANIMAGE = '$IMAGES/ocean.jpg';
 
-  // image assets
-  static const String image = 'assets/images';
-  static const String loginImage = '$image/77314-OF1N1Y-610.jpg';
-  static const String forestImage = '$image/forest.jpg';
-  static const String oceanImage = '$image/ocean.jpg';
-
-  // icon assets
-  static const String icon = 'assets/icons';
-  static const String burnIcon = '$icon/burn.png';
-  static const String distanceIcon = '$icon/distance.png';
-  static const String runnerIcon = '$icon/runner.png';
-
-}
+// icon assets
+const String ICONS = 'assets/icons';
+const String BURNICON = '$ICONS/burn.png';
+const String DISTANCEICON = '$ICONS/distance.png';
+const String RUNNERICON = '$ICONS/runner.png';

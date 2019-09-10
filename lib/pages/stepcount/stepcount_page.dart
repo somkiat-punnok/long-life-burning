@@ -104,17 +104,17 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
             radialList: RadialListViewModel(
               items: [
                 RadialListItemViewModel(
-                  icon: AssetImage(Constants.runnerIcon),
+                  icon: AssetImage(RUNNERICON),
                   title: 'Steps',
                   subtitle: '${NumberFormat('#,###', 'en_US').format(_step)} step',
                 ),
                 RadialListItemViewModel(
-                  icon: AssetImage(Constants.burnIcon),
+                  icon: AssetImage(BURNICON),
                   title: 'Calories',
                   subtitle: '${NumberFormat('#,###.##', 'en_US').format(_calories)} kCal',
                 ),
                 RadialListItemViewModel(
-                  icon: AssetImage(Constants.distanceIcon),
+                  icon: AssetImage(DISTANCEICON),
                   title: 'Distances',
                   subtitle: '${NumberFormat('#.##', 'en_US').format(_distence/1000)} km',
                 ),

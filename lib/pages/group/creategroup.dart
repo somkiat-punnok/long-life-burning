@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
-    Constants,
+    GROUP_CATEGORIES,
     SizeConfig;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
@@ -164,7 +164,7 @@ class _CreateGroupState extends State<CreateGroup> {
           ),
           SettingPicker(
             title: 'Category',
-            items: Constants.group_categories,
+            items: GROUP_CATEGORIES,
             currentIndex: category,
             onSelect: (int i) {
               setState(() {
