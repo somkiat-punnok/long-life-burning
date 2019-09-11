@@ -10,7 +10,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
     APPNAME,
     isMaterial;
 
-import 'index.dart';
+import './index.dart';
 
 class App extends StatelessWidget {
 

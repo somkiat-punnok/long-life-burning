@@ -32,6 +32,7 @@ const String IMAGES = 'assets/images';
 const String SIGNINIMAGE = '$IMAGES/77314-OF1N1Y-610.jpg';
 const String FORESTIMAGE = '$IMAGES/forest.jpg';
 const String OCEANIMAGE = '$IMAGES/ocean.jpg';
+const String RUNIMAGE = '$IMAGES/02046.jpg';
 
 // icon assets
 const String ICONS = 'assets/icons';
