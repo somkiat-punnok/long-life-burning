@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fit_kit/fit_kit.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show Gender;
 import 'package:long_life_burning/modules/stepcount/record/records.dart';
 import 'package:long_life_burning/modules/stepcount/calculate.dart';
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
@@ -8,6 +7,10 @@ import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
     CalendarController,
     CalendarFormat;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    Gender,
+    isCupertino;
 import 'package:long_life_burning/utils/widgets/date_utils.dart';
 
 import '../common/year_page.dart';
@@ -32,7 +35,7 @@ class _RecordPageState extends State<RecordPage> {
     super.initState();
     _calendarController = CalendarController();
     _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    readDate(_selectedDay);
+    isCupertino ? init().then((_) => readDate(_selectedDay)) : null;
   }
 
   @override
@@ -59,7 +62,9 @@ class _RecordPageState extends State<RecordPage> {
 
   void _onDaySelected(DateTime date, List events) async {
     ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day))
-    ? await readDate(DateTime(date.year, date.month, date.day))
+    ? isCupertino
+      ? await readDate(DateTime(date.year, date.month, date.day))
+      : null
     : null;
     setState(() {
       _selectedDay = date;
@@ -75,33 +80,36 @@ class _RecordPageState extends State<RecordPage> {
     (res) {
       if (res != null) {
         final result = res as List;
-        setState(() {
-          if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
+        if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
+          setState(() {
             _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-          }
-          else {
+          });
+        }
+        else {
+          setState(() {
             _selectedDay = DateTime(result[0], result[1], 1);
-          }
-        });
+          });
+        }
         _calendarController.setSelectedDay(_selectedDay, runCallback: true);
       }
     }
   );
 
+  Future<void> init() async => await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
+
   Future<void> readDate(DateTime date) async {
-    final bool before = (date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day);
-    if (before) {
+    if ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day)) {
       try {
-        _permissions = await FitKit.requestPermissions(DataType.values);
         if (!_permissions) {
           print("User declined permissions");
+          await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
         } else {
           _step = 0;
           _distence = 0;
           _second = 0;
           final bool now = Utils.isSameDay(date, DateTime.now());
           for (DataType type in DataType.values) {
-            if (before && type == DataType.STEP_COUNT) {
+            if (type == DataType.STEP_COUNT) {
               await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
               .then((data) {
                 if (data != null && data.isNotEmpty) {
@@ -118,7 +126,7 @@ class _RecordPageState extends State<RecordPage> {
                 }
               });
             }
-            if (before && type == DataType.DISTANCE) {
+            if (type == DataType.DISTANCE) {
               await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
               .then((data) {
                 if (data != null && data.isNotEmpty) {

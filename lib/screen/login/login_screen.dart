@@ -1,7 +1,7 @@
 library login;
 
 // import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:long_life_burning/modules/login/login.dart';
 import 'package:long_life_burning/screen/index.dart';
@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   @override
   void initState() { 
     super.initState();
+    checkAuth();
     _controller = PageController(initialPage: 1, viewportFraction: 1.0);
   }
 
@@ -50,6 +51,20 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
     );
   }
 
+  void checkAuth() async {
+    await UserOptions.auth.currentUser().then((user) async {
+      if (user != null) {
+        UserOptions.user = user;
+        print('user: ${UserOptions.user}');
+        await Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => Index(),
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +79,9 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
             signin: gotoSignin,
             signup: gotoSignup,
           ),
-          SignUpPage(),
+          SignUpPage(
+            signin: gotoSignin,
+          ),
         ],
       ),
     );

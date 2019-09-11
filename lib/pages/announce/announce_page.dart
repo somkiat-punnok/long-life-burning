@@ -73,14 +73,16 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     (res) {
       if (res != null) {
         final result = res as List;
-        setState(() {
-          if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
+        if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
+          setState(() {
             _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-          }
-          else {
+          });
+        }
+        else {
+          setState(() {
             _selectedDay = DateTime(result[0], result[1], 1);
-          }
-        });
+          });
+        }
         _calendarController.setSelectedDay(_selectedDay, runCallback: true);
       }
     }

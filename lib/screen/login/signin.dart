@@ -13,15 +13,22 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
 
-  final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  GlobalKey<FormState> fromKey;
   String _email;
   String _password;
   
   @override
   void initState() { 
     super.initState();
-    checkAuth(context);
+    fromKey = GlobalKey<FormState>();
+  }
+
+  @override
+  void dispose() {
+    if (fromKey.currentState != null) {
+      fromKey.currentState.dispose();
+    }
+    super.dispose();
   }
   
   bool validateAndSave(){
@@ -37,27 +44,18 @@ class _SignInPageState extends State<SignInPage> {
   void validateAndSubmit() async {
     if (validateAndSave()) {
       try {
-      final  AuthResult authResult = await _auth.signInWithEmailAndPassword(email: _email, password: _password);
-      final FirebaseUser user = authResult.user;
-      user != null;
-       Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Index(user: user)),
-        );
-      print('signin : ${user.uid}');
+        await UserOptions.auth.signInWithEmailAndPassword(email: _email, password: _password).then((result) {
+          if (result != null) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => Index(),
+              ),
+            );
+          }
+        });
       } catch (e) {
         print('Error : $e');
       }
-    }
-  }
-
-  Future checkAuth(BuildContext context)async {
-    FirebaseUser user = await _auth.currentUser();
-    if (user != null){
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Index(user: user,)
-          )
-        );
     }
   }
   
@@ -93,7 +91,7 @@ class _SignInPageState extends State<SignInPage> {
             Colors.black.withOpacity(0.1),
             BlendMode.dstATop,
           ),
-            image: AssetImage(Constants.loginImage),
+            image: AssetImage(SIGNINIMAGE),
             fit: BoxFit.cover,
           ),
         ),

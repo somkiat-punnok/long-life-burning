@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
-import 'marking_page.dart';
-import 'setting_page.dart';
-import 'statistic_page.dart';
+import 'package:long_life_burning/screen/login/login_screen.dart' show LoginScreen;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    SizeConfig,
+    UserOptions;
+import './marking_page.dart';
+import './setting_page.dart';
+import './statistic_page.dart';
 
 class MenuPage extends StatefulWidget {
   static const String routeName = '/';
@@ -43,9 +47,7 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   List<Widget> _buildList(BuildContext context) {
-
     List<Widget> list = <Widget>[];
-
     list.addAll([
       Padding(
         padding: EdgeInsets.only(
@@ -80,25 +82,21 @@ class _MenuPageState extends State<MenuPage> {
         color: Colors.grey,
       ),
     ]);
-
     list.addAll(_buildMenu(
       name: 'Statistics',
       icons: Icons.pie_chart_outlined,
       onTap: () async => await Navigator.of(context).pushNamed(StatisticPage.routeName),
     ));
-
     list.addAll(_buildMenu(
       name: 'Marking',
       icons: Icons.location_on,
       onTap: () async => await Navigator.of(context).pushNamed(MarkingPage.routeName),
     ));
-
     list.addAll(_buildMenu(
       name: 'Settings',
       icons: Icons.settings,
       onTap: () async => await Navigator.of(context).pushNamed(SettingPage.routeName),
     ));
-
     list.addAll([
       CupertinoButton(
         padding: EdgeInsets.zero,
@@ -116,13 +114,21 @@ class _MenuPageState extends State<MenuPage> {
             ),
           ),
         ),
-        onPressed: () => print(""),//gotologinscreen(context),
+        onPressed: () async {
+          UserOptions.auth.signOut().then((_) async {
+            print('signout');
+            UserOptions.login = false;
+            UserOptions.user = null;
+            await Navigator.of(UserOptions.index_context).pushReplacement(
+              MaterialPageRoute(
+                builder: (BuildContext context) => LoginScreen(),
+              )
+            );
+          });
+        },
       ),
-        
     ]);
-
     return list;
-
   }
 
   List<Widget> _buildMenu({@required String name, @required IconData icons, VoidCallback onTap}) {

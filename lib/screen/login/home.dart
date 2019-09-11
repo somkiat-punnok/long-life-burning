@@ -34,6 +34,15 @@ class HomePage extends StatelessWidget {
             brightness: Brightness.light,
             elevation: 0.0,
             actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.clear),
+                color: Colors.white,
+                onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => Index(),
+                  )
+                ),
+              ),
             ],
           ),
           Container(
