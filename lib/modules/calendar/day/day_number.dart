@@ -30,7 +30,7 @@ class DayNumber extends StatelessWidget {
         style: TextStyle(
           color: isToday ? Colors.white : Colors.black,
           fontSize: screenSize(context) == ScreenSizes.small ? 10.0 : 12.0,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.normal,
         ),
       ),
     );

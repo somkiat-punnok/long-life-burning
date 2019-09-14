@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoColors;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/utils/routes/routing.dart'
   show
@@ -15,14 +15,6 @@ import 'package:long_life_burning/utils/routes/routing.dart'
 import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
-  
-  Index({
-     Key key,
-     this.user,
-  }) : super(key: key);
-
-  final FirebaseUser user;
-
   @override
   _IndexState createState() => _IndexState();
 }
@@ -30,7 +22,6 @@ class Index extends StatefulWidget {
 class _IndexState extends State<Index> {
 
   int pageIndex;
-  bool login = false;
   final List<BottomNavigationBarItem> navBarItems = [
     navBarItem(kStepCount.name, kStepCount.icon),
     navBarItem(kNearby.name, kNearby.icon),
@@ -42,23 +33,21 @@ class _IndexState extends State<Index> {
   @override
   void initState() {
     super.initState();
+    UserOptions.auth = FirebaseAuth.instance;
+    UserOptions.index_context = context;
+    checkAuth();
     pageIndex = 0;
-    if (widget.user != null) {
-      if (widget.user.uid.isNotEmpty) {
-        login = true;
-      }
-    }
   }
 
-  void onChanged (int index) async {
-    if(navBarItems.length - 1 == index && !login) {
+  void onChanged(int index) async {
+    if(navBarItems.length - 1 == index && !UserOptions.login) {
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (BuildContext context) => LoginScreen(),
         )
       );
     }
-    if(pageIndex != index) {
+    else if(pageIndex != index) {
       setState(() {
         pageIndex = index;
       });
@@ -68,15 +57,23 @@ class _IndexState extends State<Index> {
     }
   }
 
+  void checkAuth() async {
+    await UserOptions.auth.currentUser().then((user) async {
+      if (user != null) {
+        UserOptions.user = user;
+        UserOptions.login = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);
-    // print(SizeConfig.printData());
     return WillPopScope(
       onWillPop: () async => !await nav[pageIndex].navigateKey.currentState.maybePop(),
       child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        resizeToAvoidBottomPadding: true,
+        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomPadding: false,
         body: _buildPageBody(),
         bottomNavigationBar: _buildNavBar(),
       ),

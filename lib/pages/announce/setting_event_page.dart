@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show Constants;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    PROVINCE,
+    CATEGORIES;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
 class SetEventPage extends StatefulWidget {
@@ -21,8 +24,8 @@ class _SetEventPageState extends State<SetEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
@@ -62,7 +65,7 @@ class _SetEventPageState extends State<SetEventPage> {
           SettingHeader('performed by'),
           SettingPicker(
             title: 'Province',
-            items: Constants.province,
+            items: PROVINCE,
             currentIndex: province,
             onSelect: (int i) {
               setState(() {
@@ -72,7 +75,7 @@ class _SetEventPageState extends State<SetEventPage> {
           ),
           SettingPicker(
             title: 'Category',
-            items: Constants.categories,
+            items: CATEGORIES,
             currentIndex: category,
             onSelect: (int i) {
               setState(() {

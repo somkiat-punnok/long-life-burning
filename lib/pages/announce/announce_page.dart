@@ -21,6 +21,7 @@ class AnnouncePage extends StatefulWidget {
 class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMixin {
 
   final SearchEventDelegate _delegate = SearchEventDelegate();
+  DateTime _now;
   CalendarController _calendarController;
   ScrollController _eventController;
   DateTime _selectedDay;
@@ -31,9 +32,10 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
+    _now = DateTime.now();
     _calendarController = CalendarController();
     _eventController = ScrollController()..addListener(_scrollListener);
-    _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    _selectedDay = DateTime(_now.year, _now.month, _now.day);
     _onDayEvents = EventToList.events[_selectedDay] ?? [];
     _events = EventToList.events;
   }
@@ -52,14 +54,7 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    _calendarController.setSelectedDay(
-      (_selectedDay.year != first.year && _selectedDay.month != first.month)
-      ? (DateTime.now().year == first.year && DateTime.now().month == first.month)
-        ? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-        : first
-      : _selectedDay,
-      runCallback: true,
-    );
+    _calendarController.setSelectedDay(_selectedDay, runCallback: true);
   }
 
   void _onDaySelected(DateTime date, List events) {
@@ -69,18 +64,20 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     });
   }
 
-  _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
+  void _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
     (res) {
       if (res != null) {
         final result = res as List;
-        setState(() {
-          if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
-            _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-          }
-          else {
+        if(_now.year == result[0] && _now.month == result[1]) {
+          setState(() {
+            _selectedDay = DateTime(_now.year, _now.month, _now.day);
+          });
+        }
+        else {
+          setState(() {
             _selectedDay = DateTime(result[0], result[1], 1);
-          }
-        });
+          });
+        }
         _calendarController.setSelectedDay(_selectedDay, runCallback: true);
       }
     }
@@ -89,8 +86,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
           Calendar(

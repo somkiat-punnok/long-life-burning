@@ -29,7 +29,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    readDate(DateTime.now());
+    isCupertino ? init().then((_) => readDate(DateTime.now())) : null;
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
@@ -40,7 +40,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     if(initComplete) {
-      readDate(DateTime.now());
+      isCupertino ? readDate(DateTime.now()) : null;
       slidingListController.reopen();
     }
     super.didChangeDependencies();
@@ -52,20 +52,21 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
     super.dispose();
   }
 
+  Future<void> init() async => await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
+
   Future<void> readDate(DateTime date) async {
-    final bool before = (date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day);
-    if (before) {
+    if ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day)) {
       try {
-        _permissions = await FitKit.requestPermissions(DataType.values);
         if (!_permissions) {
           print("User declined permissions");
+          await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
         } else {
           _step = 0;
           _distence = 0;
           _second = 0;
           final bool now = Utils.isSameDay(date, DateTime.now());
           for (DataType type in DataType.values) {
-            if (before && type == DataType.STEP_COUNT) {
+            if (type == DataType.STEP_COUNT) {
               await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
               .then((data) {
                 if (data != null && data.isNotEmpty) {
@@ -82,7 +83,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 }
               });
             }
-            if (before && type == DataType.DISTANCE) {
+            if (type == DataType.DISTANCE) {
               await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
               .then((data) {
                 if (data != null && data.isNotEmpty) {
@@ -110,8 +111,8 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
     initComplete = true;
     _calories = calculateEnergyExpenditure(1.7,DateTime(1998,1,1),70,Gender.MALE,_second,_step);
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
           Forecast(
@@ -120,17 +121,17 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
             radialList: RadialListViewModel(
               items: [
                 RadialListItemViewModel(
-                  icon: AssetImage(Constants.runnerIcon),
+                  icon: AssetImage(RUNNERICON),
                   title: 'Steps',
                   subtitle: '${NumberFormat('#,###', 'en_US').format(_step)} step',
                 ),
                 RadialListItemViewModel(
-                  icon: AssetImage(Constants.burnIcon),
+                  icon: AssetImage(BURNICON),
                   title: 'Calories',
                   subtitle: '${NumberFormat('#,###.##', 'en_US').format(_calories)} kCal',
                 ),
                 RadialListItemViewModel(
-                  icon: AssetImage(Constants.distanceIcon),
+                  icon: AssetImage(DISTANCEICON),
                   title: 'Distances',
                   subtitle: '${NumberFormat('#.##', 'en_US').format(_distence/1000)} km',
                 ),

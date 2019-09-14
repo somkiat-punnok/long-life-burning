@@ -23,13 +23,13 @@ double getDayNumberSize(BuildContext context) {
 
 double getMonthViewHeight(BuildContext context) {
   const double padding = 8.0;
-  const double titleHeight = 21.0;
+  const double titleHeight = 26.0;
   return (2 * padding) + titleHeight + 8.0 + (6 * getDayNumberSize(context));
 }
 
 double getYearViewHeight(BuildContext context) {
   const double topPadding = 16.0;
-  final double titleHeight = screenSize(context) == ScreenSizes.small ? 44.0 : 52.0;
+  final double titleHeight = screenSize(context) == ScreenSizes.small ? 38.0 : 42.0;
   const double dividerHeight = 16.0;
   return topPadding + titleHeight + 8.0 + dividerHeight + (4 * getMonthViewHeight(context) - getDayNumberSize(context));
 }

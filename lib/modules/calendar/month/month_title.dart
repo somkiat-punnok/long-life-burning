@@ -21,7 +21,7 @@ class MonthTitle extends StatelessWidget {
         getMonthName(month, monthNames: monthNames),
         style: TextStyle(
           color: isTomonth ? tomonthColor : Colors.black,
-          fontSize: 20.0,
+          fontSize: screenSize(context) == ScreenSizes.small ? 20.0 : 24.0,
           fontWeight: FontWeight.bold,
         ),
         maxLines: 1,

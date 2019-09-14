@@ -1,15 +1,18 @@
 part of login;
 
-enum SingingCharacter { lafayette, jefferson }
-SingingCharacter _character = SingingCharacter.lafayette;
+enum SingingCharacter { male, female }
+SingingCharacter _character = SingingCharacter.male;
 
 
 @immutable
 class SignUpPage extends StatefulWidget {
 
+
+  final VoidCallback signin;
   
   SignUpPage({
     Key key,
+    this.signin,
   }) : super(key: key);
 
   @override
@@ -34,54 +37,73 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
 
-  final fromKey = new GlobalKey<FormState>();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmController = TextEditingController();
+  GlobalKey<FormState> fromKey;
+  TextEditingController emailController;
+  TextEditingController passwordController;
+  TextEditingController confirmController;
   // TextEditingController hightController = TextEditingController();
   // TextEditingController weightController = TextEditingController();
 
   String _email;
   String _password;
 
+  @override
+  void initState() { 
+    super.initState();
+    fromKey = GlobalKey<FormState>();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmController = TextEditingController();
+  }
+
+  @override
+  void dispose() { 
+    if (fromKey.currentState != null) {
+      fromKey.currentState.dispose();
+    }
+    emailController.dispose();
+    passwordController.dispose();
+    confirmController.dispose();
+    super.dispose();
+  }
+
   bool validateAndSave(){
     final form = fromKey.currentState;
     if (form.validate()){
       form.save();
-     return true;
+      return true;
     }else {
       return false;   
     }
   }
 
-  void validateAndSubmit() async{
+  void validateAndSubmit() {
     if(validateAndSave()){
       try {
-        final  AuthResult authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
-        final FirebaseUser user = authResult.user;
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => Index(user: user)),
-        );
-      }catch (e){
+        UserOptions.auth.createUserWithEmailAndPassword(email: _email, password: _password).then((result) {
+          if (result != null && result.user != null) {
+            widget.signin();
+          }
+        });
+      } catch (e) {
         print('Error : $e');
       }
     }
   }
 
-  signUp() {
+  void signUp() {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     String confirmPassword = confirmController.text.trim();
     if (password == confirmPassword && password.length >= 8) {
-      _auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((user) {
-        print("Sign up user successful.");
-      }).catchError((error) {
-         print(error.message);
-      });
+      UserOptions.auth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .then((user) {
+          print("Sign up user successful.");
+        })
+        .catchError((e) {
+          print(e.message);
+        });
     } else {
       print("Password and Confirm-password is not match.");
     }
@@ -120,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Colors.black.withOpacity(0.1),
             BlendMode.dstATop,
           ),
-            image: AssetImage(Constants.loginImage),
+            image: AssetImage(SIGNINIMAGE),
             fit: BoxFit.cover,
           ),
         ),
@@ -157,30 +179,30 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   ListTile(
-                    title: const Text(
+                    title: Text(
                       'Male',
                     ),
-                    leading : Radio(
-                      value:SingingCharacter.lafayette,
+                    leading: Radio(
+                      value: SingingCharacter.male,
                       groupValue: _character,
                       onChanged: (SingingCharacter value) {
                         setState(() {
                           _character = value; 
-                          }
-                        );
+                        });
                       }
                     ),
                   ),
                   ListTile(
-                    title: const Text('Female'),
+                    title: Text(
+                      'Female',
+                    ),
                     leading: Radio(
-                      value: SingingCharacter.jefferson,
+                      value: SingingCharacter.female,
                       groupValue: _character,
                       onChanged: (SingingCharacter value){
                         setState(() {
                           _character = value; 
-                          }
-                        );
+                        });
                       }
                     ),
                   ),                
