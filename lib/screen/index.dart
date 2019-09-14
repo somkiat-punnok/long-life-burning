@@ -33,15 +33,10 @@ class _IndexState extends State<Index> {
   @override
   void initState() {
     super.initState();
-    init();
-    checkAuth();
-    pageIndex = 0;
-  }
-
-  void init() {
     UserOptions.auth = FirebaseAuth.instance;
     UserOptions.index_context = context;
-    print('init!!!');
+    checkAuth();
+    pageIndex = 0;
   }
 
   void onChanged(int index) async {
@@ -67,7 +62,6 @@ class _IndexState extends State<Index> {
       if (user != null) {
         UserOptions.user = user;
         UserOptions.login = true;
-        print('user: ${UserOptions.user}, login: ${UserOptions.login}');
       }
     });
   }

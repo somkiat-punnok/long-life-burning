@@ -24,6 +24,7 @@ class RecordPage extends StatefulWidget {
 class _RecordPageState extends State<RecordPage> {
 
   CalendarController _calendarController;
+  DateTime _now;
   DateTime _selectedDay;
   bool _permissions;
   num _step = 0;
@@ -33,8 +34,9 @@ class _RecordPageState extends State<RecordPage> {
   @override
   void initState() {
     super.initState();
+    _now = DateTime.now();
     _calendarController = CalendarController();
-    _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    _selectedDay = DateTime(_now.year, _now.month, _now.day);
     isCupertino ? init().then((_) => readDate(_selectedDay)) : null;
   }
 
@@ -45,44 +47,39 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    _calendarController.visibleDays.forEach((d) {
-      if (Utils.isSameDay(d, DateTime.now())) {
+    for(final data in _calendarController.visibleDays){
+      if (Utils.isSameDay(data, _now)) {
         setState(() {
-          _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+          _selectedDay = DateTime(_now.year, _now.month, _now.day);
         });
+        break;
       }
-      else if (_selectedDay.weekday == d.weekday) {
+      else if (_selectedDay.weekday == data.weekday) {
         setState(() {
-          _selectedDay = DateTime(d.year, d.month, d.day);
+          _selectedDay = DateTime(data.year, data.month, data.day);
         });
+        break;
       }
-    });
+    }
     _calendarController.setSelectedDay(_selectedDay, runCallback: true);
   }
 
   void _onDaySelected(DateTime date, List events) async {
-    ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day))
-    ? isCupertino
+    isCupertino
       ? await readDate(DateTime(date.year, date.month, date.day))
-      : null
-    : null;
+      : null;
     setState(() {
       _selectedDay = date;
-      if ((DateTime.now().year <= date.year) && (DateTime.now().month <= date.month) && (DateTime.now().day < date.day)) {
-        _step = 0;
-        _distence = 0;
-        _second = 0;
-      }
     });
   }
 
-  _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
+  void _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
     (res) {
       if (res != null) {
         final result = res as List;
-        if(DateTime.now().year == result[0] && DateTime.now().month == result[1]) {
+        if(_now.year == result[0] && _now.month == result[1]) {
           setState(() {
-            _selectedDay = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+            _selectedDay = DateTime(_now.year, _now.month, _now.day);
           });
         }
         else {
@@ -98,7 +95,7 @@ class _RecordPageState extends State<RecordPage> {
   Future<void> init() async => await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
 
   Future<void> readDate(DateTime date) async {
-    if ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day)) {
+    if ((date.year <= _now.year) && (date.month <= _now.month) && (date.day <= _now.day)) {
       try {
         if (!_permissions) {
           print("User declined permissions");
@@ -107,7 +104,7 @@ class _RecordPageState extends State<RecordPage> {
           _step = 0;
           _distence = 0;
           _second = 0;
-          final bool now = Utils.isSameDay(date, DateTime.now());
+          final bool now = Utils.isSameDay(date, _now);
           for (DataType type in DataType.values) {
             if (type == DataType.STEP_COUNT) {
               await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
@@ -126,7 +123,7 @@ class _RecordPageState extends State<RecordPage> {
                 }
               });
             }
-            if (type == DataType.DISTANCE) {
+            else if (type == DataType.DISTANCE) {
               await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
               .then((data) {
                 if (data != null && data.isNotEmpty) {
@@ -145,6 +142,11 @@ class _RecordPageState extends State<RecordPage> {
       } catch (e) {
         print('Failed to read all values. $e');
       }
+    }
+    else {
+      _step = 0;
+      _distence = 0;
+      _second = 0;
     }
     if (!mounted) return;
   }

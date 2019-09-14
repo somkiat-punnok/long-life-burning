@@ -40,7 +40,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() { 
-    fromKey.currentState.dispose();
+    if (fromKey.currentState != null) {
+      fromKey.currentState.dispose();
+    }
     emailController.dispose();
     passwordController.dispose();
     confirmController.dispose();
@@ -62,7 +64,6 @@ class _SignUpPageState extends State<SignUpPage> {
       try {
         UserOptions.auth.createUserWithEmailAndPassword(email: _email, password: _password).then((result) {
           if (result != null && result.user != null) {
-            print('signup result: $result');
             widget.signin();
           }
         });
@@ -82,8 +83,8 @@ class _SignUpPageState extends State<SignUpPage> {
         .then((user) {
           print("Sign up user successful.");
         })
-        .catchError((error) {
-          print(error.message);
+        .catchError((e) {
+          print(e.message);
         });
     } else {
       print("Password and Confirm-password is not match.");
