@@ -14,13 +14,17 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
 
   GlobalKey<FormState> fromKey;
-  String _email;
-  String _password;
+  GlobalKey<ScaffoldState> scaffoldKey;
+  TextEditingController emailController;
+  TextEditingController passwordController;
   
   @override
   void initState() { 
     super.initState();
     fromKey = GlobalKey<FormState>();
+    scaffoldKey = GlobalKey<ScaffoldState>();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
   }
 
   @override
@@ -28,6 +32,11 @@ class _SignInPageState extends State<SignInPage> {
     if (fromKey.currentState != null) {
       fromKey.currentState.dispose();
     }
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState.dispose();
+    }
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
   
@@ -40,18 +49,27 @@ class _SignInPageState extends State<SignInPage> {
       return false;
     }
   }
-
-  void validateAndSubmit() async {
+  
+  Future<void> signIn() async {
     if (validateAndSave()) {
       try {
-        await UserOptions.auth.signInWithEmailAndPassword(email: _email, password: _password).then((result) {
-          if (result != null) {
+        String email = emailController.text.trim();
+        String password = passwordController.text.trim();
+        await UserOptions.auth.signInWithEmailAndPassword(email: email, password: password).then((result) {
+          if (result != null && result.user != null) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => Index(),
               ),
             );
           }
+        })
+        .catchError((error) {
+          print(error.message);
+          scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(error.message, style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red,
+          ));
         });
       } catch (e) {
         print('Error : $e');
@@ -62,6 +80,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -129,14 +148,14 @@ class _SignInPageState extends State<SignInPage> {
   RaisedButton buildButtonSignIn() {
     return RaisedButton(
       child: Text(
-        "Log in",
+        "Sign in",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 18,
           color: Colors.black,
         ),
       ),
-      onPressed: validateAndSubmit,
+      onPressed: () async => await signIn(),
       padding: EdgeInsets.all(12),
     );
   }
@@ -150,11 +169,11 @@ class _SignInPageState extends State<SignInPage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextFormField(
+        controller: emailController,
         decoration: InputDecoration.collapsed(hintText: "Email"),
         style: TextStyle(
           fontSize: 18,
         ),
-        onSaved: (value) => _email = value,
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
       ),
     );
@@ -169,16 +188,15 @@ class _SignInPageState extends State<SignInPage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextFormField(
+        controller: passwordController,
         obscureText: true,
         decoration: InputDecoration.collapsed(hintText: "Password"),
         style: TextStyle(
           fontSize: 18,
         ),
-        onSaved: (value) => _password = value,
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
       ),
     );
   }
-     
-  
+
 }
