@@ -85,6 +85,12 @@ List<Pages> _buildPage() => <Pages>[
     buildRoute: (BuildContext context) => SetEventPage(),
   ),
   Pages(
+    name: 'Create Group',
+    tag: CategoryPage.groups,
+    routeName: CreateGroup.routeName,
+    buildRoute: (BuildContext context) => CreateGroup(),
+  ),
+  Pages(
     name: 'Statistic',
     tag: CategoryPage.menu,
     routeName: StatisticPage.routeName,

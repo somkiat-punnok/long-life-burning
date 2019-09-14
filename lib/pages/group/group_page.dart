@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:long_life_burning/modules/stepcount/db/model/item.dart';
-import 'package:long_life_burning/screen/index.dart';
-import './creategroup.dart';
+import 'package:flutter/cupertino.dart';
+
+import './create_group.dart';
 
 class GroupPage extends StatefulWidget {
   static const String routeName = '/';
@@ -20,16 +19,12 @@ class _GroupPageState extends State<GroupPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add),
-                color: Colors.white,
-                onPressed: () => gotoCreate(context)(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Index(),
-                  )
-                ),
-              ),
-            ],
+          IconButton(
+            icon: Icon(Icons.add),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context).pushNamed(CreateGroup.routeName),
+          ),
+        ],
         title: Text(
           'Group',
           style: TextStyle(
@@ -192,10 +187,4 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 
-}
-
-gotoCreate(context) {
-  Navigator.of(context).push(MaterialPageRoute(
-    builder: (context) => CreateGroup(),
-  ));
 }

@@ -1,5 +1,4 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
+part of diagnose;
 
 class RadialPosition extends StatelessWidget {
 
@@ -23,4 +22,5 @@ class RadialPosition extends StatelessWidget {
       child: child,
     );
   }
+  
 }

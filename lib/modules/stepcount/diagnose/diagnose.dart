@@ -1,61 +1,98 @@
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
-import 'package:long_life_burning/modules/stepcount/forecast/background/background_with_rings.dart';
-import 'package:long_life_burning/modules/stepcount/forecast/radial_list.dart';
+library diagnose;
 
-class Forecast extends StatelessWidget {
+import 'dart:ui';
+import 'dart:math';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoColors;
+import 'package:meta/meta.dart';
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    RUNIMAGE,
+    isMaterial,
+    SizeConfig;
+
+part './background/circle.dart';
+part './background/background_with_rings.dart';
+part './radial/radial_list.dart';
+part './radial/radial_item.dart';
+part './radial/radial_model.dart';
+part './radial/radial_position.dart';
+part './sliding_controller.dart';
+
+enum RadialListState {
+  closed,
+  slidingOpen,
+  open,
+  fadingOut,
+}
+
+class Diagnoses extends StatelessWidget {
 
   final RadialListViewModel radialList;
   final SlidingRadialListController slidingListController;
-  final DateTime date;
   final VoidCallback onDateText;
 
-  Forecast({
+  Diagnoses({
     Key key,
     @required this.radialList,
     @required this.slidingListController,
-    this.date,
     this.onDateText,
   }) : super(key: key);
 
   Widget _dayText() {
-    DateTime time = date ?? DateTime.now();
+    DateTime time = DateTime.now();
     return Padding(
-      padding: EdgeInsets.only(top: 0.0, left: SizeConfig.setWidth(15.0)),
-      child: GestureDetector(
-        onTap: onDateText,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
+      padding: EdgeInsets.only(top: 0.0, left: SizeConfig.setWidth(10.0)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          GestureDetector(
+            onTap: onDateText,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Text(
                 '${time.day}',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 80.0,
                 ),
               ),
-              Text(
+            ),
+          ),
+          GestureDetector(
+            onTap: onDateText,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Text(
                 month(time.month),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 50.0,
                 ),
               ),
-              Text(
+            ),
+          ),
+          GestureDetector(
+            onTap: onDateText,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Text(
                 '${time.year}',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 50.0,
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -108,11 +145,12 @@ class Forecast extends StatelessWidget {
     return Stack(
       children: <Widget>[
         BackgroundWithRings(),
+        _dayText(),
         SlidingRadialList(
           radialList: radialList,
           controller: slidingListController,
+          onTap: onDateText,
         ),
-        _dayText(),
       ],
     );
   }

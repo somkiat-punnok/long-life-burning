@@ -1,13 +1,13 @@
 part of settings;
 
-class SettingPicker extends StatefulWidget {
+class CusttomPicker extends StatefulWidget {
 
   final List<String> items;
   final String title;
   final int currentIndex;
   final SelectionCallback onSelect;
 
-  SettingPicker({
+  CusttomPicker({
     Key key,
     @required this.items,
     this.title,
@@ -18,10 +18,10 @@ class SettingPicker extends StatefulWidget {
         super(key: key);
 
   @override
-  _PickerState createState() => _PickerState();
+  _CusttomPickerState createState() => _CusttomPickerState();
 }
 
-class _PickerState extends State<SettingPicker> {
+class _CusttomPickerState extends State<CusttomPicker> {
 
   FixedExtentScrollController scrollController;
 
@@ -138,7 +138,7 @@ class TimerPicker extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) => _buildBottomPicker(
                   CupertinoTimerPicker(
-                    initialTimerDuration: currentTimer ?? Duration(),
+                    initialTimerDuration: currentTimer ?? Duration.zero,
                     mode: CupertinoTimerPickerMode.hms,
                     onTimerDurationChanged: onSelect,
                   ),
@@ -213,6 +213,7 @@ class DatePicker extends StatelessWidget {
                     mode: CupertinoDatePickerMode.date,
                     initialDateTime: currentDate ?? DateTime.now(),
                     onDateTimeChanged: onSelect,
+                    use24hFormat: true,
                   ),
                   title: title ?? ' ',
                   context: context,
@@ -280,7 +281,8 @@ class TimePicker extends StatelessWidget {
                   CupertinoDatePicker(
                     mode: CupertinoDatePickerMode.time,
                     initialDateTime: currentTime ?? DateTime.now(),
-                    onDateTimeChanged: onSelect ?? DateCallback,
+                    onDateTimeChanged: onSelect,
+                    use24hFormat: true,
                   ),
                   title: title ?? ' ',
                   context: context,
@@ -295,7 +297,7 @@ class TimePicker extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateFormat.jm().format(currentTime ?? DateTime.now()),
+                    DateFormat.Hm().format(currentTime ?? DateTime.now()),
                     style: TextStyle(
                       color: CupertinoColors.inactiveGray,
                     ),
@@ -351,6 +353,7 @@ class DateAndTimePicker extends StatelessWidget {
                     mode: CupertinoDatePickerMode.dateAndTime,
                     initialDateTime: currentDateAndTime ?? DateTime.now(),
                     onDateTimeChanged: onSelect,
+                    use24hFormat: true,
                   ),
                   title: title ?? ' ',
                   context: context,
@@ -365,7 +368,7 @@ class DateAndTimePicker extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    DateFormat.yMMMd().add_jm().format(currentDateAndTime),
+                    DateFormat.yMMMMd().add_Hm().format(currentDateAndTime),
                     style: const TextStyle(color: CupertinoColors.inactiveGray),
                   ),
                 ],

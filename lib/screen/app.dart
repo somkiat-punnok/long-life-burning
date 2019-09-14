@@ -13,7 +13,6 @@ import 'package:long_life_burning/utils/helper/constants.dart'
 import './index.dart';
 
 class App extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,5 +39,4 @@ class App extends StatelessWidget {
       ],
     );
   }
-
 }

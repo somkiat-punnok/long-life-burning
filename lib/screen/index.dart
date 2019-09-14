@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoColors;
-import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
-import 'package:long_life_burning/utils/helper/constants.dart';
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    isMaterial,
+    SizeConfig,
+    UserOptions;
 import 'package:long_life_burning/utils/routes/routing.dart'
   show
     nav,
@@ -11,7 +14,7 @@ import 'package:long_life_burning/utils/routes/routing.dart'
     kGroups,
     kMenu,
     PageNavigate;
-
+    
 import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
@@ -33,7 +36,6 @@ class _IndexState extends State<Index> {
   @override
   void initState() {
     super.initState();
-    UserOptions.auth = FirebaseAuth.instance;
     UserOptions.index_context = context;
     checkAuth();
     pageIndex = 0;

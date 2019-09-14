@@ -1,6 +1,6 @@
 import 'package:long_life_burning/utils/helper/constants.dart' show Gender;
 
-num calculateEnergyExpenditure(
+num calculateCalories(
   num height,
   DateTime age,
   num weight,
@@ -18,7 +18,7 @@ num calculateEnergyExpenditure(
           gender,
           weight,
           getAgeFromDateOfBirth(age),
-          height
+          centimeterToMeters(height)
         ),
         weight
       ))
@@ -75,11 +75,11 @@ num getMetForActivity(num speedInMph) {
   return 0;
 }
 
-num harrisBenedictRmr(Gender gender, num weightKg, num age, num heightCm) {
+num harrisBenedictRmr(Gender gender, num weight, num age, num height) {
   if (gender == Gender.FEMALE) {
-    return 655.0955 + (1.8496 * heightCm) + (9.5634 * weightKg) - (4.6756 * age);
+    return 655.0955 + (1.8496 * height) + (9.5634 * weight) - (4.6756 * age);
   } else {
-    return 66.4730 + (5.0033 * heightCm) + (13.7516 * weightKg) - (6.7550 * age);
+    return 66.4730 + (5.0033 * height) + (13.7516 * weight) - (6.7550 * age);
   }
 }
 
@@ -99,6 +99,6 @@ num meterToCentimer(num m) {
   return m * 100;
 }
 
-num calculateStepToMeters(num steps, num heightInMeters, Gender gender) {
-  return steps * centimeterToMeters(gender == Gender.FEMALE ? 0.413 : 0.415 * meterToCentimer(heightInMeters));
+num calculateStepToMeters(num steps, num height, Gender gender) {
+  return steps * centimeterToMeters(gender == Gender.FEMALE ? 0.413 : 0.415 * height);
 }

@@ -4,9 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
-import 'package:long_life_burning/modules/stepcount/stepcounter.dart';
-import 'package:long_life_burning/modules/stepcount/calculate.dart';
-import 'package:long_life_burning/utils/widgets/date_utils.dart';
+import 'package:long_life_burning/modules/stepcount/calculate.dart' show calculateCalories;
+import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
+  show
+    Diagnoses,
+    RadialListViewModel,
+    RadialListItemViewModel,
+    SlidingRadialListController;
 
 import './record_page.dart';
 
@@ -20,7 +24,6 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
 
   SlidingRadialListController slidingListController;
   bool initComplete = false;
-  bool _permissions;
   num _step = 0;
   num _distence = 0;
   num _calories = 0;
@@ -29,7 +32,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    isCupertino ? init().then((_) => readDate(DateTime.now())) : null;
+    if (isCupertino) {
+      readDate();
+    }
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
@@ -40,7 +45,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     if(initComplete) {
-      isCupertino ? readDate(DateTime.now()) : null;
+      if (isCupertino) {
+        readDate();
+      }
       slidingListController.reopen();
     }
     super.didChangeDependencies();
@@ -52,56 +59,53 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
     super.dispose();
   }
 
-  Future<void> init() async => await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
-
-  Future<void> readDate(DateTime date) async {
-    if ((date.year <= DateTime.now().year) && (date.month <= DateTime.now().month) && (date.day <= DateTime.now().day)) {
-      try {
-        if (!_permissions) {
-          print("User declined permissions");
-          await FitKit.requestPermissions(DataType.values).then((result) => _permissions = result);
-        } else {
-          _step = 0;
-          _distence = 0;
-          _second = 0;
-          final bool now = Utils.isSameDay(date, DateTime.now());
-          for (DataType type in DataType.values) {
-            if (type == DataType.STEP_COUNT) {
-              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
-              .then((data) {
-                if (data != null && data.isNotEmpty) {
-                  data.forEach((value) {
-                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
+  Future<void> readDate() async {
+    try {
+      if (!UserOptions.fitkit_permissions) {
+        print("User declined permissions");
+        await FitKit.requestPermissions(DataType.values).then((result) => UserOptions.fitkit_permissions = result);
+      } else {
+        _step = 0;
+        _distence = 0;
+        _second = 0;
+        for (DataType type in DataType.values) {
+          if (type == DataType.STEP_COUNT) {
+            await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())
+            .then((data) {
+              if (data != null && data.isNotEmpty) {
+                data.forEach((value) {
+                  if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
+                    if (value.value != 0) {
                       setState(() {
-                        _step = _step + value.value.round() ?? 0;
-                        if (value.value != 0) {
-                          _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
-                        }
+                        _step += value.value.round() ?? 0;
+                        _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
                       });
                     }
-                  });
-                }
-              });
-            }
-            if (type == DataType.DISTANCE) {
-              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
-              .then((data) {
-                if (data != null && data.isNotEmpty) {
-                  data.forEach((value) {
-                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
+                  }
+                });
+              }
+            });
+          }
+          if (type == DataType.DISTANCE) {
+            await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())
+            .then((data) {
+              if (data != null && data.isNotEmpty) {
+                data.forEach((value) {
+                  if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
+                    if (value.value != 0) {
                       setState(() {
-                        _distence = _distence + value.value.round() ?? 0;
+                        _distence += value.value.round() ?? 0;
                       });
                     }
-                  });
-                }
-              });
-            }
+                  }
+                });
+              }
+            });
           }
         }
-      } catch (e) {
-        print('Failed to read all values. $e');
       }
+    } catch (e) {
+      print('Failed to read all values. $e');
     }
     if (!mounted) return;
   }
@@ -109,13 +113,13 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     initComplete = true;
-    _calories = calculateEnergyExpenditure(1.7,DateTime(1998,1,1),70,Gender.MALE,_second,_step);
+    _calories = calculateCalories(170, DateTime(1998, 1, 1), 70, Gender.MALE, _second, _step);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
-          Forecast(
+          Diagnoses(
             slidingListController: slidingListController,
             onDateText: () => Navigator.of(context).pushNamed(RecordPage.routeName),
             radialList: RadialListViewModel(

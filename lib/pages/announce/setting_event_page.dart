@@ -26,6 +26,7 @@ class _SetEventPageState extends State<SetEventPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
+      backgroundColor: CupertinoColors.extraLightBackgroundGray,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
@@ -63,7 +64,7 @@ class _SetEventPageState extends State<SetEventPage> {
       body: Settings(
         items: <Widget>[
           SettingHeader('performed by'),
-          SettingPicker(
+          CusttomPicker(
             title: 'Province',
             items: PROVINCE,
             currentIndex: province,
@@ -73,7 +74,7 @@ class _SetEventPageState extends State<SetEventPage> {
               });
             },
           ),
-          SettingPicker(
+          CusttomPicker(
             title: 'Category',
             items: CATEGORIES,
             currentIndex: category,

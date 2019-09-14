@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   @override
   void initState() { 
     super.initState();
-    checkAuth();
     _controller = PageController(initialPage: 1, viewportFraction: 1.0);
   }
 
@@ -49,20 +48,6 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       duration: Duration(milliseconds: 800),
       curve: Curves.bounceOut,
     );
-  }
-
-  void checkAuth() async {
-    await UserOptions.auth.currentUser().then((user) async {
-      if (user != null) {
-        UserOptions.user = user;
-        print('user: ${UserOptions.user}');
-        await Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => Index(),
-          ),
-        );
-      }
-    });
   }
 
   @override
