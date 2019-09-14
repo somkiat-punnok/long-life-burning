@@ -3,8 +3,10 @@ part of login;
 enum SingingCharacter { lafayette, jefferson }
 SingingCharacter _character = SingingCharacter.lafayette;
 
+
 @immutable
 class SignUpPage extends StatefulWidget {
+
   
   SignUpPage({
     Key key,
@@ -13,6 +15,22 @@ class SignUpPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
+
+// class Reply {
+//     Reply(this.replyHight, this.replyWight);
+//       final String replyHight;
+//       final String replyWight;
+    
+
+//       String getName() {
+//         return replyHight;
+//       }
+
+//       String getText() {
+//         return replyWight;
+//       }
+
+//     }
 
 class _SignUpPageState extends State<SignUpPage> {
 
@@ -68,6 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
       print("Password and Confirm-password is not match.");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

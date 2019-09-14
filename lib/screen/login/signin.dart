@@ -13,10 +13,12 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
 
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   final GlobalKey<FormState> fromKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _email;
   String _password;
+
   
   @override
   void initState() { 
@@ -61,9 +63,11 @@ class _SignInPageState extends State<SignInPage> {
     }
   }
   
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold( 
+    return Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -181,6 +185,14 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
   }
-     
-  
+    //  catchError((error) {
+    //   print(error.message);
+    //   scaffoldKey.currentState.showSnackBar(SnackBar(
+    //     content: Text(error.message, style: TextStyle(color: Colors.white)
+    //     ),
+    //     backgroundColor: Colors.red,
+    //    )
+    //   );
+    //  }
+  //  );
 }
