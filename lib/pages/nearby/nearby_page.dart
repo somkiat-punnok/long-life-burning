@@ -67,10 +67,9 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
             left: 0.0,
             right: 0.0,
             child: AppBar(
-              backgroundColor: Colors.transparent,
               automaticallyImplyLeading: false,
               brightness: Brightness.light,
-              elevation: 0.0,
+              backgroundColor: Colors.transparent,
             ),
           ),
           Positioned(

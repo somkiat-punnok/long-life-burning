@@ -30,6 +30,8 @@ class _SetEventPageState extends State<SetEventPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
         title: Text(
           'Settings',
           style: TextStyle(
@@ -57,9 +59,6 @@ class _SetEventPageState extends State<SetEventPage> {
             ),
           ),
         ],
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
       ),
       body: Settings(
         items: <Widget>[

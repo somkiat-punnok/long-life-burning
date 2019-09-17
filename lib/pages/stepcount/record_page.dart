@@ -3,6 +3,11 @@ import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/modules/stepcount/record/records.dart';
 import 'package:long_life_burning/modules/stepcount/calculate.dart' show calculateCalories;
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
+import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
+  show
+    kHeight,
+    kWeight,
+    kDateOfBirth;
 import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
     CalendarController,
@@ -97,9 +102,9 @@ class _RecordPageState extends State<RecordPage> {
   Future<void> readDate(DateTime date) async {
     if ((date.year <= _now.year) && (date.month <= _now.month) && (date.day <= _now.day)) {
       try {
-        if (!UserOptions.fitkit_permissions) {
+        if (!Configs.fitkit_permissions) {
           print("User declined permissions");
-          await FitKit.requestPermissions(DataType.values).then((result) => UserOptions.fitkit_permissions = result);
+          await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
         } else {
           _step = 0;
           _distence = 0;
@@ -170,7 +175,14 @@ class _RecordPageState extends State<RecordPage> {
           ),
           RecordToList(
             step: _step,
-            cal: calculateCalories(170, DateTime(1998, 1, 1), 70, Gender.MALE, _second, _step),
+            cal: calculateCalories(
+              UserOptions.height ?? kHeight,
+              UserOptions.dateOfBirth ?? kDateOfBirth,
+              UserOptions.weight ?? kWeight,
+              UserOptions.gender ?? Gender.MALE,
+              _second,
+              _step,
+            ),
             dist: _distence/1000,
           ),
         ],

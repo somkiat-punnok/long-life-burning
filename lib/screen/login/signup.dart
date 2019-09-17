@@ -1,8 +1,5 @@
 part of login;
 
-enum SingingCharacter { male, female }
-SingingCharacter _character = SingingCharacter.male;
-
 @immutable
 class SignUpPage extends StatefulWidget {
   final VoidCallback signin;
@@ -16,22 +13,9 @@ class SignUpPage extends StatefulWidget {
   _SignUpPageState createState() => _SignUpPageState();
 }
 
-class Reply {
-  Reply(this.replyHeight, this.replyWight);
-  final String replyHeight;
-  final String replyWight;
-
-  String getName() {
-    return replyHeight;
-  }
-
-  String getText() {
-    return replyWight;
-  }
-}
-
 class _SignUpPageState extends State<SignUpPage> {
-  DateTime date = DateTime(2000, 1, 1);
+  DateTime _date = DateTime(2000, 1, 1);
+  Gender _gender = Gender.MALE;
   GlobalKey<FormState> fromKey;
   GlobalKey<ScaffoldState> scaffoldKey;
   TextEditingController emailController;
@@ -41,7 +25,6 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController weightController;
   TextEditingController birthController;
   TextEditingController genderController;
-  final db = Firestore.instance;
 
   @override
   void initState() {
@@ -86,32 +69,35 @@ class _SignUpPageState extends State<SignUpPage> {
   Future<void> signUp() async {
     if (validateAndSave()) {
       try {
+        String gender;
         String email = emailController.text.trim();
         String password = passwordController.text.trim();
         String confirmPassword = confirmController.text.trim();
-        String gender;
         num height = num.parse(heightController.text.trim());
         num weight = num.parse(weightController.text.trim());
-        if (_character == SingingCharacter.male) {
+        if (_gender == Gender.MALE) {
           gender = 'male';
-        } else if (_character == SingingCharacter.female) {
+        } else if (_gender == Gender.FEMALE) {
           gender = 'female';
         }
 
         if (password == confirmPassword && password.length >= 8) {
-          await UserOptions.auth
+          await Configs.auth
               .createUserWithEmailAndPassword(email: email, password: password)
               .then((result) async {
             if (result != null && result.user != null) {
-              await db.collection('users').add({
-                'uid': result.user.uid,
-                'name': 'Anonymus',
-                'height': height,
-                'weight': weight,
-                'dateOfBirth': date,
-                'gender': gender,
-              }).then((ref) => print("$ref"));
-              widget.signin();
+              await Configs.store.collection(UserOptions.collection).add({
+                UserOptions.uid_field: result.user.uid,
+                UserOptions.name_field: 'Anonymus',
+                UserOptions.height_field: height,
+                UserOptions.weight_field: weight,
+                UserOptions.dateOfBirth_field: _date,
+                UserOptions.gender_field: gender,
+              }).then((ref) {
+                if (ref != null && ref.documentID.isNotEmpty) {
+                  widget.signin();
+                }
+              });
             }
           });
         } else {
@@ -208,12 +194,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                 'Male',
                               ),
                               leading: Radio(
-                                  activeColor: Colors.red,
-                                  value: SingingCharacter.male,
-                                  groupValue: _character,
-                                  onChanged: (SingingCharacter value) {
+                                  value: Gender.MALE,
+                                  groupValue: _gender,
+                                  onChanged: (Gender value) {
                                     setState(() {
-                                      _character = value;
+                                      _gender = value;
                                     });
                                   }),
                             ),
@@ -222,12 +207,11 @@ class _SignUpPageState extends State<SignUpPage> {
                                 'Female',
                               ),
                               leading: Radio(
-                                  activeColor: Colors.pink,
-                                  value: SingingCharacter.female,
-                                  groupValue: _character,
-                                  onChanged: (SingingCharacter value) {
+                                  value: Gender.FEMALE,
+                                  groupValue: _gender,
+                                  onChanged: (Gender value) {
                                     setState(() {
-                                      _character = value;
+                                      _gender = value;
                                     });
                                   }),
                             ),
@@ -255,7 +239,6 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration:
                 InputDecoration.collapsed(hintText: "Email | exam@exam.com"),
             validator: emailValidator,
-            // validator: (value) => !value.contains('@') ? 'Not a valid email.' :null,
             style: TextStyle(fontSize: 18)));
   }
 
@@ -349,11 +332,11 @@ class _SignUpPageState extends State<SignUpPage> {
           builder: (BuildContext context) => _buildBottomPicker(
             CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
-              initialDateTime: date,
+              initialDateTime: _date,
               maximumYear: DateTime.now().year - 1,
               onDateTimeChanged: (DateTime t) {
                 setState(() {
-                  date = t;
+                  _date = t;
                 });
               },
             ),
@@ -367,7 +350,7 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: SafeArea(
               child: Text(
-                DateFormat.yMMMMd().format(date),
+                DateFormat.yMMMMd().format(_date),
                 style: TextStyle(
                   fontSize: 18,
                   color: CupertinoColors.inactiveGray,
@@ -468,8 +451,7 @@ class _SignUpPageState extends State<SignUpPage> {
       return 'Email can\'t be empty';
     } else if (!regExp.hasMatch(value)) {
       scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Email do not have strange symbols.',
-            style: TextStyle(color: Colors.white)),
+        content: Text('Email Invalid.', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red,
       ));
       return "Invalid Email";

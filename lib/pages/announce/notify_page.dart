@@ -18,6 +18,8 @@ class _NotifyPageState extends State<NotifyPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
         title: Text(
           'Notifications',
           style: TextStyle(
@@ -45,9 +47,6 @@ class _NotifyPageState extends State<NotifyPage> {
             ),
           ),
         ],
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        elevation: 0.0,
       ),
       body: Center(
         child: Column(

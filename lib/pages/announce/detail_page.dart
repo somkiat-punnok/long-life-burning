@@ -26,7 +26,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
                   backgroundColor: Colors.transparent,
                   automaticallyImplyLeading: false,
                   brightness: Brightness.dark,
-                  elevation: 0.0,
                 ),
               ),
               Container(
@@ -45,7 +44,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       ),
                       Container(
                         width: 90.0,
-                        child: new Divider(color: Colors.green),
+                        child: Divider(color: Colors.green),
                       ),
                       SizedBox(height: 10.0),
                       Text(

@@ -51,7 +51,7 @@ dependencies:
 
   # Database
   sqflite: ^1.1.6+4
-  #shared_preferences: ^0.5.3+4
+  shared_preferences: ^0.5.3+4
 
   # Map
   flutter_map: ^0.7.2
