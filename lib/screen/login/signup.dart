@@ -3,12 +3,10 @@ part of login;
 enum SingingCharacter { male, female }
 SingingCharacter _character = SingingCharacter.male;
 
-
 @immutable
 class SignUpPage extends StatefulWidget {
-
   final VoidCallback signin;
-  
+
   SignUpPage({
     Key key,
     this.signin,
@@ -19,25 +17,23 @@ class SignUpPage extends StatefulWidget {
 }
 
 class Reply {
-    Reply(this.replyHeight, this.replyWight);
-      final String replyHeight;
-      final String replyWight;
-    
+  Reply(this.replyHeight, this.replyWight);
+  final String replyHeight;
+  final String replyWight;
 
-      String getName() {
-        return replyHeight;
-      }
+  String getName() {
+    return replyHeight;
+  }
 
-      String getText() {
-        return replyWight;
-      }
-
-    }
+  String getText() {
+    return replyWight;
+  }
+}
 
 class _SignUpPageState extends State<SignUpPage> {
-
   DateTime date = DateTime(2000, 1, 1);
   GlobalKey<FormState> fromKey;
+  GlobalKey<ScaffoldState> scaffoldKey;
   TextEditingController emailController;
   TextEditingController passwordController;
   TextEditingController confirmController;
@@ -48,21 +44,25 @@ class _SignUpPageState extends State<SignUpPage> {
   final db = Firestore.instance;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     fromKey = GlobalKey<FormState>();
+    scaffoldKey = GlobalKey<ScaffoldState>();
     emailController = TextEditingController();
     passwordController = TextEditingController();
     confirmController = TextEditingController();
     heightController = TextEditingController();
     weightController = TextEditingController();
-    genderController= TextEditingController();
+    genderController = TextEditingController();
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     if (fromKey.currentState != null) {
       fromKey.currentState.dispose();
+    }
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState.dispose();
     }
     emailController.dispose();
     passwordController.dispose();
@@ -73,13 +73,13 @@ class _SignUpPageState extends State<SignUpPage> {
     super.dispose();
   }
 
-  bool validateAndSave(){
+  bool validateAndSave() {
     final form = fromKey.currentState;
-    if (form.validate()){
+    if (form.validate()) {
       form.save();
       return true;
-    }else {
-      return false;   
+    } else {
+      return false;
     }
   }
 
@@ -92,13 +92,16 @@ class _SignUpPageState extends State<SignUpPage> {
         String gender;
         num height = num.parse(heightController.text.trim());
         num weight = num.parse(weightController.text.trim());
-        if(_character == SingingCharacter.male ){
-          gender = 'male'; 
-        }else if (_character == SingingCharacter.female){
-         gender = 'female'; 
+        if (_character == SingingCharacter.male) {
+          gender = 'male';
+        } else if (_character == SingingCharacter.female) {
+          gender = 'female';
         }
+
         if (password == confirmPassword && password.length >= 8) {
-          await UserOptions.auth.createUserWithEmailAndPassword(email: email, password: password).then((result) async {
+          await UserOptions.auth
+              .createUserWithEmailAndPassword(email: email, password: password)
+              .then((result) async {
             if (result != null && result.user != null) {
               await db.collection('users').add({
                 'uid': result.user.uid,
@@ -106,13 +109,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 'height': height,
                 'weight': weight,
                 'dateOfBirth': date,
-                'gender' : gender,
+                'gender': gender,
               }).then((ref) => print("$ref"));
               widget.signin();
             }
           });
         } else {
-          print("Password and Confirm-password is not match.");
+          scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(
+                'Password and Confirm-password is not match. or Password too short.',
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red,
+          ));
+          print(
+              "Password and Confirm-password is not match. or Password too short.");
         }
       } catch (e) {
         print('Error : $e');
@@ -120,15 +130,13 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: false,
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Long Life Burning App",
+          "Long Life Burning",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -137,122 +145,130 @@ class _SignUpPageState extends State<SignUpPage> {
           IconButton(
             icon: Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (BuildContext context) => Index(),
-              )
-            ),
+            onPressed: () =>
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => Index(),
+            )),
           ),
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: Colors.blueGrey[200],
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.1),
-            BlendMode.dstATop,
-          ),
-            image: AssetImage(SIGNINIMAGE),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                colors: [
-                  Colors.grey[300],
-                  Colors.blue[300],
-                ],
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.2),
+                BlendMode.dstATop,
               ),
-            ),
-            margin: EdgeInsets.all(22),
-            padding: EdgeInsets.all(14),
-            child: Form(
-              key: fromKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  buildTextFieldEmail(),
-                  buildTextFieldPassword(),
-                  buildTextFieldConfirmPassword(),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        buildTextFieldHeight(),
-                        buildTextFieldWeight(),
-                      ],
-                    ),
-                  ),
-                  buildTextFieldBirth(),
-              
-                  ListTile(
-                    title: Text(
-                      'Male',
-                    ),
-                    leading: Radio(
-                      value: SingingCharacter.male,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter value) {
-                        setState(() {
-                          _character = value; 
-                        });
-                      }
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Female',
-                    ),
-                    leading: Radio(
-                      value: SingingCharacter.female,
-                      groupValue: _character,
-                      onChanged: (SingingCharacter value){
-                        setState(() {
-                          _character = value; 
-                        });
-                      }
-                    ),
-                  ),
-                  buildButtonSignup(),
-                ],
-              ),
+              image: AssetImage(SIGNINIMAGE),
+              fit: BoxFit.cover,
             ),
           ),
-        ),
-      ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.grey[300],
+                      Colors.blue[300],
+                    ],
+                  ),
+                ),
+                margin: EdgeInsets.all(22),
+                padding: EdgeInsets.all(14),
+                child: Form(
+                  key: fromKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      buildTextFieldEmail(),
+                      buildTextFieldPassword(),
+                      buildTextFieldConfirmPassword(),
+                      buildTextFieldHeight(),
+                      buildTextFieldWeight(),
+                      buildTextFieldBirth(),
+                      Container(
+                        margin: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.grey[50],
+                          ),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Gender :'),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'Male',
+                              ),
+                              leading: Radio(
+                                  activeColor: Colors.red,
+                                  value: SingingCharacter.male,
+                                  groupValue: _character,
+                                  onChanged: (SingingCharacter value) {
+                                    setState(() {
+                                      _character = value;
+                                    });
+                                  }),
+                            ),
+                            ListTile(
+                              title: Text(
+                                'Female',
+                              ),
+                              leading: Radio(
+                                  activeColor: Colors.pink,
+                                  value: SingingCharacter.female,
+                                  groupValue: _character,
+                                  onChanged: (SingingCharacter value) {
+                                    setState(() {
+                                      _character = value;
+                                    });
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
+                      buildButtonSignup(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )),
     );
   }
-  
+
   Container buildTextFieldEmail() {
     return Container(
-        padding: EdgeInsets.all(12),
+        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
         child: TextFormField(
-          controller: emailController,
-            decoration: InputDecoration.collapsed(hintText: "Email"),
-            validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
-            style: TextStyle(fontSize: 18)
-              )
-            );
+            controller: emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration:
+                InputDecoration.collapsed(hintText: "Email | exam@exam.com"),
+            validator: emailValidator,
+            // validator: (value) => !value.contains('@') ? 'Not a valid email.' :null,
+            style: TextStyle(fontSize: 18)));
   }
 
   Widget buildTextFieldPassword() {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
         color: Colors.grey[50],
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextFormField(
-       controller: passwordController,
+        controller: passwordController,
         obscureText: true,
         decoration: InputDecoration.collapsed(hintText: "Password"),
         validator: (value) => value.isEmpty ? 'Password can\'t be empty' : null,
@@ -265,73 +281,68 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget buildTextFieldConfirmPassword() {
     return Container(
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(top: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextFormField(
-       controller: confirmController,
-        obscureText: true,
-        decoration: InputDecoration.collapsed(hintText: "Confirm Password"),
-        validator: (value) => value.isEmpty ? 'Confirm Password can\'t be empty' : null,
-        style: TextStyle(
-          fontSize: 18,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 12),
+        decoration: BoxDecoration(
+          color: Colors.grey[50],
+          borderRadius: BorderRadius.circular(16),
         ),
-      )
-    );
+        child: TextFormField(
+          controller: confirmController,
+          obscureText: true,
+          decoration: InputDecoration.collapsed(hintText: "Confirm Password"),
+          validator: (value) =>
+              value.isEmpty ? 'Confirm Password can\'t be empty' : null,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ));
   }
 
-Widget buildTextFieldHeight() {
+  Widget buildTextFieldHeight() {
     return Container(
-      width: 150,
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(top: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        controller: heightController,
-        decoration: InputDecoration.collapsed(hintText: "Height"),
-        validator: (value) => value.isEmpty ? 'Height can\'t be empty' : null,
-        style: TextStyle(
-          fontSize: 18,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey[50],
+          borderRadius: BorderRadius.circular(16),
         ),
-      )
-    );
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          controller: heightController,
+          decoration: InputDecoration.collapsed(hintText: "Height | cm."),
+          validator: (value) => value.isEmpty ? 'can\'t be empty' : null,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ));
   }
 
-  
   Widget buildTextFieldWeight() {
     return Container(
-      width: 150,
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.only(top: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-       controller: weightController,
-        decoration: InputDecoration.collapsed(hintText: "Weight"),
-        validator: (value) => value.isEmpty ? 'Weight can\'t be empty' : null,
-        style: TextStyle(
-          fontSize: 18,
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.only(top: 10),
+        decoration: BoxDecoration(
+          color: Colors.grey[50],
+          borderRadius: BorderRadius.circular(16),
         ),
-      )
-    );
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          controller: weightController,
+          decoration: InputDecoration.collapsed(hintText: "Weight | kg."),
+          validator: (value) => value.isEmpty ? 'can\'t be empty' : null,
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ));
   }
 
-   Widget buildTextFieldBirth() {
+  Widget buildTextFieldBirth() {
     return Container(
-       padding: EdgeInsets.all(12),
-       margin: EdgeInsets.only(top: 12),
-        decoration: BoxDecoration(
-            color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 12),
+      decoration: BoxDecoration(
+          color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
       child: GestureDetector(
         onTap: () async => await showCupertinoModalPopup<void>(
           context: context,
@@ -368,18 +379,21 @@ Widget buildTextFieldHeight() {
       ),
     );
   }
-  
+
   RaisedButton buildButtonSignup() {
     return RaisedButton(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+        color: Colors.blueAccent.withOpacity(.9),
         child: Text("sign up",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black)),
-             onPressed: () async => await signUp(),
-            padding: EdgeInsets.all(12)
-  );           
+            style: TextStyle(fontSize: 18, color: Colors.white)),
+        onPressed: () async => await signUp(),
+        padding: EdgeInsets.all(12));
   }
 
-  Widget _buildBottomPicker(Widget picker, {String title, BuildContext context}) {
+  Widget _buildBottomPicker(Widget picker,
+      {String title, BuildContext context}) {
     return Container(
       height: SizeConfig.setHeight(268.0),
       decoration: BoxDecoration(
@@ -434,7 +448,7 @@ Widget buildTextFieldHeight() {
                 fontSize: 22.0,
               ),
               child: GestureDetector(
-                onTap: () { },
+                onTap: () {},
                 child: SafeArea(
                   child: picker,
                 ),
@@ -445,5 +459,22 @@ Widget buildTextFieldHeight() {
       ),
     );
   }
+
+  String emailValidator(String value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+    if (value.isEmpty) {
+      return 'Email can\'t be empty';
+    } else if (!regExp.hasMatch(value)) {
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Email do not have strange symbols.',
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ));
+      return "Invalid Email";
+    } else {
+      return null;
+    }
+  }
 }
-         

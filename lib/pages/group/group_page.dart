@@ -10,7 +10,6 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +21,8 @@ class _GroupPageState extends State<GroupPage> {
           IconButton(
             icon: Icon(Icons.add),
             color: Colors.white,
-            onPressed: () => Navigator.of(context).pushNamed(CreateGroup.routeName),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(CreateGroup.routeName),
           ),
         ],
         title: Text(
@@ -36,7 +36,6 @@ class _GroupPageState extends State<GroupPage> {
         backgroundColor: Colors.blueAccent,
         brightness: Brightness.dark,
         elevation: 0.0,
-        
       ),
       body: Center(
         child: Stack(
@@ -44,12 +43,12 @@ class _GroupPageState extends State<GroupPage> {
             ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
-               Icon(                 
+                Icon(
                   Icons.search,
                   color: Colors.white,
                   size: 30.0,
                 ),
-                 Card(
+                Card(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -58,16 +57,16 @@ class _GroupPageState extends State<GroupPage> {
                         title: Text('Name event'),
                         subtitle: Text('Detail event'),
                       ),
-                      ButtonTheme.bar( 
+                      ButtonTheme.bar(
                         child: ButtonBar(
                           children: <Widget>[
                             FlatButton(
                               child: const Text('Join'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                             FlatButton(
                               child: const Text('close'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                           ],
                         ),
@@ -84,16 +83,16 @@ class _GroupPageState extends State<GroupPage> {
                         title: Text('Name event'),
                         subtitle: Text('Detail event'),
                       ),
-                      ButtonTheme.bar( 
+                      ButtonTheme.bar(
                         child: ButtonBar(
                           children: <Widget>[
                             FlatButton(
                               child: const Text('Join'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                             FlatButton(
                               child: const Text('close'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                           ],
                         ),
@@ -110,16 +109,16 @@ class _GroupPageState extends State<GroupPage> {
                         title: Text('Name event'),
                         subtitle: Text('Detail event'),
                       ),
-                      ButtonTheme.bar( 
+                      ButtonTheme.bar(
                         child: ButtonBar(
                           children: <Widget>[
                             FlatButton(
                               child: const Text('Join'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                             FlatButton(
                               child: const Text('close'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                           ],
                         ),
@@ -136,16 +135,16 @@ class _GroupPageState extends State<GroupPage> {
                         title: Text('Name event'),
                         subtitle: Text('Detail event'),
                       ),
-                      ButtonTheme.bar( 
+                      ButtonTheme.bar(
                         child: ButtonBar(
                           children: <Widget>[
                             FlatButton(
                               child: const Text('Join'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                             FlatButton(
                               child: const Text('close'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                           ],
                         ),
@@ -162,16 +161,16 @@ class _GroupPageState extends State<GroupPage> {
                         title: Text('Name event'),
                         subtitle: Text('Detail event'),
                       ),
-                      ButtonTheme.bar( 
+                      ButtonTheme.bar(
                         child: ButtonBar(
                           children: <Widget>[
                             FlatButton(
                               child: const Text('Join'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                             FlatButton(
                               child: const Text('close'),
-                              onPressed: () { /* ... */ },
+                              onPressed: () {/* ... */},
                             ),
                           ],
                         ),
@@ -181,10 +180,9 @@ class _GroupPageState extends State<GroupPage> {
                 ),
               ],
             ),
-          ],          
+          ],
         ),
       ),
     );
   }
-
 }

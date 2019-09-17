@@ -2,6 +2,10 @@ library login;
 
 // import 'dart:math';
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:core';
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // import 'package:long_life_burning/modules/login/login.dart';
@@ -15,24 +19,23 @@ part './home.dart';
 part './signin.dart';
 part './signup.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
-
+class _LoginScreenState extends State<LoginScreen>
+    with TickerProviderStateMixin {
   PageController _controller;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _controller = PageController(initialPage: 1, viewportFraction: 1.0);
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }

@@ -16,10 +16,10 @@ class HomePage extends StatelessWidget {
     return Container(
       height: SizeConfig.screenHeight,
       decoration: BoxDecoration(
-        color: Colors.lightBlue[100],
+        color: Colors.lightBlue[50],
         image: DecorationImage(
           colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.1),
+            Colors.black.withOpacity(0.2),
             BlendMode.dstATop,
           ),
           image: AssetImage(SIGNINIMAGE),
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)
                     ),
-                    color: Colors.black26.withOpacity(.2),                    
+                    color: Colors.blueAccent.withOpacity(.9),                    
                     onPressed: signup ?? () => print('signup'),
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -101,7 +101,7 @@ class HomePage extends StatelessWidget {
                               "SIGN UP",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -124,7 +124,7 @@ class HomePage extends StatelessWidget {
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0)),
-                    color: Colors.white.withOpacity(.3),
+                    color: Colors.green.withOpacity(.8),
                     onPressed: signin ?? () => print('login'),
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -139,7 +139,7 @@ class HomePage extends StatelessWidget {
                               "LOGIN",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

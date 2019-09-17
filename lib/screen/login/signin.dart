@@ -81,11 +81,9 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          "Long Life Burning App",
+          "Long Life Burning ",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -104,10 +102,10 @@ class _SignInPageState extends State<SignInPage> {
       ),
        body: Container(
         decoration: BoxDecoration(
-          color: Colors.blueGrey[200],
+          color: Colors.black38,
           image: DecorationImage(
             colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.1),
+            Colors.black.withOpacity(0.3),
             BlendMode.dstATop,
           ),
             image: AssetImage(SIGNINIMAGE),
@@ -115,6 +113,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ),
         child: Center(
+          child: SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
@@ -141,18 +140,22 @@ class _SignInPageState extends State<SignInPage> {
             ),            
           ),        
         ),
+        )
       ),
     );
   }
  
   RaisedButton buildButtonSignIn() {
     return RaisedButton(
+       shape: RoundedRectangleBorder(
+       borderRadius: BorderRadius.circular(30.0)),
+      color: Colors.green.withOpacity(.8),
       child: Text(
-        "Sign in",
+        "Log in",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 18,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
       onPressed: () async => await signIn(),
