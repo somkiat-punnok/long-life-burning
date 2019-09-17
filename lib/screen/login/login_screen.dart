@@ -1,12 +1,13 @@
 library login;
 
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart'
-  show
-    showCupertinoModalPopup,
-    CupertinoDatePickerMode,
-    CupertinoDatePicker,
-    CupertinoColors;
+    show
+        showCupertinoModalPopup,
+        CupertinoDatePickerMode,
+        CupertinoDatePicker,
+        CupertinoColors;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
@@ -15,24 +16,23 @@ part './home.dart';
 part './signin.dart';
 part './signup.dart';
 
-
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
-
+class _LoginScreenState extends State<LoginScreen>
+    with TickerProviderStateMixin {
   PageController _controller;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _controller = PageController(initialPage: 1, viewportFraction: 1.0);
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }

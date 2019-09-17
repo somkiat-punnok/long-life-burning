@@ -1,7 +1,5 @@
 export 'package:long_life_burning/utils/widgets/platform.dart'
-  show
-    isMaterial,
-    isCupertino;
+    show isMaterial, isCupertino;
 export 'package:long_life_burning/utils/widgets/size_config.dart';
 export './options.dart';
 
@@ -177,11 +175,19 @@ const List<String> PROVINCE = [
 // ];
 
 const List<String> CATEGORIES = [
-  'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
+  'All Category',
+  'Fun Run',
+  'Mini Marathon',
+  'Half Marathon',
+  'Marathon'
 ];
 
 const List<String> GROUP_CATEGORIES = [
-  'All Category','Football','Basketball','Volaball'
+  'Other',
+  'Football',
+  'Basketball',
+  'Volaball',
+  'Run',
 ];
 
 // image assets

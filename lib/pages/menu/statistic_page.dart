@@ -48,14 +48,65 @@ class _StatisticPageState extends State<StatisticPage> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: <Widget>[
-            Text(
-              'Statistic Page',
-              style: TextStyle(
-                color: Colors.black,
-              ),
+            ListView(
+              physics: BouncingScrollPhysics(),
+              children: <Widget>[
+                Icon(
+                  Icons.search,
+                  color: Colors.white,
+                  size: 30.0,
+                ),
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.album),
+                        title: Text('Statistics'),
+                        subtitle: Text('Grap'),
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.album),
+                        title: Text('Statistics'),
+                        subtitle: Text('Grap'),
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.album),
+                        title: Text('Statistics'),
+                        subtitle: Text('Grap'),
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.album),
+                        title: Text('Statistics'),
+                        subtitle: Text('Grap'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
