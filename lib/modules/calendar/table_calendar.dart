@@ -173,11 +173,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> with SingleTickerPr
   Widget _buildHeader() {
     return widget.headerStyle.centerHeaderTitle
       ? AppBar(
-        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        brightness: Brightness.light,
-        elevation: 0.0,
         centerTitle: true,
+        brightness: Brightness.light,
+        backgroundColor: Colors.transparent,
         leading: _CustomIconButton(
           icon: widget.headerStyle.beforeIcon,
           onTap: _selectPrevious,
@@ -204,11 +203,10 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> with SingleTickerPr
         ],
       )
       : AppBar(
-        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         centerTitle: false,
         brightness: Brightness.light,
-        elevation: 0.0,
+        backgroundColor: Colors.transparent,
         title: FlatButton(
           onPressed: widget.onTitleText,
           padding: EdgeInsets.zero,

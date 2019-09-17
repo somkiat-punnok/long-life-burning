@@ -7,6 +7,9 @@ import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/modules/stepcount/calculate.dart' show calculateCalories;
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
   show
+    kHeight,
+    kWeight,
+    kDateOfBirth,
     Diagnoses,
     RadialListViewModel,
     RadialListItemViewModel,
@@ -61,9 +64,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
 
   Future<void> readDate() async {
     try {
-      if (!UserOptions.fitkit_permissions) {
+      if (!Configs.fitkit_permissions) {
         print("User declined permissions");
-        await FitKit.requestPermissions(DataType.values).then((result) => UserOptions.fitkit_permissions = result);
+        await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
       } else {
         _step = 0;
         _distence = 0;
@@ -113,7 +116,14 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     initComplete = true;
-    _calories = calculateCalories(170, DateTime(1998, 1, 1), 70, Gender.MALE, _second, _step);
+    _calories = calculateCalories(
+      UserOptions.height ?? kHeight,
+      UserOptions.dateOfBirth ?? kDateOfBirth,
+      UserOptions.weight ?? kWeight,
+      UserOptions.gender ?? Gender.MALE,
+      _second,
+      _step,
+    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -149,9 +159,8 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
             child: AppBar(
               automaticallyImplyLeading: false,
               centerTitle: false,
-              backgroundColor: Colors.transparent,
               brightness: Brightness.dark,
-              elevation: 0.0,
+              backgroundColor: Colors.transparent,
               title: Text(
                 'Step Counts',
                 style: TextStyle(

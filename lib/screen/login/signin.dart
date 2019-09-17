@@ -55,8 +55,25 @@ class _SignInPageState extends State<SignInPage> {
       try {
         String email = emailController.text.trim();
         String password = passwordController.text.trim();
-        await UserOptions.auth.signInWithEmailAndPassword(email: email, password: password).then((result) {
+        await Configs.auth.signInWithEmailAndPassword(email: email, password: password).then((result) async {
           if (result != null && result.user != null) {
+            await Configs.store
+              .collection(UserOptions.collection)
+              .where(
+                UserOptions.uid_field,
+                isEqualTo: result.user.uid,
+              )
+              .snapshots()
+              .listen((data) {
+                if (data.documents.isNotEmpty) {
+                  UserOptions.name = data.documents[0].data[UserOptions.name_field];
+                  UserOptions.weight = data.documents[0].data[UserOptions.weight_field];
+                  UserOptions.height = data.documents[0].data[UserOptions.height_field];
+                  UserOptions.dateOfBirth = DateTime.fromMicrosecondsSinceEpoch(data.documents[0].data[UserOptions.dateOfBirth_field].microsecondsSinceEpoch);
+                  UserOptions.gender = data.documents[0].data[UserOptions.gender_field].toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE;
+                }
+              });
+            UserOptions.user = result.user;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => Index(),
@@ -64,15 +81,20 @@ class _SignInPageState extends State<SignInPage> {
             );
           }
         })
-        .catchError((error) {
-          print(error.message);
+        .catchError((err) {
+          print('Error: ${err.message}');
           scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text(error.message, style: TextStyle(color: Colors.white)),
+            content: Text(
+              err.message,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
             backgroundColor: Colors.red,
           ));
         });
       } catch (e) {
-        print('Error : $e');
+        print('Error: $e');
       }
     }
   }

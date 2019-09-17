@@ -30,12 +30,14 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
             brightness: Brightness.light,
-            elevation: 0.0,
+            backgroundColor: Colors.transparent,
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.clear),
+                icon: Icon(
+                  Icons.clear,
+                  color: Colors.black,
+                ),
                 color: Colors.white,
                 onPressed: () => Navigator.of(context).pushReplacement(
                   MaterialPageRoute(

@@ -1,4 +1,8 @@
 import 'package:flutter/widgets.dart';
+import './fonts.dart'
+  show
+    MaterialFamily,
+    CupertinoFamily;
 
 // Icons on Android
 class IconAndroid {
@@ -7,27 +11,27 @@ class IconAndroid {
 
   static const IconData home = IconData(
     0xe88a,
-    fontFamily: 'MaterialIcons'
+    fontFamily: MaterialFamily,
   );
 
   static const IconData near_me = IconData(
     0xe569,
-    fontFamily: 'MaterialIcons'
+    fontFamily: MaterialFamily,
   );
 
   static const IconData marathon = IconData(
     0xe878,
-    fontFamily: 'MaterialIcons'
+    fontFamily: MaterialFamily,
   );
 
   static const IconData group = IconData(
     0xe7ef,
-    fontFamily: 'MaterialIcons'
+    fontFamily: MaterialFamily,
   );
 
   static const IconData menu = IconData(
     0xe5d2,
-    fontFamily: 'MaterialIcons'
+    fontFamily: MaterialFamily,
   );
 
 }
@@ -39,27 +43,27 @@ class IconiOS {
 
   static const IconData home = IconData(
     0xf38f,
-    fontFamily: 'CupertinoIcons',
+    fontFamily: CupertinoFamily,
   );
 
   static const IconData near_me = IconData(
     0xf474,
-    fontFamily: 'CupertinoIcons',
+    fontFamily: CupertinoFamily,
   );
 
   static const IconData marathon = IconData(
     0xf3f4,
-    fontFamily: 'CupertinoIcons',
+    fontFamily: CupertinoFamily,
   );
 
   static const IconData group = IconData(
     0xf47c,
-    fontFamily: 'CupertinoIcons',
+    fontFamily: CupertinoFamily,
   );
 
   static const IconData menu = IconData(
     0xf394,
-    fontFamily: 'CupertinoIcons',
+    fontFamily: CupertinoFamily,
   );
 
 }

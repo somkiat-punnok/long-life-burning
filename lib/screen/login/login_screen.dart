@@ -1,15 +1,15 @@
 library login;
 
-// import 'dart:math';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-// import 'package:long_life_burning/modules/login/login.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart'
+  show
+    showCupertinoModalPopup,
+    CupertinoDatePickerMode,
+    CupertinoDatePicker,
+    CupertinoColors;
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
-// import 'package:long_life_burning/modules/login/Register.dart';
 
 part './home.dart';
 part './signin.dart';

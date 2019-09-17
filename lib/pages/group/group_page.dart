@@ -18,13 +18,8 @@ class _GroupPageState extends State<GroupPage> {
       resizeToAvoidBottomPadding: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            color: Colors.white,
-            onPressed: () => Navigator.of(context).pushNamed(CreateGroup.routeName),
-          ),
-        ],
+        brightness: Brightness.dark,
+        backgroundColor: Colors.blueAccent,
         title: Text(
           'Group',
           style: TextStyle(
@@ -33,10 +28,13 @@ class _GroupPageState extends State<GroupPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blueAccent,
-        brightness: Brightness.dark,
-        elevation: 0.0,
-        
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            color: Colors.white,
+            onPressed: () => Navigator.of(context).pushNamed(CreateGroup.routeName),
+          ),
+        ],
       ),
       body: Center(
         child: Stack(

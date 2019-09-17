@@ -21,11 +21,16 @@ class App extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: isMaterial ? Colors.blue : CupertinoColors.activeBlue,
+        disabledColor: isMaterial ? Colors.grey : CupertinoColors.inactiveGray,
+        dividerColor: isMaterial ? Colors.grey : CupertinoColors.inactiveGray,
         textTheme: TextTheme(
           display1: TextStyle(
             fontWeight: FontWeight.normal,
             fontStyle: FontStyle.normal,
           ),
+        ),
+        appBarTheme: AppBarTheme(
+          elevation: 0.0,
         ),
       ),
       home: Index(),

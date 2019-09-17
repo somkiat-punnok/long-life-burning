@@ -4,7 +4,8 @@ import 'package:long_life_burning/screen/login/login_screen.dart' show LoginScre
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     SizeConfig,
-    UserOptions;
+    UserOptions,
+    Configs;
 import './marking_page.dart';
 import './setting_page.dart';
 import './statistic_page.dart';
@@ -26,6 +27,8 @@ class _MenuPageState extends State<MenuPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
         title: Text(
           'Menu',
           style: TextStyle(
@@ -34,9 +37,6 @@ class _MenuPageState extends State<MenuPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
-        brightness: Brightness.light,
-        elevation: 0.0,
       ),
       body: SafeArea(
         child: ListView(
@@ -59,7 +59,7 @@ class _MenuPageState extends State<MenuPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'User Name',
+              UserOptions.name ?? 'Username',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 24.0,
@@ -67,7 +67,7 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
             Text(
-              'ID: ' + 'username',
+              'ID: ${UserOptions.name?.toLowerCase()}',
               style: TextStyle(
                 color: Colors.grey,
               ),
@@ -79,7 +79,6 @@ class _MenuPageState extends State<MenuPage> {
         height: SizeConfig.setHeight(16.0),
         indent: SizeConfig.setWidth(16.0),
         endIndent: SizeConfig.setWidth(16.0),
-        color: Colors.grey,
       ),
     ]);
     list.addAll(_buildMenu(
@@ -115,11 +114,16 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
         onPressed: () async {
-          UserOptions.auth.signOut().then((_) async {
+          await Configs.auth.signOut().then((_) async {
             print('signout');
-            UserOptions.login = false;
+            Configs.login = false;
             UserOptions.user = null;
-            await Navigator.of(UserOptions.index_context).pushReplacement(
+            UserOptions.name = null;
+            UserOptions.height = null;
+            UserOptions.weight = null;
+            UserOptions.gender = null;
+            UserOptions.dateOfBirth = null;
+            await Navigator.of(Configs.index_context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => LoginScreen(),
               )
@@ -179,7 +183,6 @@ class _MenuPageState extends State<MenuPage> {
         height: SizeConfig.setHeight(8.0),
         indent: SizeConfig.setWidth(68.0),
         endIndent: SizeConfig.setWidth(16.0),
-        color: Colors.grey,
       ),
     ];
   }
