@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoColors;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     PROVINCE,
     CATEGORIES;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
-class SetEventPage extends StatefulWidget {
+class SettingEventPage extends StatefulWidget {
+  SettingEventPage({Key key}) : super(key: key);
   static const String routeName = '/setevent';
   @override
-  _SetEventPageState createState() => _SetEventPageState();
+  _SettingEventPageState createState() => _SettingEventPageState();
 }
 
-class _SetEventPageState extends State<SetEventPage> {
+class _SettingEventPageState extends State<SettingEventPage> {
 
   int province = 0;
   int category = 0;
@@ -83,39 +84,39 @@ class _SetEventPageState extends State<SetEventPage> {
               });
             },
           ),
-          SettingHeader(''),
-          TimerPicker(
-            currentTimer: timer,
-            onSelect: (Duration t) {
-              setState(() {
-                timer = t;
-              });
-            },
-          ),
-          DatePicker(
-            currentDate: date,
-            onSelect: (DateTime t) {
-              setState(() {
-                date = t;
-              });
-            },
-          ),
-          TimePicker(
-            currentTime: time,
-            onSelect: (DateTime t) {
-              setState(() {
-                time = t;
-              });
-            },
-          ),
-          DateAndTimePicker(
-            currentDateAndTime: datetime,
-            onSelect: (DateTime t) {
-              setState(() {
-                datetime = t;
-              });
-            },
-          ),
+          // SettingHeader(''),
+          // TimerPicker(
+          //   currentTimer: timer,
+          //   onSelect: (Duration t) {
+          //     setState(() {
+          //       timer = t;
+          //     });
+          //   },
+          // ),
+          // DatePicker(
+          //   currentDate: date,
+          //   onSelect: (DateTime t) {
+          //     setState(() {
+          //       date = t;
+          //     });
+          //   },
+          // ),
+          // TimePicker(
+          //   currentTime: time,
+          //   onSelect: (DateTime t) {
+          //     setState(() {
+          //       time = t;
+          //     });
+          //   },
+          // ),
+          // DateAndTimePicker(
+          //   currentDateAndTime: datetime,
+          //   onSelect: (DateTime t) {
+          //     setState(() {
+          //       datetime = t;
+          //     });
+          //   },
+          // ),
           SettingHeader(''),
           SettingButton(
             "Reset All Settings",
@@ -125,7 +126,7 @@ class _SetEventPageState extends State<SetEventPage> {
             }),
             type: SettingButtonType.DESTRUCTIVE,
           ),
-          SettingHeader(''),
+          // SettingHeader(''),
         ],
       ),
     );

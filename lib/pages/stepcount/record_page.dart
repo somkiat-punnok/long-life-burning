@@ -22,6 +22,7 @@ import 'package:long_life_burning/utils/widgets/date_utils.dart';
 import '../common/year_page.dart';
 
 class RecordPage extends StatefulWidget {
+  RecordPage({Key key}) : super(key: key);
   static const String routeName = '/record';
   @override
   _RecordPageState createState() => _RecordPageState();

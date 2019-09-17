@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/calendar/calendar.dart' show YearsCalendar;
 
 class YearsCalendarPage extends StatefulWidget {
+  YearsCalendarPage({Key key}) : super(key: key);
   static const String routeName = '/year';
   @override
   _YearsCalendarPageState createState() => _YearsCalendarPageState();
 }
 
 class _YearsCalendarPageState extends State<YearsCalendarPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,5 +36,4 @@ class _YearsCalendarPageState extends State<YearsCalendarPage> {
       ),
     );
   }
-  
 }

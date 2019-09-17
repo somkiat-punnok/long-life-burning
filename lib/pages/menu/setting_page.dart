@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class SettingPage extends StatefulWidget {
+  SettingPage({Key key}) : super(key: key);
   static const String routeName = '/setting';
   @override
   _SettingPageState createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,5 +62,4 @@ class _SettingPageState extends State<SettingPage> {
       ),
     );
   }
-
 }

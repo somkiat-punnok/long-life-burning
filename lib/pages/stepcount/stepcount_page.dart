@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:fit_kit/fit_kit.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
@@ -18,6 +16,7 @@ import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
 import './record_page.dart';
 
 class StepCountPage extends StatefulWidget {
+  StepCountPage({Key key}) : super(key: key);
   static const String routeName = '/';
   @override
   _StepCountPageState createState() => _StepCountPageState();

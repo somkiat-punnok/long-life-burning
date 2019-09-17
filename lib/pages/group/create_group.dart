@@ -6,6 +6,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
 class CreateGroup extends StatefulWidget {
+  CreateGroup({Key key}) : super(key: key);
   static const String routeName = '/create';
   @override
   _CreateGroupState createState() => _CreateGroupState();

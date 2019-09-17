@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/utils/helper/constants.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
 class EventDetailPage extends StatefulWidget {
+  EventDetailPage({Key key}) : super(key: key);
   static const String routeName = '/event';
   @override
   _EventDetailPageState createState() => _EventDetailPageState();
 }
 
 class _EventDetailPageState extends State<EventDetailPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,5 +90,4 @@ class _EventDetailPageState extends State<EventDetailPage> {
       ),
     );
   }
-
 }

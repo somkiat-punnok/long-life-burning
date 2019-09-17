@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoButton;
 import 'package:long_life_burning/screen/login/login_screen.dart' show LoginScreen;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     SizeConfig,
     UserOptions,
     Configs;
-import './marking_page.dart';
+import './check_point_page.dart';
 import './setting_page.dart';
 import './statistic_page.dart';
 
 class MenuPage extends StatefulWidget {
+  MenuPage({Key key}) : super(key: key);
   static const String routeName = '/';
   @override
   _MenuPageState createState() => _MenuPageState();
@@ -87,9 +88,9 @@ class _MenuPageState extends State<MenuPage> {
       onTap: () async => await Navigator.of(context).pushNamed(StatisticPage.routeName),
     ));
     list.addAll(_buildMenu(
-      name: 'Marking',
+      name: 'Check Point',
       icons: Icons.location_on,
-      onTap: () async => await Navigator.of(context).pushNamed(MarkingPage.routeName),
+      onTap: () async => await Navigator.of(context).pushNamed(CheckPointPage.routeName),
     ));
     list.addAll(_buildMenu(
       name: 'Settings',

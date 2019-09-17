@@ -20,6 +20,7 @@ import 'package:long_life_burning/utils/routes/routing.dart'
 import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
+  Index({Key key}) : super(key: key);
   @override
   _IndexState createState() => _IndexState();
 }

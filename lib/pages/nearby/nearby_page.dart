@@ -4,6 +4,7 @@ import 'package:long_life_burning/modules/nearby/nearby.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
 class NearbyPage extends StatefulWidget {
+  NearbyPage({Key key}) : super(key: key);
   static const String routeName = '/';
   @override
   _NearbyPageState createState() => _NearbyPageState();
@@ -14,16 +15,19 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
   final double _panelHeightClosed = SizeConfig.setHeight(200.0);
   final double _initRadius = 20.0;
   final MapController controller = MapController();
-  double _lat = 19.027510;
-  double _long = 99.900178;
-  double _radius;
+  double _lat, _long, _radius;
+
+  @override
+  void initState() { 
+    super.initState();
+    _lat = 19.027510;
+    _long = 99.900178;
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final double _panelHeightOpen = MediaQuery.of(context).size.height;
     final double _initFabHeight = _panelHeightClosed + _initRadius;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -117,7 +121,6 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
         ],
       ),
     );
-    
   }
 
 }
