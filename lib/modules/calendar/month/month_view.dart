@@ -7,8 +7,8 @@ class MonthView extends StatelessWidget {
     @required this.year,
     @required this.month,
     @required this.padding,
-    this.isTomonth,
-    this.todayColor,
+    this.isToMonth,
+    this.toDayColor,
     this.monthNames,
     this.onMonthTap,
   });
@@ -17,8 +17,8 @@ class MonthView extends StatelessWidget {
   final int year;
   final int month;
   final double padding;
-  final bool isTomonth;
-  final Color todayColor;
+  final bool isToMonth;
+  final Color toDayColor;
   final List<String> monthNames;
   final Function onMonthTap;
 
@@ -54,7 +54,7 @@ class MonthView extends StatelessWidget {
   Row _buildRow(List<DateTime> days, int i) {
     return Row(
       children: days.map((DateTime date) {
-        final bool isToday = dateIsToday(DateTime(date.year, date.month, date.day));
+        final bool isToDay = dateIsToday(DateTime(date.year, date.month, date.day));
         int day = 0;
         if ((i == 0 && date.day > 10) || (i > 20 && date.day < 10)) {
           day = 0;
@@ -64,8 +64,8 @@ class MonthView extends StatelessWidget {
         }
         return DayNumber(
           day: day,
-          isToday: isToday,
-          todayColor: todayColor,
+          isToDay: isToDay,
+          toDayColor: toDayColor,
         );
       }).toList()
     );
@@ -73,7 +73,7 @@ class MonthView extends StatelessWidget {
 
   Widget buildMonthView(BuildContext context) {
     return Container(
-      width: 7 * getDayNumberSize(context),
+      width: 7 * getDayNumberSize(),
       margin: EdgeInsets.all(padding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +81,8 @@ class MonthView extends StatelessWidget {
           MonthTitle(
             month: month,
             monthNames: monthNames,
-            isTomonth: isTomonth,
-            tomonthColor: todayColor,
+            isToMonth: isToMonth,
+            toMonthColor: toDayColor,
           ),
           Container(
             margin: EdgeInsets.only(top: 4.0),

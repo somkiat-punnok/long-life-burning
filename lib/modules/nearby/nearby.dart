@@ -1,9 +1,9 @@
 library nearby;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:sticky_headers/sticky_headers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:long_life_burning/utils/widgets/carousel_card.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;

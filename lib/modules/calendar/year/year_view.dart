@@ -4,34 +4,34 @@ class YearView extends StatelessWidget {
   YearView({
     @required this.context,
     @required this.year,
-    this.isToyear,
-    this.todayColor,
+    this.isToYear,
+    this.toDayColor,
     this.monthNames,
     this.onMonthTap,
   });
 
   final BuildContext context;
   final int year;
-  final bool isToyear;
-  final Color todayColor;
+  final bool isToYear;
+  final Color toDayColor;
   final List<String> monthNames;
   final Function onMonthTap;
-  double get horizontalMargin => 12.0;
+  double get horizontalMargin => 8.0;
   double get monthViewPadding => 8.0;
 
   Widget buildYearMonths(BuildContext context) {
     final List<Row> monthRows = <Row>[];
     final List<MonthView> monthRowChildren = <MonthView>[];
     for (int month = 1; month <= DateTime.monthsPerYear; month++) {
-      final bool isTomonth = dateIsTomonth(DateTime(year, month));
+      final bool isToMonth = dateIsTomonth(DateTime(year, month));
       monthRowChildren.add(
         MonthView(
           context: context,
           year: year,
           month: month,
           padding: monthViewPadding,
-          isTomonth: isTomonth,
-          todayColor: todayColor,
+          isToMonth: isToMonth,
+          toDayColor: toDayColor,
           monthNames: monthNames,
           onMonthTap: onMonthTap,
         ),
@@ -39,7 +39,7 @@ class YearView extends StatelessWidget {
       if (month % 3 == 0) {
         monthRows.add(
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List<MonthView>.from(monthRowChildren),
           ),
@@ -55,7 +55,7 @@ class YearView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: getYearViewHeight(context),
+      height: getYearViewHeight(),
       padding: EdgeInsets.only(top: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,8 +67,8 @@ class YearView extends StatelessWidget {
             ),
             child: YearTitle(
               year: year,
-              isToyear: isToyear,
-              toyearColor: todayColor,
+              isToYear: isToYear,
+              toYearColor: toDayColor,
             ),
           ),
           Container(
@@ -83,7 +83,7 @@ class YearView extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.symmetric(
-              horizontal: horizontalMargin - monthViewPadding,
+              horizontal: 0.0,
               vertical: 0.0,
             ),
             child: buildYearMonths(context),

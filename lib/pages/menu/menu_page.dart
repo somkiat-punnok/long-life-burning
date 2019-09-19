@@ -6,6 +6,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
     SizeConfig,
     UserOptions,
     Configs;
+
 import './check_point_page.dart';
 import './setting_page.dart';
 import './statistic_page.dart';
@@ -88,7 +89,7 @@ class _MenuPageState extends State<MenuPage> {
       onTap: () async => await Navigator.of(context).pushNamed(StatisticPage.routeName),
     ));
     list.addAll(_buildMenu(
-      name: 'Check Point',
+      name: 'Check Points',
       icons: Icons.location_on,
       onTap: () async => await Navigator.of(context).pushNamed(CheckPointPage.routeName),
     ));
@@ -119,11 +120,13 @@ class _MenuPageState extends State<MenuPage> {
             print('signout');
             Configs.login = false;
             UserOptions.user = null;
-            UserOptions.name = null;
-            UserOptions.height = null;
-            UserOptions.weight = null;
-            UserOptions.gender = null;
-            UserOptions.dateOfBirth = null;
+            Configs.setUser(
+              n: null,
+              w: null,
+              h: null,
+              d: null,
+              g: null,
+            );
             await Navigator.of(Configs.index_context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => LoginScreen(),

@@ -34,82 +34,57 @@ class Record {
   });
 
   factory Record.fromMap(Map<String, dynamic> map) => Record(
-    id: map[columnId],
+    id: int.parse(map[columnId]),
     day: map[columnDay],
-    step: map[columnStep],
-    cal: map[columnCal],
-    dist: map[columnDist],
+    step: int.parse(map[columnStep]),
+    cal: double.parse(map[columnCal]),
+    dist: double.parse(map[columnDist]),
     detail: map["detail"],
   );
 
-  factory Record.fromJson(String str) {
-    final jsonData = json.decode(str);
-    return Record.fromMap(jsonData);
-  }
+  factory Record.fromJson(String s) => Record.fromMap(json.decode(s));
 
   Map<String, dynamic> toMap() => {
-    columnDay: day ?? '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}',
-    columnStep: step ?? 0,
-    columnCal: cal ?? 0.0,
-    columnDist: dist ?? 0.0,
-    "detail": detail,
+    columnId: this.id ?? 0,
+    columnDay: this.day ?? '${DateTime.now().year.toString()}-${DateTime.now().month.toString()}-${DateTime.now().day.toString()}',
+    columnStep: this.step ?? 0,
+    columnCal: this.cal ?? 0.0,
+    columnDist: this.dist ?? 0.0,
+    "detail": this.detail,
   };
 
-  String toJson(Record data) {
-    final Map<String, dynamic> dyn = data.toMap();
-    return json.encode(dyn);
+  String toJson(Record data) => json.encode(this.toMap());
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Record &&
+              runtimeType == other.runtimeType &&
+              id == other.id &&
+              day == other.day &&
+              step == other.step &&
+              cal == other.cal &&
+              dist == other.dist &&
+              detail == other.detail;
+
+  @override
+  int get hashCode => id.hashCode ^ day.hashCode ^ step.hashCode ^ cal.hashCode ^ dist.hashCode ^ detail.hashCode;
+
+  @override
+  String toString() {
+    return '$runtimeType{day: $day, step: $step, cal: $cal, dist: $dist}';
   }
 
-}
-
-class RecordList {
-
-  static final Map<DateTime, List<Record>> records = {
-    _buildSub(1): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(2): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(3): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(4): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(5): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(6): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(7): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(8): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(9): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildSub(10): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(1): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(2): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(3): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(4): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(5): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(6): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(7): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(8): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(9): [Record(step: 0, cal: 0.0, dist: 0.0)],
-    _buildAdd(10): [Record(step: 0, cal: 0.0, dist: 0.0)],
-  };
-
-  static DateTime _buildSub(int i) {
-    DateTime temp = DateTime.now().subtract(Duration(days: i));
-    return DateTime(temp.year, temp.month, temp.day);
-  }
-
-  static DateTime _buildAdd(int i) {
-    DateTime temp = DateTime.now().add(Duration(days: i));
-    return DateTime(temp.year, temp.month, temp.day);
-  }
-  
 }
 
 class RecordToList extends StatelessWidget {
 
-  final List records;
   final num step;
   final num cal;
   final num dist;
 
   RecordToList({
     Key key,
-    this.records,
     this.step,
     this.cal,
     this.dist,
@@ -118,21 +93,21 @@ class RecordToList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: (records != null && records.isNotEmpty) || ((step != null && step != 0) || (cal != null && cal != 0) || (dist != null && dist != 0))
+      child: ((step != null && step != 0) || (cal != null && cal != 0) || (dist != null && dist != 0))
           ? ListView(
               children: <Widget>[
                 RecordCard(
-                  value: '${NumberFormat('#,###', 'en_US').format(step != null ? step : records.first.step)}',
+                  value: '${NumberFormat('#,###', 'en_US').format(step)}',
                   name: 'steps',
                   unit: 'step',
                 ),
                 RecordCard(
-                  value: '${NumberFormat('#,###.##', 'en_US').format(cal != null ? cal : records.first.cal)}',
+                  value: '${NumberFormat('#,###.##', 'en_US').format(cal)}',
                   name: 'calories',
                   unit: 'kCal',
                 ),
                 RecordCard(
-                  value: '${NumberFormat('#.##', 'en_US').format(dist != null ? dist : records.first.dist)}',
+                  value: '${NumberFormat('#.##', 'en_US').format(dist/1000)}',
                   name: 'distances',
                   unit: 'km',
                 ),

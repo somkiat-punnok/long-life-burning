@@ -3,11 +3,11 @@ library login;
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart'
-    show
-        showCupertinoModalPopup,
-        CupertinoDatePickerMode,
-        CupertinoDatePicker,
-        CupertinoColors;
+  show
+    showCupertinoModalPopup,
+    CupertinoDatePickerMode,
+    CupertinoDatePicker,
+    CupertinoColors;
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
@@ -17,12 +17,13 @@ part './signin.dart';
 part './signup.dart';
 
 class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key}) : super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen>
-    with TickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin {
+
   PageController _controller;
 
   @override
@@ -74,4 +75,5 @@ class _LoginScreenState extends State<LoginScreen>
       ),
     );
   }
+
 }

@@ -70,6 +70,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
         _step = 0;
         _distence = 0;
         _second = 0;
+        print('initial query data');
         for (DataType type in DataType.values) {
           if (type == DataType.STEP_COUNT) {
             await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())

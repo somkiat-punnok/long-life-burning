@@ -5,14 +5,14 @@ class MonthTitle extends StatelessWidget {
   const MonthTitle({
     @required this.month,
     this.monthNames,
-    this.isTomonth,
-    this.tomonthColor = Colors.blue,
+    this.isToMonth,
+    this.toMonthColor = Colors.blue,
   });
 
   final int month;
   final List<String> monthNames;
-  final bool isTomonth;
-  final Color tomonthColor;
+  final bool isToMonth;
+  final Color toMonthColor;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +20,8 @@ class MonthTitle extends StatelessWidget {
       child: Text(
         getMonthName(month, monthNames: monthNames),
         style: TextStyle(
-          color: isTomonth ? tomonthColor : Colors.black,
-          fontSize: screenSize(context) == ScreenSizes.small ? 20.0 : 24.0,
+          color: isToMonth ? toMonthColor : Colors.black,
+          fontSize: screenSize() == ScreenSizes.small ? 20.0 : 24.0,
           fontWeight: FontWeight.bold,
         ),
         maxLines: 1,

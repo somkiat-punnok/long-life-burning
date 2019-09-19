@@ -1,7 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:long_life_burning/screen/app.dart';
-import 'package:long_life_burning/utils/helper/icons.dart';
-import 'package:long_life_burning/utils/widgets/platform.dart' show isMaterial;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    isMaterial,
+    IconAndroid,
+    IconiOS;
 
 void main() {
   testWidgets('Widget test at index app', (WidgetTester tester) async {

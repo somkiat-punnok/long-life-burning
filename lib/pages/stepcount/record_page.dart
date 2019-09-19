@@ -176,6 +176,7 @@ class _RecordPageState extends State<RecordPage> {
           ),
           RecordToList(
             step: _step,
+            dist: _distence,
             cal: calculateCalories(
               UserOptions.height ?? kHeight,
               UserOptions.dateOfBirth ?? kDateOfBirth,
@@ -184,7 +185,6 @@ class _RecordPageState extends State<RecordPage> {
               _second,
               _step,
             ),
-            dist: _distence/1000,
           ),
         ],
       ),

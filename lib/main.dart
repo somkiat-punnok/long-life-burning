@@ -11,55 +11,57 @@ import 'package:fit_kit/fit_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
-    Gender,
     Configs,
     UserOptions,
     isCupertino;
 import 'package:long_life_burning/screen/app.dart';
 
 Future<void> main() async {
-  if (isCupertino) {
-    await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
-  }
-  await SharedPreferences.getInstance().then((_pref) {
-    if (_pref != null) {
-      Configs.pref = _pref;
-    }
+  await checkAuth().then((_) async {
+    if (isCupertino) await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
+    await SharedPreferences.getInstance().then((_pref) {
+      if (_pref != null) {
+        Configs.pref = _pref;
+      }
+    });
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+    );
+    runApp(App());
   });
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  await checkAuth();
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ),
-  );
-  runApp(App());
 }
 
 Future<void> checkAuth() async {
-  await Configs.auth.currentUser().then((user) async {
-    if (user != null) {
-      UserOptions.user = user;
-      await Configs.store
-        .collection(UserOptions.collection)
-        .where(
-          UserOptions.uid_field,
-          isEqualTo: user.uid,
-        )
-        .snapshots()
-        .listen((data) {
-          if (data.documents.isNotEmpty) {
-            UserOptions.name = data.documents[0].data[UserOptions.name_field];
-            UserOptions.weight = data.documents[0].data[UserOptions.weight_field];
-            UserOptions.height = data.documents[0].data[UserOptions.height_field];
-            UserOptions.dateOfBirth = DateTime.fromMicrosecondsSinceEpoch(data.documents[0].data[UserOptions.dateOfBirth_field].microsecondsSinceEpoch);
-            UserOptions.gender = data.documents[0].data[UserOptions.gender_field].toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE;
-          }
-        });
-      Configs.login = true;
-    }
-  });
+  await Configs.auth
+    .currentUser()
+    .then((user) async {
+      if (user != null) {
+        await Configs.store
+          .collection(UserOptions.collection)
+          .where(
+            UserOptions.uid_field,
+            isEqualTo: user.uid,
+          )
+          .snapshots()
+          .listen((data) {
+            if (data.documents.isNotEmpty) {
+              UserOptions.user = user;
+              Configs.login = true;
+              Configs.setUser(
+                n: data.documents[0].data[UserOptions.name_field],
+                w: data.documents[0].data[UserOptions.weight_field],
+                h: data.documents[0].data[UserOptions.height_field],
+                d: data.documents[0].data[UserOptions.dateOfBirth_field],
+                g: data.documents[0].data[UserOptions.gender_field],
+              );
+            }
+          });
+      }
+    });
 }

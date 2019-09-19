@@ -5,7 +5,7 @@ class RecordCard extends StatelessWidget {
   final String name;
   final String unit;
   final String value;
-  final void Function() onClick;
+  final VoidCallback onClick;
 
   RecordCard({
     Key key,
