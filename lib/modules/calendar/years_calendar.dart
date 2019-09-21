@@ -7,7 +7,7 @@ class YearsCalendar extends StatelessWidget {
     @required this.initialDate,
     @required this.firstDate,
     @required this.lastDate,
-    this.todayColor,
+    this.toDayColor,
     this.monthNames,
     this.onMonthTap,
   })  : assert(context != null),
@@ -23,16 +23,16 @@ class YearsCalendar extends StatelessWidget {
   final DateTime initialDate;
   final DateTime firstDate;
   final DateTime lastDate;
-  final Color todayColor;
+  final Color toDayColor;
   final List<String> monthNames;
   final Function onMonthTap;
 
-  YearView _getYearView(int year, bool isToyear) {
+  YearView _getYearView(int year, bool isToYear) {
     return YearView(
       context: context,
       year: year,
-      isToyear: isToyear,
-      todayColor: todayColor,
+      isToYear: isToYear,
+      toDayColor: toDayColor,
       monthNames: monthNames,
       onMonthTap: onMonthTap,
     );
@@ -41,16 +41,16 @@ class YearsCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int _itemCount = lastDate.year - firstDate.year + 1;
-    final double _initialOffset = (initialDate.year - firstDate.year) * getYearViewHeight(context);
+    final double _initialOffset = (initialDate.year - firstDate.year) * getYearViewHeight();
     final ScrollController _scrollController = ScrollController(initialScrollOffset: _initialOffset);
     return ListView.builder(
-      padding: EdgeInsets.only(bottom: 24.0),
+      padding: EdgeInsets.only(bottom: 8.0),
       controller: _scrollController,
       itemCount: _itemCount,
       itemBuilder: (BuildContext context, int index) {
         final int year = index + firstDate.year;
-        final bool isToyear = dateIsToyear(DateTime(year));
-        return _getYearView(year, isToyear);
+        final bool isToYear = dateIsToyear(DateTime(year));
+        return _getYearView(year, isToYear);
       },
     );
   }

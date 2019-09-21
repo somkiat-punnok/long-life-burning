@@ -1,8 +1,4 @@
-import 'package:flutter/widgets.dart';
-import './fonts.dart'
-  show
-    MaterialFamily,
-    CupertinoFamily;
+part of constant;
 
 // Icons on Android
 class IconAndroid {

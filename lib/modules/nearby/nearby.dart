@@ -1,7 +1,9 @@
 library nearby;
 
+import 'dart:convert' show json;
+import 'dart:math' show min, max;
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,8 +14,11 @@ export 'package:flutter_map/flutter_map.dart' show Marker;
 export 'package:latlong/latlong.dart' show LatLng;
 
 part './map.dart';
+part './header/render.dart';
+part './header/widget.dart';
 part './place/place.dart';
-part './place/placedetail.dart';
+part './place/place_model.dart';
+part './place/place_detail.dart';
 part './panel/panel.dart';
 part './panel/panel_controller.dart';
 

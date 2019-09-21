@@ -2,7 +2,7 @@ part of event;
 
 class EventCard extends StatelessWidget {
 
-  final Event event;
+  final EventModel event;
   final void Function() onClick;
 
   EventCard({

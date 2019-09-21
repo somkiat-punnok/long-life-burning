@@ -13,6 +13,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
 import './index.dart';
 
 class App extends StatelessWidget {
+  App({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

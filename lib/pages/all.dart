@@ -14,6 +14,6 @@ export './group/create_group.dart';
 export './menu/menu_page.dart';
 export './menu/statistic_page.dart';
 export './menu/setting_page.dart';
-export './menu/marking_page.dart';
+export './menu/check_point_page.dart';
 
 export './common/year_page.dart';

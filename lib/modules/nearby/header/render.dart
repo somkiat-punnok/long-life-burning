@@ -1,4 +1,9 @@
-part of header;
+part of nearby;
+
+/// Called every layout to provide the amount of stickyness a header is in.
+/// This lets the widgets animate their content and provide feedback.
+///
+typedef void RenderStickyHeaderCallback(double stuckAmount);
 
 /// RenderObject for StickyHeader widget.
 ///
@@ -26,9 +31,9 @@ class RenderStickyHeader extends RenderBox
         _scrollable = scrollable,
         _callback = callback,
         _overlapHeaders = overlapHeaders {
-    if (content != null) add(content);
-    if (header != null) add(header);
-  }
+          if (content != null) add(content);
+          if (header != null) add(header);
+        }
 
   set scrollable(ScrollableState newValue) {
     assert(newValue != null);
@@ -179,4 +184,5 @@ class RenderStickyHeader extends RenderBox
   void paint(PaintingContext context, Offset offset) {
     defaultPaint(context, offset);
   }
+
 }

@@ -81,8 +81,8 @@ List<Pages> _buildPage() => <Pages>[
   Pages(
     name: 'Setting Event',
     tag: CategoryPage.events,
-    routeName: SetEventPage.routeName,
-    buildRoute: (BuildContext context) => SetEventPage(),
+    routeName: SettingEventPage.routeName,
+    buildRoute: (BuildContext context) => SettingEventPage(),
   ),
   Pages(
     name: 'Create Group',
@@ -105,7 +105,7 @@ List<Pages> _buildPage() => <Pages>[
   Pages(
     name: 'Marking',
     tag: CategoryPage.menu,
-    routeName: MarkingPage.routeName,
-    buildRoute: (BuildContext context) => MarkingPage(),
+    routeName: CheckPointPage.routeName,
+    buildRoute: (BuildContext context) => CheckPointPage(),
   ),
 ];

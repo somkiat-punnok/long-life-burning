@@ -4,9 +4,8 @@ import 'package:long_life_burning/utils/helper/constants.dart'
   show
     isMaterial,
     SizeConfig,
-    Gender,
-    UserOptions,
-    Configs;
+    Configs,
+    UserOptions;
 import 'package:long_life_burning/utils/routes/routing.dart'
   show
     nav,
@@ -16,10 +15,11 @@ import 'package:long_life_burning/utils/routes/routing.dart'
     kGroups,
     kMenu,
     PageNavigate;
-    
+
 import './login/login_screen.dart';
 
 class Index extends StatefulWidget {
+  Index({Key key}) : super(key: key);
   @override
   _IndexState createState() => _IndexState();
 }
@@ -66,7 +66,6 @@ class _IndexState extends State<Index> {
   void checkAuth() async {
     await Configs.auth.currentUser().then((user) async {
       if (user != null) {
-        UserOptions.user = user;
         await Configs.store
           .collection(UserOptions.collection)
           .where(
@@ -76,11 +75,14 @@ class _IndexState extends State<Index> {
           .snapshots()
           .listen((data) {
             if (data.documents.isNotEmpty) {
-              UserOptions.name = data.documents[0].data[UserOptions.name_field];
-              UserOptions.weight = data.documents[0].data[UserOptions.weight_field];
-              UserOptions.height = data.documents[0].data[UserOptions.height_field];
-              UserOptions.dateOfBirth = DateTime.fromMicrosecondsSinceEpoch(data.documents[0].data[UserOptions.dateOfBirth_field].microsecondsSinceEpoch);
-              UserOptions.gender = data.documents[0].data[UserOptions.gender_field].toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE;
+              UserOptions.user = user;
+              Configs.setUser(
+                n: data.documents[0].data[UserOptions.name_field],
+                w: data.documents[0].data[UserOptions.weight_field],
+                h: data.documents[0].data[UserOptions.height_field],
+                d: data.documents[0].data[UserOptions.dateOfBirth_field],
+                g: data.documents[0].data[UserOptions.gender_field],
+              );
             }
           });
         Configs.login = true;

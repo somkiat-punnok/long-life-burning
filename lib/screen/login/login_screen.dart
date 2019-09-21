@@ -1,5 +1,6 @@
 library login;
 
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart'
   show
@@ -15,8 +16,8 @@ part './home.dart';
 part './signin.dart';
 part './signup.dart';
 
-
 class LoginScreen extends StatefulWidget {
+  LoginScreen({Key key}) : super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -26,13 +27,13 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
   PageController _controller;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     _controller = PageController(initialPage: 1, viewportFraction: 1.0);
   }
 
   @override
-  void dispose() { 
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
@@ -74,4 +75,5 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
       ),
     );
   }
+
 }

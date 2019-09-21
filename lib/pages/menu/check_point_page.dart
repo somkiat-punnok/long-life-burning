@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/nearby/nearby.dart'
   show
@@ -7,13 +6,14 @@ import 'package:long_life_burning/modules/nearby/nearby.dart'
     Marker,
     LatLng;
 
-class MarkingPage extends StatefulWidget {
+class CheckPointPage extends StatefulWidget {
+  CheckPointPage({Key key}) : super(key: key);
   static const String routeName = '/marking';
   @override
-  _MarkingPageState createState() => _MarkingPageState();
+  _CheckPointPageState createState() => _CheckPointPageState();
 }
 
-class _MarkingPageState extends State<MarkingPage> {
+class _CheckPointPageState extends State<CheckPointPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _MarkingPageState extends State<MarkingPage> {
             child: Container(
               padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
               child: Text(
-                "Marking",
+                "Check Point",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

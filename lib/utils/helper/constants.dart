@@ -1,9 +1,19 @@
-export 'package:long_life_burning/utils/widgets/platform.dart'
+library constant;
+
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
+import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
+import 'package:firebase_auth/firebase_auth.dart'
   show
-    isMaterial,
-    isCupertino;
+    FirebaseAuth,
+    FirebaseUser;
+
+export 'package:long_life_burning/utils/widgets/platform.dart';
 export 'package:long_life_burning/utils/widgets/size_config.dart';
-export './options.dart';
+
+part './fonts.dart';
+part './icons.dart';
+part './options.dart';
 
 enum Gender {
   MALE,
@@ -177,11 +187,19 @@ const List<String> PROVINCE = [
 // ];
 
 const List<String> CATEGORIES = [
-  'All Category','Fun Run','Mini Marathon','Half Marathon','Marathon'
+  'All Category',
+  'Fun Run',
+  'Mini Marathon',
+  'Half Marathon',
+  'Marathon'
 ];
 
 const List<String> GROUP_CATEGORIES = [
-  'All Category','Football','Basketball','Volaball'
+  'Other',
+  'Football',
+  'Basketball',
+  'Volaball',
+  'Run',
 ];
 
 // image assets

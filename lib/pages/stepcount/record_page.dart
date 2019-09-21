@@ -22,6 +22,7 @@ import 'package:long_life_burning/utils/widgets/date_utils.dart';
 import '../common/year_page.dart';
 
 class RecordPage extends StatefulWidget {
+  RecordPage({Key key}) : super(key: key);
   static const String routeName = '/record';
   @override
   _RecordPageState createState() => _RecordPageState();
@@ -175,6 +176,7 @@ class _RecordPageState extends State<RecordPage> {
           ),
           RecordToList(
             step: _step,
+            dist: _distence,
             cal: calculateCalories(
               UserOptions.height ?? kHeight,
               UserOptions.dateOfBirth ?? kDateOfBirth,
@@ -183,7 +185,6 @@ class _RecordPageState extends State<RecordPage> {
               _second,
               _step,
             ),
-            dist: _distence/1000,
           ),
         ],
       ),

@@ -1,4 +1,18 @@
-part of header;
+part of nearby;
+
+/// Builder called during layout to allow the header's content to be animated or styled based
+/// on the amount of stickyness the header has.
+///
+/// [context] for your build operation.
+///
+/// [stuckAmount] will have the value of:
+/// ```
+///   0.0 <= value <= 1.0: about to be stuck
+///          0.0 == value: at top
+///  -1.0 >= value >= 0.0: past stuck
+/// ```
+///
+typedef Widget StickyHeaderWidgetBuilder(BuildContext context, double stuckAmount);
 
 /// Stick Header Widget
 ///
@@ -86,7 +100,6 @@ class StickyHeaderBuilder extends StatefulWidget {
 
 class _StickyHeaderBuilderState extends State<StickyHeaderBuilder> {
   double _stuckAmount;
-
   @override
   Widget build(BuildContext context) {
     return new StickyHeader(
