@@ -1,5 +1,9 @@
+import 'dart:collection';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:long_life_burning/utils/helper/options.dart';
 
 class SettingPage extends StatefulWidget {
   static const String routeName = '/setting';
@@ -8,6 +12,31 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+
+  // static Future<void> _getDataUserFromFirestore(user) async {
+  //   CollectionReference ref = Firestore.instance.collection('User');
+  //   QuerySnapshot userQuery = await ref
+  //   .where(
+  //         UserOptions.uid_field,
+  //         isEqualTo: user.uid,
+  //       )
+  //     .getDocuments();
+  
+  //   HashMap<String, UserOptions> userHashmap = new HashMap<String, UserOptions>();
+
+  //   userQuery.documents.forEach((document){
+  //     userHashmap.putIfAbsent(document['user'],() => UserOptions(
+  //       dateOfBirth : document['dateOfBirth'],
+  //       gender : document['gender'],
+  //       height : document['height'],
+  //       weight : document['weight'],
+  //       name : document['name'],
+  //   )
+  //   );
+  //   }
+  //   );
+  //     return userHashmap.values.toList();
+  // }
 
   @override
   Widget build(BuildContext context) {

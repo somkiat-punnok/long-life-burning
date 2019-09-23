@@ -195,6 +195,7 @@ class _SignInPageState extends State<SignInPage> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: TextFormField(
+         keyboardType: TextInputType.emailAddress,
         controller: emailController,
         decoration: InputDecoration.collapsed(hintText: "Email"),
         style: TextStyle(
