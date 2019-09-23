@@ -1,7 +1,6 @@
 part of calendar;
 
 class MonthTitle extends StatelessWidget {
-
   const MonthTitle({
     @required this.month,
     this.monthNames,
@@ -21,7 +20,7 @@ class MonthTitle extends StatelessWidget {
         getMonthName(month, monthNames: monthNames),
         style: TextStyle(
           color: isToMonth ? toMonthColor : Colors.black,
-          fontSize: screenSize() == ScreenSizes.small ? 20.0 : 24.0,
+          fontSize: screenSize() == ScreenSizes.small ? 20.0 : 22.0,
           fontWeight: FontWeight.bold,
         ),
         maxLines: 1,
@@ -30,5 +29,4 @@ class MonthTitle extends StatelessWidget {
       ),
     );
   }
-  
 }

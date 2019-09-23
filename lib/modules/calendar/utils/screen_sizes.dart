@@ -18,18 +18,18 @@ ScreenSizes screenSize() {
 }
 
 double getDayNumberSize() {
-  return screenSize() == ScreenSizes.small ? 12.0 : 16.0;
+  return screenSize() == ScreenSizes.small ? 12.0 : 14.0;
 }
 
 double getMonthViewHeight() {
   const double padding = 8.0;
-  final double titleHeight = screenSize() == ScreenSizes.small ? 26.0 : 30.0;
+  final double titleHeight = screenSize() == ScreenSizes.small ? 22.0 : 24.0;
   return (2 * padding) + titleHeight + 8.0 + (6 * getDayNumberSize());
 }
 
 double getYearViewHeight() {
-  const double topPadding = 8.0;
-  final double titleHeight = screenSize() == ScreenSizes.small ? 38.0 : 42.0;
-  const double dividerHeight = 8.0;
+  final double topPadding = screenSize() == ScreenSizes.small ? 8.0 : 16.0;
+  final double titleHeight = screenSize() == ScreenSizes.small ? 42.0 : 44.0;
+  final double dividerHeight = screenSize() == ScreenSizes.small ? 8.0 : 16.0;
   return topPadding + titleHeight + 8.0 + dividerHeight + (4 * getMonthViewHeight() - getDayNumberSize());
 }
