@@ -26,7 +26,7 @@ class PanelController {
     bool Function() isPanelOpenListener,
     bool Function() isPanelClosedListener,
     bool Function() isPanelShownListener,
-  ){
+  ) {
     this._closeListener = closeListener;
     this._openListener = openListener;
     this._hideListener = hideListener;

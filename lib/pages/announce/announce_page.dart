@@ -13,6 +13,7 @@ import 'setting_event_page.dart';
 import '../common/year_page.dart';
 
 class AnnouncePage extends StatefulWidget {
+  AnnouncePage({Key key}) : super(key: key);
   static const String routeName = '/';
   @override
   _AnnouncePageState createState() => _AnnouncePageState();
@@ -27,7 +28,6 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   DateTime _selectedDay;
   Map<DateTime, List> _events;
   List _onDayEvents;
-  String _lastSelected;
 
   @override
   void initState() {
@@ -36,8 +36,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     _calendarController = CalendarController();
     _eventController = ScrollController()..addListener(_scrollListener);
     _selectedDay = DateTime(_now.year, _now.month, _now.day);
-    _onDayEvents = EventToList.events[_selectedDay] ?? [];
-    _events = EventToList.events;
+    _onDayEvents = Event.events[_selectedDay] ?? [];
+    _events = Event.events;
   }
 
   @override
@@ -98,18 +98,13 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
               _selection(context);
             },
             onIcon1: () async {
-              final String selected = await showSearch<String>(
+              await showSearch<String>(
                 context: context,
                 delegate: _delegate,
               );
-              if (selected != null && selected != _lastSelected) {
-                setState(() {
-                  _lastSelected = selected;
-                });
-              }
             },
             onIcon2: () async => await Navigator.of(context).pushNamed(NotifyPage.routeName),
-            onIcon3: () async => await Navigator.of(context).pushNamed(SetEventPage.routeName),
+            onIcon3: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
           EventView(

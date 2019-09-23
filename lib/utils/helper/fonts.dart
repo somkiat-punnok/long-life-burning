@@ -1,3 +1,5 @@
+part of constant;
+
 const String MaterialFamily = 'MaterialIcons';
 const String CupertinoFamily = 'CupertinoIcons';
 

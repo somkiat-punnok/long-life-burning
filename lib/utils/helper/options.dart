@@ -1,11 +1,4 @@
-import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
-import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
-import 'package:firebase_auth/firebase_auth.dart'
-  show
-    FirebaseAuth,
-    FirebaseUser;
-import './constants.dart' show Gender;
+part of constant;
 
 class Configs {
 
@@ -19,6 +12,20 @@ class Configs {
   static String province;
   static String categories;
   static bool login = false;
+
+  static void setUser({
+    String n,
+    String g,
+    dynamic d,
+    num h,
+    num w,
+  }) {
+    UserOptions.name = n;
+    UserOptions.gender = g != null ? g.toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE : null;
+    UserOptions.dateOfBirth = d != null ? DateTime.fromMicrosecondsSinceEpoch(d.microsecondsSinceEpoch) : null;
+    UserOptions.height = h;
+    UserOptions.weight = w;
+  }
 
 }
 
@@ -37,11 +44,15 @@ class UserOptions {
   static const String weight_field = 'weight';
 
   static FirebaseUser user;
+  static String id;
   static String name;
-  static String username;
-  static Gender gender;
-  static DateTime dateOfBirth;
   static num height;
   static num weight;
+  static Gender gender;
+  static DateTime dateOfBirth;
+
+  static String toValue() {
+    return 'UserOptions: {name: $name, weight: $weight, height: $height, date of birth: $dateOfBirth, gender: $gender}';
+  }
   
 }

@@ -1,7 +1,19 @@
-export 'package:long_life_burning/utils/widgets/platform.dart'
-    show isMaterial, isCupertino;
+library constant;
+
+import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
+import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
+import 'package:firebase_auth/firebase_auth.dart'
+  show
+    FirebaseAuth,
+    FirebaseUser;
+
+export 'package:long_life_burning/utils/widgets/platform.dart';
 export 'package:long_life_burning/utils/widgets/size_config.dart';
-export './options.dart';
+
+part './fonts.dart';
+part './icons.dart';
+part './options.dart';
 
 enum Gender {
   MALE,

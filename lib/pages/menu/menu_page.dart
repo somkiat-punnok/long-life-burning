@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoButton;
 import 'package:long_life_burning/screen/login/login_screen.dart' show LoginScreen;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     SizeConfig,
     UserOptions,
     Configs;
-import './marking_page.dart';
+
+import './check_point_page.dart';
 import './setting_page.dart';
 import './statistic_page.dart';
 
 class MenuPage extends StatefulWidget {
+  MenuPage({Key key}) : super(key: key);
   static const String routeName = '/';
   @override
   _MenuPageState createState() => _MenuPageState();
@@ -87,9 +89,9 @@ class _MenuPageState extends State<MenuPage> {
       onTap: () async => await Navigator.of(context).pushNamed(StatisticPage.routeName),
     ));
     list.addAll(_buildMenu(
-      name: 'Marking',
+      name: 'Check Points',
       icons: Icons.location_on,
-      onTap: () async => await Navigator.of(context).pushNamed(MarkingPage.routeName),
+      onTap: () async => await Navigator.of(context).pushNamed(CheckPointPage.routeName),
     ));
     list.addAll(_buildMenu(
       name: 'Settings',
@@ -118,11 +120,13 @@ class _MenuPageState extends State<MenuPage> {
             print('signout');
             Configs.login = false;
             UserOptions.user = null;
-            UserOptions.name = null;
-            UserOptions.height = null;
-            UserOptions.weight = null;
-            UserOptions.gender = null;
-            UserOptions.dateOfBirth = null;
+            Configs.setUser(
+              n: null,
+              w: null,
+              h: null,
+              d: null,
+              g: null,
+            );
             await Navigator.of(Configs.index_context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => LoginScreen(),

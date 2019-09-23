@@ -1,12 +1,5 @@
 part of record;
 
-final String tableName = 'record';
-final String columnId = 'id';
-final String columnDay = 'day';
-final String columnStep = 'step';
-final String columnCal = 'cal';
-final String columnDist = 'dist';
-
 class DBProvider {
 
   DBProvider._internal();
@@ -42,12 +35,12 @@ class DBProvider {
     });
   }
 
-  Future<Record> insert(Record record) async {
+  Future<RecordModel> insert(RecordModel record) async {
     record.id = await db.insert(tableName, record.toMap());
     return record;
   }
 
-  Future<Record> getRecord(int id) async {
+  Future<RecordModel> getRecord(int id) async {
     List<Map> maps = await db.query(
       tableName,
       columns: [columnDay, columnStep, columnCal, columnDist],
@@ -55,12 +48,12 @@ class DBProvider {
       whereArgs: [id]
     );
     if (maps.length > 0) {
-      return Record.fromMap(maps.first);
+      return RecordModel.fromMap(maps.first);
     }
     return null;
   }
 
-  Future<int> update(Record record) async => await db.update(
+  Future<int> update(RecordModel record) async => await db.update(
     tableName,
     record.toMap(),
     where: '$columnId = ?',

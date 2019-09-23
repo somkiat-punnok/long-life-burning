@@ -57,23 +57,6 @@ class _SignInPageState extends State<SignInPage> {
         String password = passwordController.text.trim();
         await Configs.auth.signInWithEmailAndPassword(email: email, password: password).then((result) async {
           if (result != null && result.user != null) {
-            await Configs.store
-              .collection(UserOptions.collection)
-              .where(
-                UserOptions.uid_field,
-                isEqualTo: result.user.uid,
-              )
-              .snapshots()
-              .listen((data) {
-                if (data.documents.isNotEmpty) {
-                  UserOptions.name = data.documents[0].data[UserOptions.name_field];
-                  UserOptions.weight = data.documents[0].data[UserOptions.weight_field];
-                  UserOptions.height = data.documents[0].data[UserOptions.height_field];
-                  UserOptions.dateOfBirth = DateTime.fromMicrosecondsSinceEpoch(data.documents[0].data[UserOptions.dateOfBirth_field].microsecondsSinceEpoch);
-                  UserOptions.gender = data.documents[0].data[UserOptions.gender_field].toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE;
-                }
-              });
-            UserOptions.user = result.user;
             Configs.login = true;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(

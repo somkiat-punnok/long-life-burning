@@ -1,18 +1,17 @@
-import 'dart:collection';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/utils/helper/options.dart';
 
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:long_life_burning/utils/helper/constants.dart';
 class SettingPage extends StatefulWidget {
+  SettingPage({Key key}) : super(key: key);
   static const String routeName = '/setting';
   @override
   _SettingPageState createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   // static Future<void> _getDataUserFromFirestore(user) async {
   //   CollectionReference ref = Firestore.instance.collection('User');
   //   QuerySnapshot userQuery = await ref
@@ -21,7 +20,7 @@ class _SettingPageState extends State<SettingPage> {
   //         isEqualTo: user.uid,
   //       )
   //     .getDocuments();
-  
+
   //   HashMap<String, UserOptions> userHashmap = new HashMap<String, UserOptions>();
 
   //   userQuery.documents.forEach((document){
@@ -92,5 +91,4 @@ class _SettingPageState extends State<SettingPage> {
       ),
     );
   }
-
 }

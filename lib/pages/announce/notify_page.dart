@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class NotifyPage extends StatefulWidget {
+  NotifyPage({Key key}) : super(key: key);
   static const String routeName = '/notify';
   @override
   _NotifyPageState createState() => _NotifyPageState();
 }
 
 class _NotifyPageState extends State<NotifyPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,5 +62,4 @@ class _NotifyPageState extends State<NotifyPage> {
       ),
     );
   }
-
 }

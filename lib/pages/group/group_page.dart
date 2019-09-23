@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 import './create_group.dart';
 
 class GroupPage extends StatefulWidget {
+  GroupPage({Key key}) : super(key: key);
   static const String routeName = '/';
   @override
   _GroupPageState createState() => _GroupPageState();
