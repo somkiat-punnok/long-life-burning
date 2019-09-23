@@ -4,8 +4,10 @@ import 'dart:convert' show json;
 import 'dart:math' show min, max;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:long_life_burning/utils/widgets/carousel_card.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
@@ -30,6 +32,7 @@ class SlidePanel extends StatelessWidget {
   final double panelHeightOpen;
   final double panelHeightClosed;
   final double radius;
+  final LatLng userLocation;
   final PanelSlideCallback onPanelSlide;
   final LocateCallback onLocate;
   final bool fullscreen;
@@ -42,6 +45,7 @@ class SlidePanel extends StatelessWidget {
     this.panelHeightClosed,
     this.fullscreen,
     this.radius,
+    this.userLocation,
     this.onPanelSlide,
     this.onLocate,
   }) :  assert(title != null && title != ''),
@@ -73,6 +77,7 @@ class SlidePanel extends StatelessWidget {
       panel: Place(
         title: title,
         fullscreen: fullscreen,
+        userLocation: userLocation,
         onTapLocate: onLocate,
       ),
       borderRadius: BorderRadius.only(
@@ -81,4 +86,5 @@ class SlidePanel extends StatelessWidget {
       ),
     );
   }
+
 }

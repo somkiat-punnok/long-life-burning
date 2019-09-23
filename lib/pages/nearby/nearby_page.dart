@@ -17,13 +17,19 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
   final double _initRadius = 20.0;
   final MapController controller = MapController();
   final Location _locationService  = Location();
-  LocationData _location;
-  double _radius;
+  List<Marker> _marker = [];
+  Marker _userMarker;
+  LocationData _location = LocationData.fromMap({
+    'latitude': 19.027510,
+    'longitude': 99.900178,
+  });
   bool _permission = false;
+  double _initFabHeight, _radius;
 
   @override
   void initState() { 
     super.initState();
+    _initFabHeight = _panelHeightClosed + _initRadius;
     initPlatformState();
   }
 
@@ -31,16 +37,23 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH, interval: 1000);
     try {
       bool serviceStatus = await _locationService.serviceEnabled();
-      print("Service status: $serviceStatus");
       if (serviceStatus) {
         _permission = await _locationService.requestPermission();
-        print("Permission: $_permission");
         if (_permission) {
           _location = await _locationService.getLocation();
+          _marker.clear();
+          _userMarker = Marker(
+            point: LatLng(_location?.latitude, _location?.longitude),
+            builder: (_) => Icon(
+              Icons.location_on,
+              color: Colors.blueAccent,
+            ),
+          );
+          _marker.add(_userMarker);
+          setState(() {});
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
-        print("Service status activated after request: $serviceStatusResult");
         if (serviceStatusResult) {
           initPlatformState();
         }
@@ -52,8 +65,6 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final double _panelHeightOpen = MediaQuery.of(context).size.height;
-    final double _initFabHeight = _panelHeightClosed + _initRadius;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -62,16 +73,8 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
         children: [
           MapView(
             controller: controller,
-            center: LatLng(_location.latitude - 0.015, _location.longitude),
-            listMark: <Marker>[
-              Marker(
-                point: LatLng(_location.latitude, _location.longitude),
-                builder: (_) => Icon(
-                  Icons.location_on,
-                  color: Colors.redAccent,
-                ),
-              ),
-            ],
+            center: LatLng((_location?.latitude ?? 0.01) - 0.01, _location?.longitude),
+            listMark: _marker,
           ),
           Positioned(
             right: 8.0,
@@ -85,7 +88,17 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
               ),
               onPressed: () async {
                 _location = await _locationService.getLocation();
-                controller.move(LatLng(_location.latitude - 0.002, _location.longitude), 16.0);
+                _userMarker = Marker(
+                  point: LatLng(_location?.latitude, _location?.longitude),
+                  builder: (_) => Icon(
+                    Icons.location_on,
+                    color: Colors.blueAccent,
+                  ),
+                );
+                _marker.removeAt(0);
+                _marker.insert(0, _userMarker);
+                setState(() {});
+                controller.move(LatLng((_location?.latitude ?? 0.0015) - 0.0015, _location?.longitude), 16.0);
               },
             ),
           ),
@@ -124,8 +137,9 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
           ),
           SlidePanel(
             title: 'Place for Runners',
-            panelHeightOpen: _panelHeightOpen,
+            panelHeightOpen: SizeConfig.screenHeight,
             panelHeightClosed: _panelHeightClosed,
+            userLocation: LatLng(_location?.latitude, _location?.longitude),
             radius: _radius ?? _initRadius,
             fullscreen: _radius == 0,
             onPanelSlide: (value) {
@@ -134,13 +148,19 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
               });
             },
             onLocate: (double lat, double long) {
-              setState(() {
-                _location = LocationData.fromMap({
-                  'latitude': lat,
-                  'longitude': long,
-                });
-              });
-              controller.move(LatLng(_location.latitude - 0.002, _location.longitude), 16.0);
+              _marker.clear();
+              _marker.addAll([
+                _userMarker,
+                Marker(
+                  point: LatLng(lat, long),
+                  builder: (_) => Icon(
+                    Icons.location_on,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              ]);
+              setState(() {});
+              controller.move(LatLng((lat ?? 0.0015) - 0.0015, long), 16.0);
             },
           ),
         ],

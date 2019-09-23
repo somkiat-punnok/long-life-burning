@@ -23,7 +23,7 @@ double getDayNumberSize() {
 
 double getMonthViewHeight() {
   const double padding = 8.0;
-  const double titleHeight = 26.0;
+  final double titleHeight = screenSize() == ScreenSizes.small ? 26.0 : 30.0;
   return (2 * padding) + titleHeight + 8.0 + (6 * getDayNumberSize());
 }
 
