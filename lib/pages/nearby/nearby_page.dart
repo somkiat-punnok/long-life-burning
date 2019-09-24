@@ -23,6 +23,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     'latitude': 19.027510,
     'longitude': 99.900178,
   });
+  bool _serviceStatus = false;
   bool _permission = false;
   double _initFabHeight, _radius;
 
@@ -33,11 +34,11 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     initPlatformState();
   }
 
-  initPlatformState() async {
+  void initPlatformState() async {
     await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH, interval: 1000);
     try {
-      bool serviceStatus = await _locationService.serviceEnabled();
-      if (serviceStatus) {
+      _serviceStatus = await _locationService.serviceEnabled();
+      if (_serviceStatus) {
         _permission = await _locationService.requestPermission();
         if (_permission) {
           _location = await _locationService.getLocation();
@@ -51,6 +52,9 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
           );
           _marker.add(_userMarker);
           setState(() {});
+        } else {
+          _permission = await _locationService.requestPermission();
+          initPlatformState();
         }
       } else {
         bool serviceStatusResult = await _locationService.requestService();
@@ -87,18 +91,32 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 color: Theme.of(context).primaryColor,
               ),
               onPressed: () async {
-                _location = await _locationService.getLocation();
-                _userMarker = Marker(
-                  point: LatLng(_location?.latitude, _location?.longitude),
-                  builder: (_) => Icon(
-                    Icons.location_on,
-                    color: Colors.blueAccent,
-                  ),
-                );
-                _marker.removeAt(0);
-                _marker.insert(0, _userMarker);
-                setState(() {});
-                controller.move(LatLng((_location?.latitude ?? 0.0015) - 0.0015, _location?.longitude), 16.0);
+                if (_serviceStatus) {
+                  if (_permission) {
+                    _location = await _locationService.getLocation();
+                    _userMarker = Marker(
+                      point: LatLng(_location?.latitude, _location?.longitude),
+                      builder: (_) => Icon(
+                        Icons.location_on,
+                        color: Colors.blueAccent,
+                      ),
+                    );
+                    _marker.removeAt(0);
+                    _marker.insert(0, _userMarker);
+                    setState(() {});
+                    controller.move(LatLng((_location?.latitude ?? 0.0015) - 0.0015, _location?.longitude), 16.0);
+                  } else {
+                    _permission = await _locationService.requestPermission();
+                  }
+                } else {
+                  bool serviceStatusResult = await _locationService.requestService();
+                  if (serviceStatusResult) {
+                    _serviceStatus = await _locationService.serviceEnabled();
+                    if (!_permission) {
+                      _permission = await _locationService.requestPermission();
+                    }
+                  }
+                }
               },
             ),
           ),
@@ -149,16 +167,16 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
             },
             onLocate: (double lat, double long) {
               _marker.clear();
-              _marker.addAll([
-                _userMarker,
+              if (_serviceStatus) _marker.add(_userMarker);
+              _marker.add(
                 Marker(
                   point: LatLng(lat, long),
                   builder: (_) => Icon(
                     Icons.location_on,
                     color: Colors.redAccent,
                   ),
-                ),
-              ]);
+                )
+              );
               setState(() {});
               controller.move(LatLng((lat ?? 0.0015) - 0.0015, long), 16.0);
             },
