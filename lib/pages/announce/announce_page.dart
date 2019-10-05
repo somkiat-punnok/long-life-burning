@@ -54,10 +54,11 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    _calendarController.setSelectedDay(_selectedDay, runCallback: true);
+    // _calendarController.setSelectedDay(_selectedDay, runCallback: true);
   }
 
   void _onDaySelected(DateTime date, List events) {
+    _calendarController.setCalendarFormat(CalendarFormat.month);
     setState(() {
       _selectedDay = date;
       _onDayEvents = events;
@@ -90,22 +91,35 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
       resizeToAvoidBottomPadding: false,
       body: Column(
         children: <Widget>[
-          Calendar(
-            controller: _calendarController,
-            events: _events,
-            onDaySelected: _onDaySelected,
-            onTitleText: () {
-              _selection(context);
-            },
-            onIcon1: () async {
-              await showSearch<String>(
-                context: context,
-                delegate: _delegate,
-              );
-            },
-            onIcon2: () async => await Navigator.of(context).pushNamed(NotifyPage.routeName),
-            onIcon3: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
-            onVisibleDaysChanged: _onVisibleDaysChanged,
+          Container(
+            padding: EdgeInsets.only( bottom: 8.0 ),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.black,
+                  width: 1.0,
+                  style: BorderStyle.solid,
+                ),
+              ),
+            ),
+            child: Calendar(
+              controller: _calendarController,
+              events: _events,
+              onDaySelected: _onDaySelected,
+              onTitleText: () {
+                _selection(context);
+              },
+              onIcon1: () async {
+                await showSearch<String>(
+                  context: context,
+                  delegate: _delegate,
+                );
+              },
+              onIcon2: () async => await Navigator.of(context).pushNamed(NotifyPage.routeName),
+              onIcon3: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
+              onVisibleDaysChanged: _onVisibleDaysChanged,
+            ),
           ),
           EventView(
             controller: _eventController,

@@ -57,12 +57,12 @@ dependencies:
   flutter_map: ^0.7.2
   latlong: ^0.6.1
   location: ^2.3.5
-  #google_maps_flutter: ^0.5.21+3
+  #google_maps_flutter: ^0.5.21+7
   #geoflutterfire: ^2.0.3+5
 
   # Pedometer
-  fit_kit: ^0.0.5
-  #pedometer: ^0.0.5
+  fit_kit: ^0.0.6
+  #pedometer: ^1.0.0
 
 dev_dependencies:
   flutter_test:

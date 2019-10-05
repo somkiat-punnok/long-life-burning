@@ -57,15 +57,11 @@ class _RecordPageState extends State<RecordPage> {
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
     for(final data in _calendarController.visibleDays){
       if (Utils.isSameDay(data, _now)) {
-        setState(() {
-          _selectedDay = DateTime(_now.year, _now.month, _now.day);
-        });
+        _selectedDay = DateTime(_now.year, _now.month, _now.day);
         break;
       }
       else if (_selectedDay.weekday == data.weekday) {
-        setState(() {
-          _selectedDay = DateTime(data.year, data.month, data.day);
-        });
+        _selectedDay = DateTime(data.year, data.month, data.day);
         break;
       }
     }
@@ -86,14 +82,10 @@ class _RecordPageState extends State<RecordPage> {
       if (res != null) {
         final result = res as List;
         if(_now.year == result[0] && _now.month == result[1]) {
-          setState(() {
-            _selectedDay = DateTime(_now.year, _now.month, _now.day);
-          });
+          _selectedDay = DateTime(_now.year, _now.month, _now.day);
         }
         else {
-          setState(() {
-            _selectedDay = DateTime(result[0], result[1], 1);
-          });
+          _selectedDay = DateTime(result[0], result[1], 1);
         }
         _calendarController.setSelectedDay(_selectedDay, runCallback: true);
       }
@@ -175,15 +167,15 @@ class _RecordPageState extends State<RecordPage> {
             onVisibleDaysChanged: _onVisibleDaysChanged,
           ),
           RecordToList(
-            step: _step,
-            dist: _distence,
+            step: _step ?? 0,
+            dist: _distence ?? 0,
             cal: calculateCalories(
               UserOptions.height ?? kHeight,
               UserOptions.dateOfBirth ?? kDateOfBirth,
               UserOptions.weight ?? kWeight,
               UserOptions.gender ?? Gender.MALE,
-              _second,
-              _step,
+              _second ?? 0,
+              _step ?? 0,
             ),
           ),
         ],
