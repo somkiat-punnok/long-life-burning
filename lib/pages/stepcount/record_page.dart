@@ -96,8 +96,8 @@ class _RecordPageState extends State<RecordPage> {
     if ((date.year <= _now.year) && (date.month <= _now.month) && (date.day <= _now.day)) {
       try {
         if (!Configs.fitkit_permissions) {
-          print("User declined permissions");
           await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
+          await readDate(date);
         } else {
           _step = 0;
           _distence = 0;

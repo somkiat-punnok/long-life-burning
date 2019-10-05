@@ -64,46 +64,45 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   Future<void> readDate() async {
     try {
       if (!Configs.fitkit_permissions) {
-        print("User declined permissions");
         await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
+        await readDate();
       } else {
         _step = 0;
         _distence = 0;
         _second = 0;
-        print('initial query data');
         for (DataType type in DataType.values) {
           if (type == DataType.STEP_COUNT) {
             await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())
-            .then((data) {
-              if (data != null && data.isNotEmpty) {
-                data.forEach((value) {
-                  if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
-                    if (value.value != 0) {
-                      setState(() {
-                        _step += value.value.round() ?? 0;
-                        _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
-                      });
+              .then((data) {
+                if (data != null && data.isNotEmpty) {
+                  data.forEach((value) {
+                    if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
+                      if (value.value != 0) {
+                        setState(() {
+                          _step += value.value.round() ?? 0;
+                          _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
+                        });
+                      }
                     }
-                  }
-                });
-              }
-            });
+                  });
+                }
+              });
           }
           if (type == DataType.DISTANCE) {
             await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())
-            .then((data) {
-              if (data != null && data.isNotEmpty) {
-                data.forEach((value) {
-                  if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
-                    if (value.value != 0) {
-                      setState(() {
-                        _distence += value.value.round() ?? 0;
-                      });
+              .then((data) {
+                if (data != null && data.isNotEmpty) {
+                  data.forEach((value) {
+                    if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
+                      if (value.value != 0) {
+                        setState(() {
+                          _distence += value.value.round() ?? 0;
+                        });
+                      }
                     }
-                  }
-                });
-              }
-            });
+                  });
+                }
+              });
           }
         }
       }

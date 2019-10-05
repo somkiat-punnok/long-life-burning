@@ -28,6 +28,7 @@ class CarouselCard extends StatefulWidget {
           viewportFraction: viewportFraction,
           initialPage: enableInfiniteScroll ? realPage + initialPage : initialPage,
         ),
+        assert(items != null && items.isNotEmpty),
         super(key: key);
 
   /// The widgets to be shown in the carousel.
@@ -146,7 +147,7 @@ class CarouselCard extends StatefulWidget {
   /// Jumps the page position from its current value to the given value,
   /// without animation, and without checking if the new value is in range.
   void jumpToPage(int page) {
-    final index = _getRealIndex(pageController.page.toInt(), realPage, items.length);
+    final index = _getRealIndex(pageController.page.toInt(), realPage, items?.length);
     return pageController.jumpToPage(pageController.page.toInt() + page - index);
   }
 
@@ -155,7 +156,7 @@ class CarouselCard extends StatefulWidget {
   /// The animation lasts for the given duration and follows the given curve.
   /// The returned [Future] resolves when the animation completes.
   Future<void> animateToPage(int page, {Duration duration, Curve curve}) {
-    final index = _getRealIndex(pageController.page.toInt(), realPage, items.length);
+    final index = _getRealIndex(pageController.page.toInt(), realPage, items?.length);
     return pageController.animateToPage(pageController.page.toInt() + page - index,
         duration: duration, curve: curve);
   }
@@ -215,54 +216,56 @@ class _CarouselCardState extends State<CarouselCard> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return getWrapper(PageView.builder(
-      physics: widget.scrollPhysics,
-      scrollDirection: widget.scrollDirection,
-      controller: widget.pageController,
-      reverse: widget.reverse,
-      itemCount: widget.enableInfiniteScroll ? null : widget.items.length,
-      onPageChanged: (int index) {
-        int currentPage = _getRealIndex(index + widget.initialPage, widget.realPage, widget.items.length);
-        if (widget.onPageChanged != null) {
-          widget.onPageChanged(currentPage);
-        }
-      },
-      itemBuilder: (BuildContext context, int i) {
-        final int index =
-            _getRealIndex(i + widget.initialPage, widget.realPage, widget.items.length);
+    return getWrapper(
+      PageView.builder(
+        physics: widget.scrollPhysics,
+        scrollDirection: widget.scrollDirection,
+        controller: widget.pageController,
+        reverse: widget.reverse,
+        itemCount: widget.enableInfiniteScroll ? null : widget.items.length,
+        onPageChanged: (int index) {
+          int currentPage = _getRealIndex(index + widget.initialPage, widget.realPage, widget.items?.length);
+          if (widget.onPageChanged != null) {
+            widget.onPageChanged(currentPage);
+          }
+        },
+        itemBuilder: (BuildContext context, int i) {
+          final int index =
+              _getRealIndex(i + widget.initialPage, widget.realPage, widget.items?.length);
 
-        return AnimatedBuilder(
-          animation: widget.pageController,
-          child: widget.items[index],
-          builder: (BuildContext context, child) {
-            // on the first render, the pageController.page is null,
-            // this is a dirty hack
-            if (widget.pageController.position.minScrollExtent == null ||
-                widget.pageController.position.maxScrollExtent == null) {
-              Future.delayed(Duration(microseconds: 1), () {
-                setState(() {});
-              });
-              return Container();
-            }
-            double value = widget.pageController.page - i;
-            value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
+          return AnimatedBuilder(
+            animation: widget.pageController,
+            child: widget.items[index],
+            builder: (BuildContext context, child) {
+              // on the first render, the pageController.page is null,
+              // this is a dirty hack
+              if (widget.pageController.position.minScrollExtent == null ||
+                  widget.pageController.position.maxScrollExtent == null) {
+                Future.delayed(Duration(microseconds: 1), () {
+                  setState(() {});
+                });
+                return Container();
+              }
+              double value = widget.pageController.page - i;
+              value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
 
-            final double height =
-                widget.height ?? MediaQuery.of(context).size.width * (1 / widget.aspectRatio);
-            final double distortionValue =
-                widget.enlargeCenterPage ? Curves.easeOut.transform(value) : 1.0;
+              final double height =
+                  widget.height ?? MediaQuery.of(context).size.width * (1 / widget.aspectRatio);
+              final double distortionValue =
+                  widget.enlargeCenterPage ? Curves.easeOut.transform(value) : 1.0;
 
-            if (widget.scrollDirection == Axis.horizontal) {
-              return Center(child: SizedBox(height: distortionValue * height, child: child));
-            } else {
-              return Center(
-                  child: SizedBox(
-                      width: distortionValue * MediaQuery.of(context).size.width, child: child));
-            }
-          },
-        );
-      },
-    ));
+              if (widget.scrollDirection == Axis.horizontal) {
+                return Center(child: SizedBox(height: distortionValue * height, child: child));
+              } else {
+                return Center(
+                    child: SizedBox(
+                        width: distortionValue * MediaQuery.of(context).size.width, child: child));
+              }
+            },
+          );
+        },
+      )
+    );
   }
 }
 

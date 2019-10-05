@@ -81,8 +81,8 @@ class _SignUpPageState extends State<SignUpPage> {
           gender = 'female';
         }
 
-        if (password == confirmPassword && password.length >= 8) {
-          await Configs.auth
+        if ( password.length >= 8) {
+          if(password == confirmPassword){await Configs.auth
               .createUserWithEmailAndPassword(email: email, password: password)
               .then((result) async {
             if (result != null && result.user != null) {
@@ -99,16 +99,25 @@ class _SignUpPageState extends State<SignUpPage> {
                 }
               });
             }
-          });
-        } else {
+          });}else {
           scaffoldKey.currentState.showSnackBar(SnackBar(
             content: Text(
-                'Password and Confirm-password is not match. or Password too short.',
+                'Password and Confirm-password is not match..',
                 style: TextStyle(color: Colors.white)),
             backgroundColor: Colors.red,
           ));
           print(
-              "Password and Confirm-password is not match. or Password too short.");
+              "Password and Confirm-password is not match.");
+        }
+        } else {
+          scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text(
+                'Password too short.',
+                style: TextStyle(color: Colors.white)),
+            backgroundColor: Colors.red,
+          ));
+          print(
+              "Password too short.");
         }
       } catch (e) {
         print('Error : $e');
