@@ -77,9 +77,9 @@ class PlaceDetail extends StatelessWidget {
                         bottom: 0.0,
                       ),
                       child: Text(
-                        distance < 1000
-                          ? 'ระยะทาง: ${NumberFormat('#,###.##', 'en_US').format(distance)} เมตร'
-                          : 'ระยะทาง: ${NumberFormat('#,###.##', 'en_US').format(distance/1000)} กิโลเมตร',
+                        distance * 1000 < 1000
+                          ? 'ระยะทาง: ${NumberFormat('#,###.##', 'en_US').format(distance * 1000)} เมตร'
+                          : 'ระยะทาง: ${NumberFormat('#,###.##', 'en_US').format(distance)} กิโลเมตร',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,

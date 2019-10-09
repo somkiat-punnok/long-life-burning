@@ -34,9 +34,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    if (isCupertino) {
-      readDate();
-    }
+    // if (isCupertino) {
+    readDate();
+    // }
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
@@ -47,9 +47,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     if(initComplete) {
-      if (isCupertino) {
-        readDate();
-      }
+      // if (isCupertino) {
+      readDate();
+      // }
       slidingListController.reopen();
     }
     super.didChangeDependencies();

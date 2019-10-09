@@ -43,9 +43,9 @@ class _RecordPageState extends State<RecordPage> {
     _now = DateTime.now();
     _calendarController = CalendarController();
     _selectedDay = DateTime(_now.year, _now.month, _now.day);
-    if (isCupertino) {
-      readDate(_selectedDay);
-    }
+    // if (isCupertino) {
+    readDate(_selectedDay);
+    // }
   }
 
   @override
@@ -69,9 +69,9 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   void _onDaySelected(DateTime date, List events) async {
-    if (isCupertino) {
-      await readDate(DateTime(date.year, date.month, date.day));
-    }
+    // if (isCupertino) {
+    await readDate(DateTime(date.year, date.month, date.day));
+    // }
     setState(() {
       _selectedDay = date;
     });

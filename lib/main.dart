@@ -18,7 +18,7 @@ import 'package:long_life_burning/screen/app.dart';
 
 Future<void> main() async {
   await checkAuth().then((_) async {
-    if (isCupertino) await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
+    await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
     await SharedPreferences.getInstance().then((_pref) {
       if (_pref != null) {
         Configs.pref = _pref;

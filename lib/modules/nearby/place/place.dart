@@ -1,7 +1,7 @@
 part of nearby;
 
 class Place extends StatefulWidget {
-  
+
   final String title;
   final bool fullscreen;
   final LatLng userLocation;
@@ -105,7 +105,7 @@ class _PlaceState extends State<Place> {
   ];
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
     init();
   }
@@ -153,17 +153,24 @@ class _PlaceState extends State<Place> {
     List<Widget> result = <Widget>[];
     list.forEach((l) async {
       final p = PlaceModel.fromMap(l);
-      await Geolocator().distanceBetween(widget.userLocation?.latitude, widget.userLocation?.longitude, l['lat'], l['long'])
-        .then((dist) {
-          result.add(
-            PlaceDetail(
-              item: p,
-              distance: dist,
-              fullscreen: widget.fullscreen,
-              onTap: widget.onTapLocate != null ? () => widget.onTapLocate(l['lat'], l['long']) : () {},
-            )
-          );
-        });
+      final Geoflutterfire geo = Geoflutterfire();
+      final double dist = geo
+        .point(
+          latitude: widget.userLocation?.latitude,
+          longitude: widget.userLocation?.longitude,
+        )
+        .distance(
+          lat: l['lat'],
+          lng: l['long']
+        );
+      result.add(
+        PlaceDetail(
+          item: p,
+          distance: dist,
+          fullscreen: widget.fullscreen,
+          onTap: widget.onTapLocate != null ? () => widget.onTapLocate(l['lat'], l['long']) : () {},
+        )
+      );
     });
     return result;
   }

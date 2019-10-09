@@ -4,7 +4,9 @@ import 'package:long_life_burning/modules/nearby/nearby.dart'
   show
     MapView,
     Marker,
-    LatLng;
+    LatLng,
+    MarkerId,
+    BitmapDescriptor;
 
 class CheckPointPage extends StatefulWidget {
   CheckPointPage({Key key}) : super(key: key);
@@ -15,6 +17,28 @@ class CheckPointPage extends StatefulWidget {
 
 class _CheckPointPageState extends State<CheckPointPage> {
 
+  final List<double> lat = <double>[
+    18.793867,
+    19.027510,
+    18.027510,
+    16.027510,
+    16.427510,
+    14.268217,
+    13.361143,
+    13.814029,
+  ];
+
+  final List<double> long = <double>[
+    98.997116,
+    99.900178,
+    100.200178,
+    99.500178,
+    101.800178,
+    100.614021,
+    100.984673,
+    100.037292,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +48,7 @@ class _CheckPointPageState extends State<CheckPointPage> {
         alignment: Alignment.topCenter,
         children: [
           MapView(
-            center: LatLng(13.437167, 101.484685),
-            zoom: 5.8,
-            maxZoom: 18,
-            listMark: _buildMarker(),
+            markers: Set<Marker>.of(_buildMarker()),
           ),
           Positioned(
             top: 0.0,
@@ -92,73 +113,13 @@ class _CheckPointPageState extends State<CheckPointPage> {
     );
   }
 
-  List<Marker> _buildMarker() {
-    return <Marker>[
-      Marker(
-        point: LatLng(18.793867, 98.997116),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
+  Iterable<Marker> _buildMarker() {
+    return Iterable<Marker>.generate(lat.length, (i) => Marker(
+        markerId: MarkerId("mark" + (i+1).toString()),
+        position: LatLng(lat[i], long[i]),
+        icon: BitmapDescriptor.defaultMarker,
       ),
-      Marker(
-        point: LatLng(19.027510, 99.900178),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-      Marker(
-        point: LatLng(18.027510, 100.200178),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-      Marker(
-        point: LatLng(16.027510, 99.500178),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-      Marker(
-        point: LatLng(16.427510, 101.800178),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-      Marker(
-        point: LatLng(14.268217, 100.614021),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-      Marker(
-        point: LatLng(13.361143, 100.984673),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-      Marker(
-        point: LatLng(13.814029, 100.037292),
-        builder: (_) => Icon(
-          Icons.location_on,
-          color: Colors.redAccent,
-          size: 24.0,
-        ),
-      ),
-    ];
+    );
   }
 
 }

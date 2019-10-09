@@ -22,7 +22,7 @@ enum Gender {
 
 const String APPNAME = 'Long Burn';
 
-// Key others
+// Key
 // const String API_Key = '';
 
 const List<String> PROVINCE = [
