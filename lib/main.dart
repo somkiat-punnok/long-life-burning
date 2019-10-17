@@ -12,8 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Configs,
-    UserOptions,
-    isCupertino;
+    UserOptions;
 import 'package:long_life_burning/screen/app.dart';
 
 Future<void> main() async {

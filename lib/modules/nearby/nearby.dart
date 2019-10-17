@@ -3,6 +3,7 @@ library nearby;
 import 'dart:async' show Completer;
 import 'dart:convert' show json;
 import 'dart:math' show min, max;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';

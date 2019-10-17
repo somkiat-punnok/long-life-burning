@@ -15,8 +15,8 @@ import 'package:long_life_burning/modules/calendar/calendar.dart'
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Gender,
-    isCupertino;
-import 'package:long_life_burning/utils/helper/constants.dart';
+    Configs,
+    UserOptions;
 import 'package:long_life_burning/utils/widgets/date_utils.dart';
 
 import '../common/year_page.dart';

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/announce/search.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
@@ -21,10 +22,10 @@ class AnnouncePage extends StatefulWidget {
 
 class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMixin {
 
-  final SearchEventDelegate _delegate = SearchEventDelegate();
+  SearchEventDelegate _delegate;
+  IconData _arrow_icon;
   DateTime _now;
   CalendarController _calendarController;
-  ScrollController _eventController;
   DateTime _selectedDay;
   Map<DateTime, List> _events;
   List _onDayEvents;
@@ -32,9 +33,10 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
+    _arrow_icon = Icons.arrow_drop_up;
     _now = DateTime.now();
+    _delegate = SearchEventDelegate();
     _calendarController = CalendarController();
-    _eventController = ScrollController()..addListener(_scrollListener);
     _selectedDay = DateTime(_now.year, _now.month, _now.day);
     _onDayEvents = Event.events[_selectedDay] ?? [];
     _events = Event.events;
@@ -43,14 +45,7 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   @override
   void dispose() {
     _calendarController.dispose();
-    _eventController.dispose();
     super.dispose();
-  }
-
-  void _scrollListener() {
-    if (_eventController.offset > _eventController.position.minScrollExtent && _calendarController.calendarFormat != CalendarFormat.week) {
-      _calendarController.setCalendarFormat(CalendarFormat.week);
-    }
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
@@ -58,7 +53,7 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
   }
 
   void _onDaySelected(DateTime date, List events) {
-    _calendarController.setCalendarFormat(CalendarFormat.month);
+    _calendarController?.setCalendarFormat(CalendarFormat.month);
     setState(() {
       _selectedDay = date;
       _onDayEvents = events;
@@ -69,7 +64,7 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     (res) {
       if (res != null) {
         final result = res as List;
-        if(_now.year == result[0] && _now.month == result[1]) {
+        if (_now.year == result[0] && _now.month == result[1]) {
           setState(() {
             _selectedDay = DateTime(_now.year, _now.month, _now.day);
           });
@@ -93,16 +88,6 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
         children: <Widget>[
           Container(
             padding: EdgeInsets.only( bottom: 8.0 ),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.black,
-                  width: 1.0,
-                  style: BorderStyle.solid,
-                ),
-              ),
-            ),
             child: Calendar(
               controller: _calendarController,
               events: _events,
@@ -121,15 +106,53 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
               onVisibleDaysChanged: _onVisibleDaysChanged,
             ),
           ),
+          Expanded(
+            flex: 0,
+            child: CupertinoButton(
+              color: Colors.blue,
+              padding: EdgeInsets.zero,
+              borderRadius: BorderRadius.zero,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Opacity(
+                    opacity: 0.0,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Icon(
+                        Icons.arrow_drop_down,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Text(
+                      "${_selectedDay.year} - ${_selectedDay.month > 9 ? _selectedDay.month : "0" + _selectedDay.month.toString()} - ${_selectedDay.day > 9 ? _selectedDay.day : "0" + _selectedDay.day.toString()}",
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: Icon(
+                      _arrow_icon,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                if ((_calendarController?.calendarFormat ?? CalendarFormat.month) == CalendarFormat.month) {
+                  _arrow_icon = Icons.arrow_drop_down;
+                  _calendarController?.setCalendarFormat(CalendarFormat.week);
+                } else {
+                  _arrow_icon = Icons.arrow_drop_up;
+                  _calendarController?.setCalendarFormat(CalendarFormat.month);
+                }
+                setState(() {});
+              },
+            ),
+          ),
           EventView(
-            controller: _eventController,
             events: _onDayEvents,
             onClick: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),
-            onDown: (b) {
-              if (b && _calendarController.calendarFormat != CalendarFormat.month) {
-                _calendarController.setCalendarFormat(CalendarFormat.month);
-              }
-            },
           ),
         ],
       ),
