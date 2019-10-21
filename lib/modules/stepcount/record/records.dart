@@ -40,48 +40,48 @@ class RecordToList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ((step != null && step != 0) || (cal != null && cal != 0) || (dist != null && dist != 0))
-          ? ListView(
+        ? ListView(
+            children: <Widget>[
+              RecordCard(
+                value: '${NumberFormat('#,###', 'en_US').format(step)}',
+                name: 'steps',
+                unit: 'step',
+              ),
+              RecordCard(
+                value: '${NumberFormat('#,###.##', 'en_US').format(cal)}',
+                name: 'calories',
+                unit: 'kCal',
+              ),
+              RecordCard(
+                value: '${NumberFormat('#.##', 'en_US').format(dist/1000)}',
+                name: 'distances',
+                unit: 'km',
+              ),
+            ],
+          )
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                RecordCard(
-                  value: '${NumberFormat('#,###', 'en_US').format(step)}',
-                  name: 'steps',
-                  unit: 'step',
+                Text(
+                  'No Data',
+                  style: TextStyle(
+                    fontSize: 36.0,
+                    color: CupertinoColors.darkBackgroundGray,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                RecordCard(
-                  value: '${NumberFormat('#,###.##', 'en_US').format(cal)}',
-                  name: 'calories',
-                  unit: 'kCal',
-                ),
-                RecordCard(
-                  value: '${NumberFormat('#.##', 'en_US').format(dist/1000)}',
-                  name: 'distances',
-                  unit: 'km',
+                Text(
+                  'No data recorded for this day.',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: CupertinoColors.darkBackgroundGray,
+                    fontWeight: FontWeight.normal,
+                  ),
                 ),
               ],
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'No Data',
-                    style: TextStyle(
-                      fontSize: 36.0,
-                      color: CupertinoColors.darkBackgroundGray,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'No data recorded for this day.',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: CupertinoColors.darkBackgroundGray,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ],
-              ),
             ),
+          ),
     );
   }
   

@@ -418,7 +418,12 @@ class _TableCalendarState<T> extends State<TableCalendar<T>> with SingleTickerPr
     return GestureDetector(
       behavior: widget.dayHitTestBehavior,
       onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
-      child: content,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: content,
+      ),
     );
   }
 

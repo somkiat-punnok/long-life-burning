@@ -34,7 +34,7 @@ class Calendar extends StatelessWidget {
       locale: 'en_US',
       events: events,
       startingDayOfWeek: StartingDayOfWeek.sunday,
-      availableGestures: AvailableGestures.verticalSwipe,
+      availableGestures: AvailableGestures.none,
       availableCalendarFormats: {
         CalendarFormat.month: 'Month',
         CalendarFormat.week: 'Week',

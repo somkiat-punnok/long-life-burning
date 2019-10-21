@@ -2,6 +2,7 @@ library event;
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoColors;
 
 part './event_model.dart';
 part './event_card.dart';
@@ -45,29 +46,71 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return _ExpandWidget(
+      child: events.isNotEmpty
+        ? NotificationListener(
+            onNotification: (Notification notify) {
+              if (notify is UserScrollNotification) {
+                if (notify.direction.toString() == 'ScrollDirection.forward') {
+                  onDown(true);
+                }
+                else {
+                  onDown(false);
+                }
+              }
+              return true;
+            },
+            child: ListView(
+              controller: controller,
+              children: events.map((event) => EventCard(
+                event: event,
+                onClick: onClick,
+              ))
+              .toList(),
+            ),
+          )
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'No Event',
+                  style: TextStyle(
+                    fontSize: 28.0,
+                    color: CupertinoColors.darkBackgroundGray,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'No event for this day.',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: CupertinoColors.darkBackgroundGray,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+  
+}
+
+class _ExpandWidget extends StatelessWidget {
+
+  final Widget child;
+
+  _ExpandWidget({
+    Key key,
+    @required this.child,
+  }) :  assert(child != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
-      child: NotificationListener(
-        onNotification: (Notification notify) {
-          if (notify is UserScrollNotification) {
-            if (notify.direction.toString() == 'ScrollDirection.forward') {
-              onDown(true);
-            }
-            else {
-              onDown(false);
-            }
-          }
-          return true;
-        },
-        child: ListView(
-          controller: controller,
-          physics: BouncingScrollPhysics(),
-          children: events.map((event) => EventCard(
-            event: event,
-            onClick: onClick,
-          ))
-          .toList(),
-        ),
-      ),
+      child: child,
     );
   }
   
