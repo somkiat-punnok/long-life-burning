@@ -10,6 +10,7 @@ export './announce/detail_page.dart';
 
 export './group/group_page.dart';
 export './group/create_group.dart';
+export './group/detail.dart';
 
 export './menu/menu_page.dart';
 export './menu/statistic_page.dart';
