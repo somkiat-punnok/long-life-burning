@@ -65,7 +65,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grap'),
+                        subtitle: Text('Grapควยๆ'),
                       ),
                     ],
                   ),
@@ -77,7 +77,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grap'),
+                        subtitle: Text('Grapควยๆ'),
                       ),
                     ],
                   ),
@@ -89,7 +89,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grap'),
+                        subtitle: Text('Grapควยๆ'),
                       ),
                     ],
                   ),
@@ -101,7 +101,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grap'),
+                        subtitle: Text('Grapควยๆ'),
                       ),
                     ],
                   ),
