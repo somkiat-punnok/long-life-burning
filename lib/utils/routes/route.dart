@@ -91,6 +91,12 @@ List<Pages> _buildPage() => <Pages>[
     buildRoute: (BuildContext context) => CreateGroup(),
   ),
   Pages(
+    name: 'Detail Group',
+    tag: CategoryPage.groups,
+    routeName: DetailGroup.routeName,
+    buildRoute: (BuildContext context) => DetailGroup(),
+  ),
+  Pages(
     name: 'Statistic',
     tag: CategoryPage.menu,
     routeName: StatisticPage.routeName,

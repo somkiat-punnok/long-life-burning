@@ -1,3 +1,4 @@
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
@@ -6,6 +7,7 @@ import 'package:long_life_burning/modules/announce/setting/settings.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 
 class CreateGroup extends StatefulWidget {
+
   CreateGroup({Key key}) : super(key: key);
   static const String routeName = '/create';
 
@@ -20,7 +22,8 @@ class _CreateGroupState extends State<CreateGroup> {
   GlobalKey<FormState> _key = new GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
-  String groupname, location;
+  String groupname;
+  String location;
 
   _sendToServer() {
     if (_key.currentState.validate()) {
@@ -29,11 +32,12 @@ class _CreateGroupState extends State<CreateGroup> {
       var data = {
         "groupname": groupname,
         "location": location,
-        // "Category": category,
-        // "time":time,
+        "category": GROUP_CATEGORIES[category],
+        "time": "${time.hour}:${time.minute}",
       };
       ref.child('GROUP').push().set(data).then((v) {
         _key.currentState.reset();
+        Navigator.of(context).maybePop();
       });
     } else {
       setState(() {
@@ -41,7 +45,7 @@ class _CreateGroupState extends State<CreateGroup> {
       });
     }
   }
-
+  
   String validateGroupName(String val) {
     return val.length == 0 ? "Enter Name First" : null;
   }
@@ -49,7 +53,7 @@ class _CreateGroupState extends State<CreateGroup> {
   String validateLocation(String val) {
     return val.length == 0 ? "Enter Location First" : null;
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,7 +114,7 @@ class _CreateGroupState extends State<CreateGroup> {
           ],
         ),
         new TextFormField(
-          decoration: new InputDecoration(hintText: 'location'),
+          decoration: new InputDecoration(hintText: 'Location and Comment'),
           onSaved: (val) {
             location = val;
           },
@@ -119,6 +123,7 @@ class _CreateGroupState extends State<CreateGroup> {
           maxLength: 256,
         ),
         TimePicker(
+          title: 'Time',
           currentTime: time,
           onSelect: (DateTime t) {
             setState(() {

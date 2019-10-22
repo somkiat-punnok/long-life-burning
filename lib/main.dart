@@ -48,8 +48,8 @@ Future<void> checkAuth() async {
             UserOptions.uid_field,
             isEqualTo: user.uid,
           )
-          .snapshots()
-          .listen((data) {
+          .getDocuments()
+          .then((data) {
             if (data.documents.isNotEmpty) {
               UserOptions.user = user;
               Configs.login = true;
@@ -62,6 +62,20 @@ Future<void> checkAuth() async {
               );
             }
           });
+          // .snapshots()
+          // .listen((data) {
+          //   if (data.documents.isNotEmpty) {
+          //     UserOptions.user = user;
+          //     Configs.login = true;
+          //     Configs.setUser(
+          //       n: data.documents[0].data[UserOptions.name_field],
+          //       w: data.documents[0].data[UserOptions.weight_field],
+          //       h: data.documents[0].data[UserOptions.height_field],
+          //       d: data.documents[0].data[UserOptions.dateOfBirth_field],
+          //       g: data.documents[0].data[UserOptions.gender_field],
+          //     );
+          //   }
+          // });
       }
     });
 }
