@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DetailGroup extends StatefulWidget {
-
-  final Todo todo;
-  DetailGroup({Key key, @required this.todo}) : super(key: key);
+  DetailGroup({ Key key }) : super(key: key);
   static const String routeName = '/detail';
   @override
   _DetailGroupState createState() => _DetailGroupState();
@@ -26,11 +23,11 @@ class Todo {
       time: json['time'],
     );
   }
-  
+
 }
 
 class _DetailGroupState extends State<DetailGroup> {
-  
+
   @override
   Widget build(BuildContext context) {
   //  Firestore.instance.collection('name').document('users').get().then((DocumentSnapshot ds){

@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart'
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,

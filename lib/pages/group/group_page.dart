@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import 'package:long_life_burning/utils/helper/constants.dart' show UserOptions;
+// import 'package:long_life_burning/utils/helper/constants.dart' show UserOptions;
 
 import './create_group.dart';
 import './detail.dart';
@@ -25,7 +25,7 @@ class MyData {
   bool isPressed = false, animatingReveal = false;
   MyData(this.groupname, this.location, this.time, this.category);
 }
-    
+
 class _GroupPageState extends State<GroupPage> {
       List<MyData> allData = [];
 
@@ -147,7 +147,7 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
                   onPressed: (){
                     DatabaseReference groupRef = FirebaseDatabase.instance.reference().child("GROUP");
                     groupRef.child("id").child("users").push().set({
-                      UserOptions.user.uid:UserOptions.user.uid
+                      // UserOptions.user.uid:UserOptions.user.uid
                     });
                   },
                   onHighlightChanged: (isPressed){
