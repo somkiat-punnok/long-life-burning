@@ -15,8 +15,9 @@ dependencies:
   intl: ^0.15.8
   cached_network_image: ^1.1.2+1
   #uuid: ^2.0.2
+  background_fetch: ^0.3.2
+  #connectivity: ^0.4.4
   #scoped_model: ^1.0.1
-  background_fetch: ^0.3.1
   #connectivity: ^0.4.5+1
   #url_launcher: ^5.2.3
   #permission_handler: ^3.3.0
