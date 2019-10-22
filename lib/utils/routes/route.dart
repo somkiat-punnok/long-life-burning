@@ -43,6 +43,12 @@ List<Pages> _buildPage() => <Pages>[
     buildRoute: (BuildContext context) => GroupPage(),
   ),
   Pages(
+    name: kNotify.name,
+    tag: CategoryPage.notify,
+    routeName: NotifyPage.routeName,
+    buildRoute: (BuildContext context) => NotifyPage(),
+  ),
+  Pages(
     name: kMenu.name,
     tag: CategoryPage.menu,
     routeName: MenuPage.routeName,
@@ -71,12 +77,6 @@ List<Pages> _buildPage() => <Pages>[
     tag: CategoryPage.events,
     routeName: YearsCalendarPage.routeName,
     buildRoute: (BuildContext context) => YearsCalendarPage(),
-  ),
-  Pages(
-    name: 'Notify',
-    tag: CategoryPage.events,
-    routeName: NotifyPage.routeName,
-    buildRoute: (BuildContext context) => NotifyPage(),
   ),
   Pages(
     name: 'Setting Event',

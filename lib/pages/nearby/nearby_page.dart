@@ -15,52 +15,65 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
 
   final double _panelHeightClosed = SizeConfig.setHeight(200.0);
   final double _initRadius = 20.0;
-  final Location _locationService  = Location();
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   LocationData _location = LocationData.fromMap({
     'latitude': 19.027510,
     'longitude': 99.900178,
   });
-  bool _serviceStatus = false;
-  bool _permission = false;
   double _initFabHeight, _radius;
 
   @override
   void initState() {
     super.initState();
-    _initFabHeight = _panelHeightClosed + _initRadius;
     initPlatformState();
+    _initFabHeight = _panelHeightClosed + _initRadius;
   }
 
   void initPlatformState() async {
-    await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH, interval: 1000);
     try {
-      _serviceStatus = await _locationService.serviceEnabled();
-      if (_serviceStatus) {
-        _permission = await _locationService.requestPermission();
-        if (_permission) {
-          _location = await _locationService.getLocation();
-          _markers.clear();
-          _addMarker(
-            id: "user",
-            latitude: _location?.latitude,
-            longitude: _location?.longitude,
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
-            toPlace: false,
-          );
+      await getCurrentLocation()
+        .then((data) {
+          if (data != null) {
+            _location = data;
+            _markers.clear();
+            _addMarker(
+              id: "user",
+              latitude: data?.latitude,
+              longitude: data?.longitude,
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+              toPlace: false,
+            );
+          }
+        });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<LocationData> getCurrentLocation() async {
+    Location location = Location();
+    try {
+      if (await location.serviceEnabled()) {
+        if (await location.hasPermission()) {
+          return await location.getLocation();
         } else {
-          _permission = await _locationService.requestPermission();
-          initPlatformState();
+          await location.requestPermission();
+          if (await location.hasPermission()) {
+            return await getCurrentLocation();
+          }
+          return null;
         }
       } else {
-        bool serviceStatusResult = await _locationService.requestService();
-        if (serviceStatusResult) {
-          initPlatformState();
+        await location.requestService();
+        if (await location.serviceEnabled()) {
+          return await getCurrentLocation();
         }
+        return null;
       }
     } catch (e) {
       print('Error: $e');
+      return null;
     }
   }
 
@@ -79,7 +92,6 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
       icon: icon,
     );
     _markers[markerId] = marker;
-    setState(() {});
     if (toPlace) {
       controller.animateCamera(
         CameraUpdate.newCameraPosition(
@@ -90,6 +102,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
         )
       );
     }
+    setState(() {});
   }
 
   void _remove({@required String id}) {
@@ -126,28 +139,18 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 color: Theme.of(context).primaryColor,
               ),
               onPressed: () async {
-                if (_serviceStatus) {
-                  if (_permission) {
-                    _location = await _locationService.getLocation();
-                    _remove(id: "user");
-                    _addMarker(
-                      id: "user",
-                      latitude: _location?.latitude,
-                      longitude: _location?.longitude,
-                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
-                    );
-                  } else {
-                    _permission = await _locationService.requestPermission();
-                  }
-                } else {
-                  bool serviceStatusResult = await _locationService.requestService();
-                  if (serviceStatusResult) {
-                    _serviceStatus = await _locationService.serviceEnabled();
-                    if (!_permission) {
-                      _permission = await _locationService.requestPermission();
+                await getCurrentLocation()
+                  .then((data) {
+                    if (data != null) {
+                      _remove(id: "user");
+                      _addMarker(
+                        id: "user",
+                        latitude: data?.latitude,
+                        longitude: data?.longitude,
+                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+                      );
                     }
-                  }
-                }
+                  });
               },
             ),
           ),

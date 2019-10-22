@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/announce/search.dart';
+import 'package:long_life_burning/modules/announce/search/search.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
 import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
@@ -8,9 +8,9 @@ import 'package:long_life_burning/modules/calendar/calendar.dart'
     CalendarFormat;
 import 'package:long_life_burning/modules/announce/event/events.dart';
 
-import 'detail_page.dart';
-import 'notify_page.dart';
-import 'setting_event_page.dart';
+import './detail_page.dart';
+// import 'notify_page.dart';
+import './setting_event_page.dart';
 import '../common/year_page.dart';
 
 class AnnouncePage extends StatefulWidget {
@@ -101,8 +101,7 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
                   delegate: _delegate,
                 );
               },
-              onIcon2: () async => await Navigator.of(context).pushNamed(NotifyPage.routeName),
-              onIcon3: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
+              onIcon2: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
               onVisibleDaysChanged: _onVisibleDaysChanged,
             ),
           ),
@@ -139,13 +138,8 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
                 ],
               ),
               onPressed: () {
-                if ((_calendarController?.calendarFormat ?? CalendarFormat.month) == CalendarFormat.month) {
-                  _arrow_icon = Icons.arrow_drop_down;
-                  _calendarController?.setCalendarFormat(CalendarFormat.week);
-                } else {
-                  _arrow_icon = Icons.arrow_drop_up;
-                  _calendarController?.setCalendarFormat(CalendarFormat.month);
-                }
+                _arrow_icon = (_calendarController?.calendarFormat ?? CalendarFormat.month) == CalendarFormat.month ? Icons.arrow_drop_down : Icons.arrow_drop_up;
+                _calendarController?.toggleCalendarFormat();
                 setState(() {});
               },
             ),

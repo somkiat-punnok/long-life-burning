@@ -1,7 +1,7 @@
 part of calendar;
 
 class CalendarBuilders {
-  
+
   final FullBuilder dayBuilder;
   final FullBuilder selectedDayBuilder;
   final FullBuilder todayDayBuilder;
@@ -10,6 +10,8 @@ class CalendarBuilders {
   final FullBuilder outsideWeekendDayBuilder;
   final FullBuilder unavailableDayBuilder;
   final FullListBuilder markersBuilder;
+  final DowBuilder dowWeekdayBuilder;
+  final DowBuilder dowWeekendBuilder;
 
   const CalendarBuilders({
     this.dayBuilder,
@@ -20,6 +22,8 @@ class CalendarBuilders {
     this.outsideWeekendDayBuilder,
     this.unavailableDayBuilder,
     this.markersBuilder,
+    this.dowWeekdayBuilder,
+    this.dowWeekendBuilder,
   });
-  
+
 }

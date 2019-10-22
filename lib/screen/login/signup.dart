@@ -2,11 +2,14 @@ part of login;
 
 @immutable
 class SignUpPage extends StatefulWidget {
+
+  final NavBarProvider provider;
   final VoidCallback signin;
 
   SignUpPage({
     Key key,
     this.signin,
+    this.provider,
   }) : super(key: key);
 
   @override
@@ -81,43 +84,56 @@ class _SignUpPageState extends State<SignUpPage> {
           gender = 'female';
         }
 
-        if ( password.length >= 8) {
-          if(password == confirmPassword){await Configs.auth
+        if (password.length >= 8) {
+          if (password == confirmPassword) {
+            await Configs.auth
               .createUserWithEmailAndPassword(email: email, password: password)
               .then((result) async {
-            if (result != null && result.user != null) {
-              await Configs.store.collection(UserOptions.collection).add({
-                UserOptions.uid_field: result.user.uid,
-                UserOptions.name_field: 'Anonymus',
-                UserOptions.height_field: height,
-                UserOptions.weight_field: weight,
-                UserOptions.dateOfBirth_field: _date,
-                UserOptions.gender_field: gender,
-              }).then((ref) {
-                if (ref != null && ref.documentID.isNotEmpty) {
-                  widget.signin();
+                if (result != null && result.user != null) {
+                  await Configs.store
+                    .collection(Configs.collection_user)
+                    .add({
+                      Configs.uid_field: result.user.uid,
+                      Configs.name_field: 'Anonymus',
+                      Configs.height_field: height,
+                      Configs.weight_field: weight,
+                      Configs.dateOfBirth_field: _date,
+                      Configs.gender_field: gender,
+                    })
+                    .then((ref) {
+                      if (ref != null && ref.documentID.isNotEmpty) {
+                        widget.signin();
+                      }
+                    });
                 }
               });
-            }
-          });}else {
-          scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text(
-                'Password and Confirm-password is not match..',
-                style: TextStyle(color: Colors.white)),
-            backgroundColor: Colors.red,
-          ));
-          print(
-              "Password and Confirm-password is not match.");
-        }
+          } else {
+            scaffoldKey.currentState.showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Password and Confirm-password is not match..',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Colors.red,
+              )
+            );
+            print("Password and Confirm-password is not match.");
+          }
         } else {
-          scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text(
+          scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              content: Text(
                 'Password too short.',
-                style: TextStyle(color: Colors.white)),
-            backgroundColor: Colors.red,
-          ));
-          print(
-              "Password too short.");
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              backgroundColor: Colors.red,
+            )
+          );
+          print("Password too short.");
         }
       } catch (e) {
         print('Error : $e');
@@ -140,10 +156,14 @@ class _SignUpPageState extends State<SignUpPage> {
           IconButton(
             icon: Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () =>
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => Index(),
-            )),
+            onPressed: () {
+              widget.provider.reset();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => Index(),
+                )
+              );
+            },
           ),
         ],
       ),

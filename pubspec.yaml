@@ -13,23 +13,25 @@ dependencies:
     sdk: flutter
 
   intl: ^0.15.8
-  cached_network_image: ^1.1.1
+  cached_network_image: ^1.1.2+1
   #uuid: ^2.0.2
-  background_fetch: ^0.3.1
-  #connectivity: ^0.4.4
   #scoped_model: ^1.0.1
-  #url_launcher: ^5.1.4
-  #permission_handler: ^3.2.2
-  #provider: ^3.1.0
-  #path_provider: ^1.3.0
-  #flutter_redux: ^0.5.3
+  background_fetch: ^0.3.1
+  #connectivity: ^0.4.5+1
+  #url_launcher: ^5.2.3
+  #permission_handler: ^3.3.0
   #page_transition: ^1.1.4
   #percent_indicator: ^2.1.1+1
   #font_awesome_flutter: ^8.5.0
 
-  #Firebase
+  # Stage management
+  provider: ^3.1.0+1
+  flutter_redux: ^0.5.3
+  #path_provider: ^1.3.1
+
+  # Firebase
   firebase_auth: ^0.14.0+5
-  cloud_firestore: ^0.12.9+4
+  cloud_firestore: ^0.12.9+5
   firebase_database: ^3.0.7
   #firebase_storage: ^3.0.6
   #firebase_storage_image: ^0.4.0
@@ -41,19 +43,19 @@ dependencies:
   #badges: ^1.1.0
 
   # Share
-  #share: ^0.6.2+3
+  #share: ^0.6.2+4
   #esys_flutter_share: ^1.0.2
   #flutter_share_me: ^0.6.0
 
   # Database
-  sqflite: ^1.1.6+4
-  shared_preferences: ^0.5.3+4
+  sqflite: ^1.1.7+1
+  shared_preferences: ^0.5.3+5
 
   # Map
   location: ^2.3.5
-  #geolocator: ^5.1.4
+  #geolocator: ^5.1.4+2
   #google_maps_webservice: ^0.0.15
-  google_maps_flutter: ^0.5.21+7
+  google_maps_flutter: ^0.5.21+8
   #flutter_google_places: ^0.2.3
   #clustering_google_maps: ^0.1.2
   geoflutterfire: ^2.0.3+5

@@ -15,8 +15,11 @@ import 'package:long_life_burning/modules/calendar/calendar.dart'
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Gender,
-    Configs,
-    UserOptions;
+    Configs;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    UserProvider;
 import 'package:long_life_burning/utils/widgets/date_utils.dart';
 
 import '../common/year_page.dart';
@@ -153,6 +156,7 @@ class _RecordPageState extends State<RecordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -170,10 +174,10 @@ class _RecordPageState extends State<RecordPage> {
             step: _step ?? 0,
             dist: _distence ?? 0,
             cal: calculateCalories(
-              UserOptions.height ?? kHeight,
-              UserOptions.dateOfBirth ?? kDateOfBirth,
-              UserOptions.weight ?? kWeight,
-              UserOptions.gender ?? Gender.MALE,
+              userProvider.height ?? kHeight,
+              userProvider.dateOfBirth ?? kDateOfBirth,
+              userProvider.weight ?? kWeight,
+              userProvider.gender ?? Gender.MALE,
               _second ?? 0,
               _step ?? 0,
             ),

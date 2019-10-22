@@ -11,13 +11,19 @@ import 'package:flutter/cupertino.dart'
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:long_life_burning/screen/index.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    NavBarProvider,
+    UserProvider;
 
 part './home.dart';
 part './signin.dart';
 part './signup.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key key}) : super(key: key);
+  LoginScreen({ Key key }) : super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -56,6 +62,7 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final NavBarProvider provider = Provider.of<NavBarProvider>(context);
     return Container(
       height: SizeConfig.screenHeight,
       child: PageView(
@@ -63,12 +70,16 @@ class _LoginScreenState extends State<LoginScreen> with TickerProviderStateMixin
         scrollDirection: Axis.horizontal,
         physics: AlwaysScrollableScrollPhysics(),
         children: <Widget>[
-          SignInPage(),
+          SignInPage(
+            provider: provider,
+          ),
           HomePage(
+            provider: provider,
             signin: gotoSignin,
             signup: gotoSignup,
           ),
           SignUpPage(
+            provider: provider,
             signin: gotoSignin,
           ),
         ],

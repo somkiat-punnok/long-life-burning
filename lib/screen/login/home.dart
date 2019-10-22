@@ -4,11 +4,13 @@ class HomePage extends StatelessWidget {
 
   final VoidCallback signin;
   final VoidCallback signup;
+  final NavBarProvider provider;
 
   HomePage({
     Key key,
     this.signin,
     this.signup,
+    this.provider,
   }) : super(key: key);
 
   @override
@@ -39,11 +41,14 @@ class HomePage extends StatelessWidget {
                   color: Colors.black,
                 ),
                 color: Colors.white,
-                onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Index(),
-                  )
-                ),
+                onPressed: () {
+                  provider.reset();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => Index(),
+                    )
+                  );
+                },
               ),
             ],
           ),
@@ -58,22 +63,22 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 20.0),           
+            padding: EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[              
+              children: <Widget>[
                 Text(
                   "Long Life Burning",
                   style: TextStyle(
-                    fontFamily: "Poppins-Bold", 
+                    fontFamily: "Poppins-Bold",
                     letterSpacing: .6,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                     fontSize: 30.0,
                     decoration: TextDecoration.none,
-                    decorationStyle: TextDecorationStyle.dashed,  
+                    decorationStyle: TextDecorationStyle.dashed,
                 ),
-                ),                
+                ),
               ],
             ),
           ),
@@ -88,7 +93,7 @@ class HomePage extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0)
                     ),
-                    color: Colors.blueAccent.withOpacity(.9),                    
+                    color: Colors.blueAccent.withOpacity(.9),
                     onPressed: signup ?? () => print('signup'),
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -158,5 +163,5 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  
+
 }
