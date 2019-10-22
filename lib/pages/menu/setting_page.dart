@@ -1,17 +1,17 @@
-
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:long_life_burning/pages/all.dart';
-
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:long_life_burning/pages/all.dart';
 // import 'package:long_life_burning/utils/helper/constants.dart';
+
 class SettingPage extends StatefulWidget {
   SettingPage({Key key}) : super(key: key);
   static const String routeName = '/setting';
   @override
   _SettingPageState createState() => _SettingPageState();
 }
+
 class _SettingPageState extends State<SettingPage> {
 
   @override
