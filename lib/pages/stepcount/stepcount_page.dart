@@ -12,6 +12,10 @@ import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
     RadialListViewModel,
     RadialListItemViewModel,
     SlidingRadialListController;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    UserProvider;
 
 import './record_page.dart';
 
@@ -34,9 +38,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void initState() {
     super.initState();
-    if (isCupertino) {
-      readDate();
-    }
+    // if (isCupertino) {
+    readDate();
+    // }
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
@@ -47,9 +51,9 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     if(initComplete) {
-      if (isCupertino) {
-        readDate();
-      }
+      // if (isCupertino) {
+      readDate();
+      // }
       slidingListController.reopen();
     }
     super.didChangeDependencies();
@@ -114,12 +118,13 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     initComplete = true;
     _calories = calculateCalories(
-      UserOptions.height ?? kHeight,
-      UserOptions.dateOfBirth ?? kDateOfBirth,
-      UserOptions.weight ?? kWeight,
-      UserOptions.gender ?? Gender.MALE,
+      userProvider.height ?? kHeight,
+      userProvider.dateOfBirth ?? kDateOfBirth,
+      userProvider.weight ?? kWeight,
+      userProvider.gender ?? Gender.MALE,
       _second,
       _step,
     );

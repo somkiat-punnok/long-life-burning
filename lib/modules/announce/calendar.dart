@@ -12,7 +12,6 @@ class Calendar extends StatelessWidget {
   final OnHeader onTitleText;
   final OnHeader onIcon1;
   final OnHeader onIcon2;
-  final OnHeader onIcon3;
   final OnVisibleDaysChanged onVisibleDaysChanged;
 
   Calendar({
@@ -23,7 +22,6 @@ class Calendar extends StatelessWidget {
     this.onTitleText,
     this.onIcon1,
     this.onIcon2,
-    this.onIcon3,
     this.onVisibleDaysChanged,
   }) : super(key: key);
 
@@ -43,7 +41,6 @@ class Calendar extends StatelessWidget {
       onTitleText: onTitleText,
       onIcon1: onIcon1,
       onIcon2: onIcon2,
-      onIcon3: onIcon3,
       onVisibleDaysChanged: onVisibleDaysChanged,
       calendarStyle: CalendarStyle(
         outsideDaysVisible: false,
@@ -65,16 +62,12 @@ class Calendar extends StatelessWidget {
           fontSize: 20.0,
           fontWeight: FontWeight.bold,
         ),
-        rightPadding1: EdgeInsets.all(SizeConfig.setWidth(8.0)),
-        rightPadding2: EdgeInsets.all(SizeConfig.setWidth(8.0)),
-        rightPadding3: EdgeInsets.all(SizeConfig.setWidth(8.0)),
+        rightPadding1: EdgeInsets.all(SizeConfig.setWidth(12.0)),
+        rightPadding2: EdgeInsets.all(SizeConfig.setWidth(12.0)),
         rightMargin1: EdgeInsets.symmetric(
           horizontal: SizeConfig.setWidth(2.0),
         ),
         rightMargin2: EdgeInsets.symmetric(
-          horizontal: SizeConfig.setWidth(2.0),
-        ),
-        rightMargin3: EdgeInsets.symmetric(
           horizontal: SizeConfig.setWidth(2.0),
         ),
         rightIcon1: Icon(
@@ -82,10 +75,6 @@ class Calendar extends StatelessWidget {
           color: Colors.black,
         ),
         rightIcon2: Icon(
-          Icons.notifications,
-          color: Colors.black,
-        ),
-        rightIcon3: Icon(
           Icons.tune,
           color: Colors.black,
         ),
@@ -106,25 +95,25 @@ class Calendar extends StatelessWidget {
         markersBuilder: (context, date, events) {
           return [
             Container(
+              width: 5,
+              height: 5,
+              margin: EdgeInsets.all(1.0),
               decoration: BoxDecoration(
                 color: Colors.grey,
                 shape: BoxShape.circle,
               ),
-              margin: EdgeInsets.all(1.0),
-              width: 5,
-              height: 5,
             )
           ];
         },
         selectedDayBuilder: (context, date, events) {
           return Container(
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color:  controller.isToday(date) ? Colors.red : Colors.black,
               shape: BoxShape.circle,
             ),
-            margin: EdgeInsets.all(8.0),
-            width: 100,
-            height: 100,
             child: Center(
               child: Text(
                 '${date.day}',

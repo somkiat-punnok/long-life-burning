@@ -7,11 +7,13 @@ import 'package:firebase_auth/firebase_auth.dart'
   show
     FirebaseAuth,
     FirebaseUser;
+import '../providers/all.dart' show UserProvider;
 
-export 'package:long_life_burning/utils/widgets/platform.dart';
-export 'package:long_life_burning/utils/widgets/size_config.dart';
+export '../widgets/platform.dart';
+export '../widgets/size_config.dart';
 
 part './fonts.dart';
+part './functions.dart';
 part './icons.dart';
 part './options.dart';
 
@@ -22,7 +24,7 @@ enum Gender {
 
 const String APPNAME = 'Long Burn';
 
-// Key others
+// Key
 // const String API_Key = '';
 
 const List<String> PROVINCE = [

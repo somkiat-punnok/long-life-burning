@@ -1,7 +1,7 @@
 part of calendar;
 
 class CalendarStyle {
-  
+
   final TextStyle weekdayStyle;
   final TextStyle weekendStyle;
   final TextStyle selectedStyle;
@@ -13,7 +13,6 @@ class CalendarStyle {
   final Color todayColor;
   final Color markersColor;
   final Alignment markersAlignment;
-  final int markersMaxAmount;
   final bool outsideDaysVisible;
   final bool renderSelectedFirst;
   final bool canEventMarkersOverflow;
@@ -30,10 +29,9 @@ class CalendarStyle {
     this.todayColor = const Color(0xFF9FA8DA), // Material indigo[200]
     this.markersColor = const Color(0xFF263238), // Material blueGrey[900]
     this.markersAlignment = Alignment.bottomCenter,
-    this.markersMaxAmount = 1,
     this.outsideDaysVisible = true,
     this.renderSelectedFirst = true,
     this.canEventMarkersOverflow = false,
   });
-  
+
 }

@@ -23,8 +23,7 @@ class Calendar extends StatelessWidget {
     this.onDaySelected,
     this.onTitleText,
     this.onVisibleDaysChanged,
-  }) :  
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,19 +95,20 @@ class Calendar extends StatelessWidget {
         },
         selectedDayBuilder: (context, date, events) {
           return Container(
+            width: 100,
+            height: 100,
+            margin: EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color:  controller.isToday(date) ? Colors.red : Colors.black,
               shape: BoxShape.circle,
             ),
-            margin: EdgeInsets.all(6.0),
-            width: 100,
-            height: 100,
             child: Center(
               child: Text(
                 '${date.day}',
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

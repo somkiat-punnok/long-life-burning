@@ -79,5 +79,5 @@ class _CellWidget extends StatelessWidget {
       return calendarStyle.weekdayStyle;
     }
   }
-  
+
 }

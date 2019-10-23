@@ -41,6 +41,9 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    defaultConfig {
+        manifestPlaceholders = [mapsApiKey: "$System.env.MAPS_API_KEY"]
+    }
     buildTypes {
         release {
             signingConfig signingConfigs.debug

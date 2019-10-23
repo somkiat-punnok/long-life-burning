@@ -4,8 +4,11 @@ import 'package:long_life_burning/screen/login/login_screen.dart' show LoginScre
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     SizeConfig,
-    UserOptions,
     Configs;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    UserProvider;
 
 import './check_point_page.dart';
 import './setting_page.dart';
@@ -20,8 +23,11 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
 
+  UserProvider userProvider;
+
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -61,7 +67,7 @@ class _MenuPageState extends State<MenuPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              UserOptions.name ?? 'Username',
+              userProvider.name ?? 'Username',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 24.0,
@@ -69,7 +75,7 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
             Text(
-              'ID: ${UserOptions.name?.toLowerCase()}',
+              'ID: ${userProvider.name?.toLowerCase()}',
               style: TextStyle(
                 color: Colors.grey,
               ),
@@ -117,16 +123,15 @@ class _MenuPageState extends State<MenuPage> {
         ),
         onPressed: () async {
           await Configs.auth.signOut().then((_) async {
-            print('signout');
-            Configs.login = false;
-            UserOptions.user = null;
-            Configs.setUser(
-              n: null,
-              w: null,
-              h: null,
-              d: null,
-              g: null,
+            userProvider.setUser(
+              userNew: null,
+              nameNew: null,
+              weightNew: null,
+              heightNew: null,
+              dateOfBirthNew: null,
+              genderNew: null,
             );
+            Configs.login = false;
             await Navigator.of(Configs.index_context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => LoginScreen(),

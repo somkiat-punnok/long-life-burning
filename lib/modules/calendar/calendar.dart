@@ -36,20 +36,8 @@ typedef void _SelectedDayCallback(DateTime day);
 
 typedef FullBuilder = Widget Function(BuildContext context, DateTime date, List events);
 typedef FullListBuilder = List<Widget> Function(BuildContext context, DateTime date, List events);
+typedef DowBuilder = Widget Function(BuildContext context, String weekday);
 
-enum CalendarFormat {
-  month,
-  week,
-}
-
-enum StartingDayOfWeek {
-  monday,
-  sunday,
-}
-
-enum AvailableGestures {
-  none,
-  verticalSwipe,
-  horizontalSwipe,
-  all,
-}
+enum CalendarFormat { month, week }
+enum StartingDayOfWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }

@@ -31,5 +31,5 @@ class _CustomIconButton extends StatelessWidget {
       ),
     );
   }
-  
+
 }
