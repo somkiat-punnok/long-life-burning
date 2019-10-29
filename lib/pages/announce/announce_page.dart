@@ -1,15 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:long_life_burning/modules/announce/search/search.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show MAP_PROVINCE;
 import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
     CalendarController,
     CalendarFormat;
-import 'package:long_life_burning/modules/announce/event/events.dart';
+import 'package:long_life_burning/modules/announce/event/events.dart'
+  show
+    Event,
+    EventView;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    SettingProvider;
 
 import './detail_page.dart';
-// import 'notify_page.dart';
 import './setting_event_page.dart';
 import '../common/year_page.dart';
 
@@ -20,26 +28,26 @@ class AnnouncePage extends StatefulWidget {
   _AnnouncePageState createState() => _AnnouncePageState();
 }
 
-class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMixin {
+class _AnnouncePageState extends State<AnnouncePage> {
 
-  SearchEventDelegate _delegate;
-  IconData _arrow_icon;
-  DateTime _now;
   CalendarController _calendarController;
-  DateTime _selectedDay;
   Map<DateTime, List> _events;
+  List<Event> _eventList;
   List _onDayEvents;
+  IconData _arrow_icon;
+  DateTime _selectedDay;
+  DateTime _now;
 
   @override
   void initState() {
     super.initState();
     _arrow_icon = Icons.arrow_drop_up;
     _now = DateTime.now();
-    _delegate = SearchEventDelegate();
     _calendarController = CalendarController();
     _selectedDay = DateTime(_now.year, _now.month, _now.day);
-    _onDayEvents = Event.events[_selectedDay] ?? [];
-    _events = Event.events;
+    _events = <DateTime, List>{};
+    _eventList = <Event>[];
+    _onDayEvents = [];
   }
 
   @override
@@ -52,104 +60,137 @@ class _AnnouncePageState extends State<AnnouncePage> with TickerProviderStateMix
     // _calendarController.setSelectedDay(_selectedDay, runCallback: true);
   }
 
-  void _onDaySelected(DateTime date, List events) {
+  void _onDaySelected(DateTime date, List event) {
+    _selectedDay = date;
     _calendarController?.setCalendarFormat(CalendarFormat.month);
-    setState(() {
-      _selectedDay = date;
-      _onDayEvents = events;
-    });
+    setState(() {});
   }
 
-  void _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
-    (res) {
-      if (res != null) {
-        final result = res as List;
-        if (_now.year == result[0] && _now.month == result[1]) {
-          setState(() {
+  void _selection(BuildContext context) async => await Navigator.of(context)
+    .pushNamed(YearsCalendarPage.routeName)
+    .then(
+      (res) {
+        if (res != null) {
+          final result = res as List;
+          if (_now.year == result[0] && _now.month == result[1]) {
             _selectedDay = DateTime(_now.year, _now.month, _now.day);
-          });
-        }
-        else {
-          setState(() {
+          } else {
             _selectedDay = DateTime(result[0], result[1], 1);
-          });
+          }
+          _calendarController.setSelectedDay(_selectedDay, runCallback: true);
         }
-        _calendarController.setSelectedDay(_selectedDay, runCallback: true);
       }
-    }
-  );
+    );
 
   @override
   Widget build(BuildContext context) {
+    final SettingProvider provider = Provider.of<SettingProvider>(context);
+    final String filter = MAP_PROVINCE[provider.province];
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
-      body: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only( bottom: 8.0 ),
-            child: Calendar(
-              controller: _calendarController,
-              events: _events,
-              onDaySelected: _onDaySelected,
-              onTitleText: () {
-                _selection(context);
-              },
-              onIcon1: () async {
-                await showSearch<String>(
-                  context: context,
-                  delegate: _delegate,
-                );
-              },
-              onIcon2: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
-              onVisibleDaysChanged: _onVisibleDaysChanged,
-            ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+          .collection("Blog")
+          .orderBy("date", descending: true)
+          .snapshots(),
+        builder: (_, snapshot) {
+          if (!snapshot.hasData) {
+            return _buildBody(context);
+          }
+          _events?.clear();
+          _eventList?.clear();
+          _onDayEvents?.clear();
+          _events = <DateTime, List>{};
+          _eventList = <Event>[];
+          if (snapshot?.data?.documents?.isNotEmpty ?? false) {
+            snapshot.data.documents.forEach((snap) {
+              var data = snap.data;
+              data["id"] = snap.documentID;
+              var e = Event.fromMap(data);
+              _eventList.add(e);
+              if (filter != null && filter.isNotEmpty) {
+                if (!e.province.contains(filter)) return;
+              }
+              if (_events[e.date] == null) _events[e.date] = [];
+              _events[e.date].add(e);
+            });
+          }
+          _onDayEvents = _events[_selectedDay] ?? [];
+          return _buildBody(context);
+        }
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only( bottom: 8.0 ),
+          child: Calendar(
+            controller: _calendarController,
+            events: _events,
+            onDaySelected: _onDaySelected,
+            onVisibleDaysChanged: _onVisibleDaysChanged,
+            onTitleText: () {
+              _selection(context);
+            },
+            onIcon1: () async {
+              await showSearch<Event>(
+                context: context,
+                delegate: SearchEventDelegate(),
+              );
+            },
+            onIcon2: () async => await Navigator.of(context).pushNamed(SettingEventPage.routeName),
           ),
-          Expanded(
-            flex: 0,
-            child: CupertinoButton(
-              color: Colors.blue,
-              padding: EdgeInsets.zero,
-              borderRadius: BorderRadius.zero,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Opacity(
-                    opacity: 0.0,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                      child: Icon(
-                        Icons.arrow_drop_down,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Text(
-                      "${_selectedDay.year} - ${_selectedDay.month > 9 ? _selectedDay.month : "0" + _selectedDay.month.toString()} - ${_selectedDay.day > 9 ? _selectedDay.day : "0" + _selectedDay.day.toString()}",
-                    ),
-                  ),
-                  Padding(
+        ),
+        Expanded(
+          flex: 0,
+          child: CupertinoButton(
+            color: Colors.blue,
+            padding: EdgeInsets.zero,
+            borderRadius: BorderRadius.zero,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.0,
+                  child: Padding(
                     padding: EdgeInsets.only(left: 8.0, right: 8.0),
                     child: Icon(
-                      _arrow_icon,
+                      Icons.arrow_drop_down,
                     ),
                   ),
-                ],
-              ),
-              onPressed: () {
-                _arrow_icon = (_calendarController?.calendarFormat ?? CalendarFormat.month) == CalendarFormat.month ? Icons.arrow_drop_down : Icons.arrow_drop_up;
-                _calendarController?.toggleCalendarFormat();
-                setState(() {});
-              },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: Text(
+                    "${_selectedDay.year} - ${_selectedDay.month > 9 ? _selectedDay.month : "0" + _selectedDay.month.toString()} - ${_selectedDay.day > 9 ? _selectedDay.day : "0" + _selectedDay.day.toString()}",
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                  child: Icon(
+                    _arrow_icon,
+                  ),
+                ),
+              ],
             ),
+            onPressed: () {
+              _arrow_icon = (_calendarController?.calendarFormat ?? CalendarFormat.month) == CalendarFormat.month
+                ? Icons.arrow_drop_down
+                : Icons.arrow_drop_up;
+              _calendarController?.toggleCalendarFormat();
+              setState(() {});
+            },
           ),
-          EventView(
-            events: _onDayEvents,
-            onClick: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),
-          ),
-        ],
-      ),
+        ),
+        EventView(
+          events: _onDayEvents,
+          onClick: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
+        ),
+      ],
     );
   }
 

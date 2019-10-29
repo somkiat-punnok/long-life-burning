@@ -28,7 +28,7 @@ class MonthView extends StatelessWidget {
     final int firstWeekdayOfMonth = first.weekday;
     final int daysBefore = firstWeekdayOfMonth % 7;
     final DateTime firstToDisplay = first.subtract(Duration(days: daysBefore));
-    final DateTime date = month < 12 ? DateTime.utc(year, month + 1, 1, 12) : DateTime.utc(year + 1, 1, 1, 12);
+    final DateTime date = month < 12 ? DateTime(year, month + 1, 1, 12) : DateTime(year + 1, 1, 1, 12);
     final DateTime last = date.subtract(Duration(days: 1));
     int daysAfter = 7 - last.weekday;
     if (daysAfter == 0) {

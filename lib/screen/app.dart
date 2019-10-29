@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoColors;
-import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth, FirebaseUser;
+import 'package:firebase_auth/firebase_auth.dart'
+  show
+    FirebaseAuth,
+    FirebaseUser;
+import 'package:cloud_firestore/cloud_firestore.dart'
+  show
+    Firestore,
+    QuerySnapshot;
 import 'package:flutter_localizations/flutter_localizations.dart'
   show
     GlobalMaterialLocalizations,
@@ -22,8 +29,19 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<SettingProvider>(builder: (_) => SettingProvider(),),
         ChangeNotifierProvider<NavBarProvider>(builder: (_) => NavBarProvider(),),
         ChangeNotifierProvider<UserProvider>(builder: (_) => UserProvider(),),
+        StreamProvider<QuerySnapshot>(
+          builder: (_) => Firestore.instance
+            .collection("Blog")
+            .orderBy("date", descending: true)
+            .snapshots(),
+          catchError: (_, err) {
+            print(err);
+            return null;
+          },
+        ),
         StreamProvider<FirebaseUser>(
           builder: (_) => FirebaseAuth.instance.currentUser().asStream(),
           catchError: (_, err) {

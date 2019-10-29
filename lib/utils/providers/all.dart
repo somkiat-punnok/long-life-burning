@@ -13,4 +13,5 @@ export 'package:provider/provider.dart';
 
 part './navigation_bar.dart';
 part './step_data.dart';
+part './setting.dart';
 part './user.dart';

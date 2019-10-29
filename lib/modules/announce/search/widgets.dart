@@ -1,54 +1,18 @@
 part of search;
 
-class _ResultCard extends StatelessWidget {
-
-  _ResultCard({
-    this.string,
-    this.title,
-    this.searchDelegate,
-  });
-
-  final String string;
-  final String title;
-  final SearchDelegate<String> searchDelegate;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () async => await Navigator.of(context).pushNamed(EventDetailPage.routeName),
-      child: Card(
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Text(title),
-              Text(
-                '$string',
-                style: theme.textTheme.headline.copyWith(fontSize: 72.0),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-}
-
 class _SuggestionList extends StatelessWidget {
 
   const _SuggestionList({
     this.suggestions,
-    this.history,
+    this.mapCategory,
     this.query,
     this.onSelected,
   });
 
-  final List<String> suggestions;
-  final List<String> history;
+  final List<Event> suggestions;
+  final Map<Event, SearchWhere> mapCategory;
   final String query;
-  final ValueChanged<String> onSelected;
+  final EventCallback onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -56,24 +20,52 @@ class _SuggestionList extends StatelessWidget {
     return ListView.builder(
       itemCount: suggestions.length,
       itemBuilder: (BuildContext context, int i) {
-        final String suggestion = suggestions[i];
-        return ListTile(
-          leading: (query.isEmpty || history.indexOf(suggestion) >= 0) ? Icon(Icons.history) : Icon(Icons.event),
-          title: RichText(
-            text: TextSpan(
-              text: suggestion.substring(0, query.length),
-              style: theme.textTheme.subhead.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-              children: <TextSpan>[
-                TextSpan(
-                  text: suggestion.substring(query.length),
-                  style: theme.textTheme.subhead,
-                ),
-              ],
-            ),
+        final Event suggestion = suggestions[i];
+        return Card(
+          elevation: 4.0,
+          shape: OutlineInputBorder(
+            borderSide: BorderSide(width: 1.0),
+            borderRadius: BorderRadius.circular(12.0),
           ),
-          onTap: () async => onSelected(suggestion),
+          margin: EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 4.0,
+          ),
+          child: ListTile(
+            title: mapCategory[suggestion] == SearchWhere.title
+              ? RichText(
+                  text: TextSpan(
+                    text: suggestion.title.substring(0, query.length),
+                    style: theme.textTheme.subhead.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: suggestion.title.substring(query.length),
+                        style: theme.textTheme.subhead,
+                      ),
+                    ],
+                  ),
+                )
+              : Text(suggestion.title.toString()),
+            subtitle: mapCategory[suggestion] == SearchWhere.subtitle
+              ? RichText(
+                  text: TextSpan(
+                    text: suggestion.subtitle.substring(0, query.length),
+                    style: theme.textTheme.subhead.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: suggestion.subtitle.substring(query.length),
+                        style: theme.textTheme.subhead,
+                      ),
+                    ],
+                  ),
+                )
+              : Text(suggestion.subtitle.toString()),
+            onTap: () => this.onSelected != null ? onSelected(suggestion) : () {},
+          ),
         );
       },
     );
