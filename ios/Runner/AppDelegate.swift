@@ -12,10 +12,6 @@ import GoogleMaps
         GMSServices.provideAPIKey("AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE")
         FirebaseApp.configure()
         GeneratedPluginRegistrant.register(with: self)
-        if(![[NSUserDefaults standardUserDefaults]objectForKey:@"Notification"]){
-            [[UIApplication sharedApplication] cancelAllLocalNotifications];
-            [[NSUserDefaults standardUserDefaults]setBool:YES forKey:@"Notification"];
-        }
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }
