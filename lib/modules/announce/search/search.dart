@@ -1,11 +1,19 @@
 library search;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart' show Provider;
+import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
 import 'package:long_life_burning/pages/announce/detail_page.dart';
+import '../event/events.dart'
+  show
+    Event,
+    EventCallback;
 
 part './widgets.dart';
 
-class SearchEventDelegate extends SearchDelegate<String> {
+enum SearchWhere { title, subtitle, category, province }
+
+class SearchEventDelegate extends SearchDelegate<Event> {
 
   SearchEventDelegate({
     String searchFieldLabel,
@@ -16,9 +24,6 @@ class SearchEventDelegate extends SearchDelegate<String> {
     keyboardType: keyboardType,
     textInputAction: textInputAction,
   );
-
-  final List<String> _data = List<String>.generate(1001, (int i) => i.toString()).toList();
-  final List<String> _history = <String>[];
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -35,13 +40,11 @@ class SearchEventDelegate extends SearchDelegate<String> {
     return <Widget>[
       query.isEmpty
         ? IconButton(
-            tooltip: 'Search',
-            icon: const Icon(Icons.search),
-            onPressed: () async => showResults(context),
+            icon: Icon(Icons.search),
+            onPressed: () async => showSuggestions(context),
           )
         : IconButton(
-            tooltip: 'Clear',
-            icon: const Icon(Icons.clear),
+            icon: Icon(Icons.clear),
             onPressed: () async {
               query = '';
               showSuggestions(context);
@@ -52,25 +55,39 @@ class SearchEventDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final Iterable<String> suggestions = query.isEmpty
-        ? _history
-        : _data.where((String i) => '$i'.startsWith(query));
+    final QuerySnapshot provider = Provider.of<QuerySnapshot>(context);
+    List<Event> _data = <Event>[];
+    Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
 
-    return _SuggestionList(
-      query: query,
-      history: _history,
-      suggestions: suggestions.map<String>((String i) => '$i').toList(),
-      onSelected: (String suggestion) async {
-        query = suggestion;
-        showResults(context);
-      },
-    );
-  }
+    provider.documents.forEach((doc) {
+      var d = doc.data;
+      d["id"] = doc.documentID;
+      _data.add(Event.fromMap(d));
+    });
 
-  @override
-  Widget buildResults(BuildContext context) {
-    final String searched = query.toString();
-    if (searched == null || !_data.contains(searched)) {
+    final Iterable<Event> suggestions = query.isNotEmpty
+      ? _data.where((Event e) {
+          if (e.title.startsWith(query)) {
+            _map[e] = SearchWhere.title;
+            return true;
+          }
+          if (e.subtitle.startsWith(query)) {
+            _map[e] = SearchWhere.subtitle;
+            return true;
+          }
+          if (e.province.startsWith(query)) {
+            _map[e] = SearchWhere.province;
+            return true;
+          }
+          if (e.category.startsWith(query)) {
+            _map[e] = SearchWhere.category;
+            return true;
+          }
+          return false;
+        })
+      : <Event>[];
+
+    if (query.isNotEmpty && suggestions.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -98,19 +115,18 @@ class SearchEventDelegate extends SearchDelegate<String> {
         ),
       );
     }
-    else {
-      if (_history.indexOf(searched) < 0) _history.add(searched);
-    }
 
-    return ListView(
-      children: <Widget>[
-        _ResultCard(
-          title: 'This String',
-          string: searched,
-          searchDelegate: this,
-        ),
-      ],
+    return _SuggestionList(
+      query: query,
+      mapCategory: _map,
+      suggestions: suggestions.toList(),
+      onSelected: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
     );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return null;
   }
 
 }

@@ -63,7 +63,7 @@ class IconiOS {
   );
 
   static const IconData notifications = IconData(
-    0xf3e1,
+    0xf3e2,
     fontFamily: CupertinoFamily,
   );
 

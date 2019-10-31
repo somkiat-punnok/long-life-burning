@@ -8,6 +8,10 @@ import 'package:flutter_localizations/flutter_localizations.dart'
     GlobalMaterialLocalizations,
     GlobalCupertinoLocalizations,
     GlobalWidgetsLocalizations;
+import 'package:cloud_firestore/cloud_firestore.dart'
+  show
+    Firestore,
+    QuerySnapshot;
 import 'package:firebase_auth/firebase_auth.dart'
   show
     FirebaseAuth,
@@ -26,10 +30,21 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<SettingProvider>(builder: (_) => SettingProvider(),),
         ChangeNotifierProvider<NavBarProvider>(builder: (_) => NavBarProvider(),),
         ChangeNotifierProvider<UserProvider>(builder: (_) => UserProvider(),),
         FutureProvider<SharedPreferences>(
           builder: (_) async => await SharedPreferences.getInstance(),
+          catchError: (_, err) {
+            print(err);
+            return null;
+          },
+        ),
+        StreamProvider<QuerySnapshot>(
+          builder: (_) => Firestore.instance
+            .collection("Blog")
+            .orderBy("date", descending: true)
+            .snapshots(),
           catchError: (_, err) {
             print(err);
             return null;

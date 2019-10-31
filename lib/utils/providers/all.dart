@@ -11,4 +11,5 @@ export 'package:provider/provider.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 
 part './navigation_bar.dart';
+part './setting.dart';
 part './user.dart';
