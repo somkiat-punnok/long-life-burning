@@ -61,7 +61,15 @@ class _PlaceState extends State<Place> {
                 aspectRatio: SizeConfig.aspectRatio * 1.25,
                 autoPlay: false,
                 enlargeCenterPage: false,
-                items: (items != null && items.isNotEmpty) ? items : [Center(child: Text('Hasn\'t place.'),)],
+                items: (items != null && items.isNotEmpty)
+                    ? items
+                    : [
+                      Container(
+                        child: Center(
+                          child: Text('Hasn\'t place.'),
+                        ),
+                      ),
+                    ],
               ),
             ],
           ),

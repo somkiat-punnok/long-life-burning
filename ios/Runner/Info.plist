@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Long Life Burning</string>
+	<string>Long Burn</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,16 +26,18 @@
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Used to read user data.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always/When in use description</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Used to read the user location.</string>
+	<string>Always in use description</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used to tracking the user location.</string>
+	<string>When in use description</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Used to tracks the user step count.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>processing</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

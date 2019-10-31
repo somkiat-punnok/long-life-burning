@@ -8,8 +8,8 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
         Configs.uid_field,
         isEqualTo: user.uid,
       )
-      .getDocuments()
-      .then((data) {
+      .snapshots()
+      .listen((data) {
         if (data.documents.isNotEmpty) {
           Configs.login = true;
           userProvider.setUser(

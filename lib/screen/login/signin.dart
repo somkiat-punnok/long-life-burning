@@ -65,11 +65,14 @@ class _SignInPageState extends State<SignInPage> {
             if (result != null && result.user != null) {
               Configs.login = true;
               await checkAuth(userProvider, result.user)
-                .then((_) => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => Index(),
-                  ),
-                ));
+                .then((_) async {
+                  widget.provider.reset();
+                  await Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => Index(),
+                    ),
+                  );
+                });
             }
           })
           .catchError((err) {
@@ -106,9 +109,9 @@ class _SignInPageState extends State<SignInPage> {
           IconButton(
             icon: Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () {
+            onPressed: () async {
               widget.provider.reset();
-              Navigator.of(context).pushReplacement(
+              await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (BuildContext context) => Index(),
                 )

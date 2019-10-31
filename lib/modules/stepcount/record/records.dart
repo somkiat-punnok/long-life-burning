@@ -53,7 +53,7 @@ class RecordToList extends StatelessWidget {
                 unit: 'kCal',
               ),
               RecordCard(
-                value: '${NumberFormat('#.##', 'en_US').format(dist/1000)}',
+                value: '${NumberFormat('#.##', 'en_US').format(dist)}',
                 name: 'distances',
                 unit: 'km',
               ),

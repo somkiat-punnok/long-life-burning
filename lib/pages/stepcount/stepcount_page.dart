@@ -29,34 +29,25 @@ class StepCountPage extends StatefulWidget {
 class _StepCountPageState extends State<StepCountPage> with TickerProviderStateMixin {
 
   SlidingRadialListController slidingListController;
-  bool initComplete = false;
+  UserProvider userProvider;
   num _step = 0;
   num _distence = 0;
   num _calories = 0;
-  num _second = 0;
 
   @override
   void initState() {
     super.initState();
-    // if (isCupertino) {
-    readDate();
-    // }
     slidingListController = SlidingRadialListController(
       itemCount: 3,
       vsync: this,
-    )
-    ..open();
+    );
   }
 
   @override
   void didChangeDependencies() {
-    if(initComplete) {
-      // if (isCupertino) {
-      readDate();
-      // }
-      slidingListController.reopen();
-    }
     super.didChangeDependencies();
+    readDate();
+    slidingListController.reopen();
   }
 
   @override
@@ -66,68 +57,73 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   }
 
   Future<void> readDate() async {
+    if (!mounted) return;
     try {
       if (!Configs.fitkit_permissions) {
-        await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
+        await FitKit
+          .requestPermissions(DataType.values)
+          .then(
+            (result) => Configs.fitkit_permissions = result
+          );
         await readDate();
       } else {
         _step = 0;
         _distence = 0;
-        _second = 0;
+        _calories = 0;
+        final DateTime _now = DateTime.now();
         for (DataType type in DataType.values) {
           if (type == DataType.STEP_COUNT) {
             await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())
-              .then((data) {
-                if (data != null && data.isNotEmpty) {
-                  data.forEach((value) {
-                    if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
-                      if (value.value != 0) {
-                        setState(() {
-                          _step += value.value.round() ?? 0;
-                          _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
-                        });
-                      }
+            .then((data) {
+              if (data != null && data.isNotEmpty) {
+                data.forEach((d) {
+                  if (d.dateFrom.day == _now.day && d.dateTo.day == _now.day) {
+                    if (d.value != 0) {
+                      _step += d.value ?? 0;
+                      _calories += calculateCalories(
+                        userProvider?.height ?? kHeight,
+                        userProvider?.dateOfBirth ?? kDateOfBirth,
+                        userProvider?.weight ?? kWeight,
+                        userProvider?.gender ?? Gender.MALE,
+                        ((d.dateTo.millisecondsSinceEpoch - d.dateFrom.millisecondsSinceEpoch) / 1000.0),
+                        d.value,
+                      );
                     }
-                  });
-                }
-              });
-          }
-          if (type == DataType.DISTANCE) {
+                  }
+                });
+              }
+            });
+          } else if (type == DataType.DISTANCE) {
             await FitKit.read(type, DateTime.now().subtract(Duration(days: 1)), DateTime.now())
-              .then((data) {
-                if (data != null && data.isNotEmpty) {
-                  data.forEach((value) {
-                    if (value.dateFrom.day == DateTime.now().day && value.dateTo.day == DateTime.now().day) {
-                      if (value.value != 0) {
-                        setState(() {
-                          _distence += value.value.round() ?? 0;
-                        });
-                      }
+            .then((data) {
+              if (data != null && data.isNotEmpty) {
+                data.forEach((d) {
+                  if (d.dateFrom.day == _now.day && d.dateTo.day == _now.day) {
+                    if (d.value != 0) {
+                      _distence += d.value ?? 0;
                     }
-                  });
-                }
-              });
+                  }
+                });
+              }
+            });
+          } else {
+            continue;
           }
         }
+        setState(() {});
       }
     } catch (e) {
       print('Failed to read all values. $e');
+      _step = 0;
+      _distence = 0;
+      _calories = 0;
+      setState(() {});
     }
-    if (!mounted) return;
   }
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
-    initComplete = true;
-    _calories = calculateCalories(
-      userProvider.height ?? kHeight,
-      userProvider.dateOfBirth ?? kDateOfBirth,
-      userProvider.weight ?? kWeight,
-      userProvider.gender ?? Gender.MALE,
-      _second,
-      _step,
-    );
+    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -151,7 +147,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 RadialListItemViewModel(
                   icon: AssetImage(DISTANCEICON),
                   title: 'Distances',
-                  subtitle: '${NumberFormat('#.##', 'en_US').format(_distence/1000)} km',
+                  subtitle: '${NumberFormat('#.##', 'en_US').format(_distence / 1000.0)} km',
                 ),
               ],
             ),

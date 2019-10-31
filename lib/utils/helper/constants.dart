@@ -1,7 +1,6 @@
 library constant;
 
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
 import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
 import 'package:firebase_auth/firebase_auth.dart'
   show

@@ -156,9 +156,9 @@ class _SignUpPageState extends State<SignUpPage> {
           IconButton(
             icon: Icon(Icons.clear),
             color: Colors.white,
-            onPressed: () {
+            onPressed: () async {
               widget.provider.reset();
-              Navigator.of(context).pushReplacement(
+              await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (BuildContext context) => Index(),
                 )

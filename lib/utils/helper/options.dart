@@ -6,7 +6,6 @@ class Configs {
 
   static final FirebaseAuth auth = FirebaseAuth.instance;
   static final Firestore store = Firestore.instance;
-  static SharedPreferences pref;
   static BuildContext index_context;
   static bool fitkit_permissions;
   static String province;

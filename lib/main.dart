@@ -8,29 +8,27 @@ import 'package:flutter/services.dart'
     SystemUiOverlayStyle,
     DeviceOrientation;
 import 'package:fit_kit/fit_kit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show Configs;
 import 'package:long_life_burning/screen/app.dart';
 
 Future<void> main() async {
   await FitKit
     .requestPermissions(DataType.values)
-    .then((result) => Configs.fitkit_permissions = result);
-  await SharedPreferences
-    .getInstance()
-    .then((_pref) {
-      if (_pref != null) {
-        Configs.pref = _pref;
-      }
+    .then((result) async {
+      Configs.fitkit_permissions = result;
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ),
+      );
+      runApp(App());
+    })
+    .catchError((err) {
+      print(err);
+      return;
     });
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ),
-  );
-  runApp(App());
 }
