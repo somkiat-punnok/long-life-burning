@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-
 class StatisticPage extends StatefulWidget {
   StatisticPage({Key key}) : super(key: key);
   static const String routeName = '/statistic';
   @override
   _StatisticPageState createState() => _StatisticPageState();
+  
 }
 
 class _StatisticPageState extends State<StatisticPage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grapควยๆ'),
+                        subtitle: Text('Grap'),
                       ),
                     ],
                   ),
@@ -77,7 +78,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grapควยๆ'),
+                        subtitle: Text('Grap'),
                       ),
                     ],
                   ),
@@ -89,7 +90,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grapควยๆ'),
+                        subtitle: Text('Grap'),
                       ),
                     ],
                   ),
@@ -101,7 +102,7 @@ class _StatisticPageState extends State<StatisticPage> {
                       const ListTile(
                         leading: Icon(Icons.album),
                         title: Text('Statistics'),
-                        subtitle: Text('Grapควยๆ'),
+                        subtitle: Text('Grap'),
                       ),
                     ],
                   ),

@@ -1,8 +1,9 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/modules/stepcount/db/src/common_import.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
-    show GROUP_CATEGORIES, SizeConfig;
+    show GROUP_CATEGORIES, SizeConfig, UserOptions;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 
@@ -34,6 +35,9 @@ class _CreateGroupState extends State<CreateGroup> {
         "location": location,
         "category": GROUP_CATEGORIES[category],
         "time": "${time.hour}:${time.minute}",
+        "users": {
+          "0": UserOptions.id ?? "",
+        },
       };
       ref.child('GROUP').push().set(data).then((v) {
         _key.currentState.reset();

@@ -17,13 +17,14 @@ class GroupPage extends StatefulWidget {
 }
 
 class MyData {
-  String groupname, location, time , category;
+  String id, groupname, location, time , category;
+  List users;
   Animation animation;
   AnimationController controller;
   final GlobalKey<dynamic> key = GlobalKey();
   int state = 0;
   bool isPressed = false, animatingReveal = false;
-  MyData(this.groupname, this.location, this.time, this.category);
+  MyData(this.id, this.groupname, this.location, this.time, this.category, this.users);
 }
     
 class _GroupPageState extends State<GroupPage> {
@@ -55,7 +56,7 @@ class _GroupPageState extends State<GroupPage> {
               ),
             ],
           ),
-          body: StreamBuilder(
+          body: StreamBuilder<DataSnapshot>(
             stream: FirebaseDatabase.instance.reference().child("GROUP").once().asStream(),
             builder: (_, snapshot) {
               if (!snapshot.hasData) {
@@ -68,10 +69,12 @@ class _GroupPageState extends State<GroupPage> {
               for(var individualKey in KEYS)
               {
                 MyData data = new MyData(
+                  individualKey,
                   DATA[individualKey]['groupname'],
                   DATA[individualKey]['location'],
                   DATA[individualKey]['time'],
                   DATA[individualKey]['category'],
+                  DATA[individualKey]['users'],
                 );
                 allData.add(data);
               }
@@ -137,18 +140,20 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
                 "category": widget.data.category,
                 "location": widget.data.location,
                 "time": widget.data.time,
-              }),
+              }
+              ),
             ),
                 RaisedButton(
                   elevation: 4.0,
                   child: buildButtonChild(),
                   key: widget.data.key,
                   color: widget.data.state == 2 ? Colors.green : Colors.grey,
-                  onPressed: (){
-                    DatabaseReference groupRef = FirebaseDatabase.instance.reference().child("GROUP");
-                    groupRef.child("id").child("users").push().set({
-                      UserOptions.user.uid:UserOptions.user.uid
-                    });
+                  onPressed: () async {
+                    List _users = widget.data.users.toList();
+                    _users.add(UserOptions.user?.uid ?? "join eiei");
+                    Map<String, String> userMap = <String, String>{};
+                    _users.asMap().forEach((i, user) => userMap[i.toString()] = user);
+                    await FirebaseDatabase.instance.reference().child("GROUP").child(widget.data.id).update({ "users":  userMap});
                   },
                   onHighlightChanged: (isPressed){
                     setState(() {
@@ -168,7 +173,7 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
             ),
             new Text
               (widget.data.location ?? "",style: Theme.of(context).textTheme.subtitle,
-            textAlign:TextAlign.center,
+            textAlign:TextAlign.start
             ),
           ],
         ),

@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DetailGroup extends StatefulWidget {
-
-  final Todo todo;
-  DetailGroup({Key key, @required this.todo}) : super(key: key);
+  DetailGroup({Key key }) : super(key: key);
   static const String routeName = '/detail';
   @override
   _DetailGroupState createState() => _DetailGroupState();
@@ -26,16 +24,13 @@ class Todo {
       time: json['time'],
     );
   }
-  
 }
-
 class _DetailGroupState extends State<DetailGroup> {
   
   @override
   Widget build(BuildContext context) {
-  //  Firestore.instance.collection('name').document('users').get().then((DocumentSnapshot ds){
-
-  //  });
+   Firestore.instance.collection('name').document('users').get().then((DocumentSnapshot ds){
+   });
     final Todo data = Todo.fromJson(ModalRoute.of(context).settings.arguments);
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -53,9 +48,7 @@ class _DetailGroupState extends State<DetailGroup> {
           ),
         ),
       ),
-      
        body: Card( 
-         
         elevation: 10.0,
       margin: EdgeInsets.all(15.0),
       child: new Container(
@@ -83,11 +76,17 @@ class _DetailGroupState extends State<DetailGroup> {
             ),
             ),
              Divider(height: 40.0,),
-             new Text('User join :',
+             new Text('Category : '+data.category,
             style: TextStyle(
               fontSize: 15.0
             ),
-             )
+             ),
+              Divider(height: 40.0,),
+               new Text('Users join : ',
+            style: TextStyle(
+              fontSize: 15.0
+            ),
+             ),
             ] 
           )
        )
