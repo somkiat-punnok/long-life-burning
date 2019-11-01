@@ -85,4 +85,14 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetUser() {
+    _user = null;
+    _id = null;
+    _name = null;
+    _height = null;
+    _weight = null;
+    _gender = null;
+    _dateOfBirth = null;
+  }
+
 }

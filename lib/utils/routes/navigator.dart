@@ -64,6 +64,27 @@ class PageNavigate extends StatelessWidget {
       settings: settings,
       builder: _buildRoutePage(nav[index].tag)[settings.name],
     ),
+    onUnknownRoute: (RouteSettings settings) => MaterialPageRoute(
+      settings: settings,
+      builder: (_) => NotFoundPage(),
+    ),
   );
 
+}
+
+class NotFoundPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(
+          "Not Found Page",
+          style: TextStyle(
+            fontSize: 34.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 }

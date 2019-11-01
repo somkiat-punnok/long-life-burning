@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/modules/nearby/nearby.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig, Map_API_Key;
+import 'package:google_maps_webservice/directions.dart' as direction;
+import 'package:http/http.dart' as http;
 
 class NearbyPage extends StatefulWidget {
   NearbyPage({Key key}) : super(key: key);
@@ -15,7 +17,9 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
   final double _panelHeightClosed = SizeConfig.setHeight(200.0);
   final double _initRadius = 20.0;
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  direction.GoogleMapsDirections _directions;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
   LocationData _location = LocationData.fromMap({
     'latitude': 19.027510,
     'longitude': 99.900178,
@@ -27,6 +31,13 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     super.initState();
     initPlatformState();
     _initFabHeight = _panelHeightClosed + _initRadius;
+    _directions = new direction.GoogleMapsDirections(apiKey: Map_API_Key);
+  }
+
+  @override
+  void dispose() {
+    _directions.dispose();
+    super.dispose();
   }
 
   void initPlatformState() async {
@@ -51,7 +62,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
   }
 
   Future<LocationData> getCurrentLocation() async {
-    Location location = Location();
+    Location location = new Location();
     try {
       if (await location.serviceEnabled()) {
         if (await location.hasPermission()) {
@@ -104,7 +115,48 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
     setState(() {});
   }
 
-  void _remove({@required String id}) {
+  void _getPolyline({
+    @required String id,
+    @required double latitude,
+    @required double longitude,
+  }) async {
+    await _directions
+      .directionsWithLocation(
+        direction.Location(_location?.latitude, _location?.longitude),
+        direction.Location(latitude, longitude),
+      )
+      .then((result) {
+        List<LatLng> _points = <LatLng>[];
+        _points.add(LatLng(_location?.latitude, _location?.longitude));
+        result.routes.forEach((r) {
+          r.legs.forEach((l) {
+            l.steps.forEach((s) {
+              _points.add(LatLng(s.startLocation.lat, s.startLocation.lng));
+              _points.add(LatLng(s.endLocation.lat, s.endLocation.lng));
+            });
+          });
+        });
+        _points.add(LatLng(latitude, longitude));
+        final PolylineId polylineId = PolylineId(id);
+        final Polyline polyline = Polyline(
+          polylineId: polylineId,
+          points: _points,
+          color: Colors.cyan,
+          jointType: JointType.round,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+          width: 8,
+        );
+        _polylines[polylineId] = polyline;
+        setState(() {});
+      })
+      .catchError((err) {
+        print(err);
+        return;
+      });
+  }
+
+  void _removeMarker({@required String id}) {
     final MarkerId markerId = MarkerId(id);
     if (_markers.containsKey(markerId)) {
       _markers.remove(markerId);
@@ -126,6 +178,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
               zoom: 13.0,
             ),
             markers: Set<Marker>.of(_markers.values),
+            polylines: Set<Polyline>.of(_polylines.values),
           ),
           Positioned(
             right: 8.0,
@@ -141,7 +194,7 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 await getCurrentLocation()
                   .then((data) {
                     if (data != null) {
-                      _remove(id: "user");
+                      _removeMarker(id: "user");
                       _addMarker(
                         id: "user",
                         latitude: data?.latitude,
@@ -199,13 +252,20 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
               });
             },
             onLocate: (double lat, double long) async {
-              _remove(id: "place");
+              _removeMarker(id: "place");
               _addMarker(
                 id: "place",
                 latitude: lat,
                 longitude: long,
                 icon: BitmapDescriptor.defaultMarker,
               );
+              if (_markers[MarkerId("user")] != null) {
+                _getPolyline(
+                  id: "route",
+                  latitude: lat,
+                  longitude: long,
+                );
+              }
             },
           ),
         ],

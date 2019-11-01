@@ -188,5 +188,5 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
       ),
     );
   }
-  
+
 }

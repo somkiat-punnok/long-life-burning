@@ -1,4 +1,19 @@
-part of nearby;
+library place;
+
+import 'dart:convert' show json;
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:long_life_burning/utils/widgets/carousel_card.dart';
+import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
+import '../header/header.dart' show StickyHeaderBuilder;
+import '../utils.dart';
+
+part './place_model.dart';
+part './place_detail.dart';
 
 class Place extends StatefulWidget {
 
@@ -85,15 +100,13 @@ class _PlaceState extends State<Place> {
       data["id"] = l.documentID;
       data["image"] = "https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80";
       final PlaceModel p = PlaceModel.fromMap(data);
-      final Geoflutterfire geo = Geoflutterfire();
-      final double dist = geo
-        .point(
-          latitude: widget.userLocation?.latitude,
-          longitude: widget.userLocation?.longitude,
-        )
-        .distance(
-          lat: p.lat,
-          lng: p.long,
+      final Geolocator geo = new Geolocator();
+      final double dist = await geo
+        .distanceBetween(
+          widget.userLocation?.latitude,
+          widget.userLocation?.longitude,
+          p.lat,
+          p.long,
         );
       result.add(
         PlaceDetail(
