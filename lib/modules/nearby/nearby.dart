@@ -3,20 +3,24 @@ library nearby;
 import 'dart:async' show Completer;
 import 'dart:convert' show json;
 import 'dart:math' show min, max;
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 // import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:long_life_burning/utils/widgets/carousel_card.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
+export 'package:location/location.dart';
 export 'package:google_maps_flutter/google_maps_flutter.dart';
 
-part './map.dart';
+part './map/map.dart';
+part './map/listener.dart';
 part './header/render.dart';
 part './header/widget.dart';
 part './place/place.dart';

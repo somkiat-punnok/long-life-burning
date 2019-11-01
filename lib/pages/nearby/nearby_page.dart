@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:long_life_burning/modules/nearby/nearby.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
