@@ -35,6 +35,14 @@ end
 target 'Runner' do
   use_frameworks!
 
+  # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
+  # referring to absolute paths on developers' machines.
+  system('rm -rf .symlinks')
+  system('rm -rf Pods')
+  system('rm -rf Podfile.lock')
+  system('rm -rf ServiceDefinitions.json')
+  system('mkdir -p .symlinks/plugins')
+
   # Pods for Runner
   pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
@@ -44,14 +52,6 @@ target 'Runner' do
   # pod 'Firebase/Functions'
   # pod 'Firebase/Messaging'
   # pod 'Firebase/InAppMessaging'
-
-  # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
-  # referring to absolute paths on developers' machines.
-  system('rm -rf .symlinks')
-  system('rm -rf Pods')
-  system('rm -rf Podfile.lock')
-  system('rm -rf ServiceDefinitions.json')
-  system('mkdir -p .symlinks/plugins')
 
   # Flutter Pods
   generated_xcode_build_settings = parse_KV_file('./Flutter/Generated.xcconfig')

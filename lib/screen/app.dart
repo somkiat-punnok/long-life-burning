@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart' show CupertinoColors;
-import 'package:firebase_auth/firebase_auth.dart'
+import 'package:flutter/cupertino.dart'
   show
-    FirebaseAuth,
-    FirebaseUser;
-import 'package:cloud_firestore/cloud_firestore.dart'
-  show
-    Firestore,
-    QuerySnapshot;
+    CupertinoColors,
+    DefaultCupertinoLocalizations;
 import 'package:flutter_localizations/flutter_localizations.dart'
   show
     GlobalMaterialLocalizations,
     GlobalCupertinoLocalizations,
     GlobalWidgetsLocalizations;
+import 'package:cloud_firestore/cloud_firestore.dart'
+  show
+    Firestore,
+    QuerySnapshot;
+import 'package:firebase_auth/firebase_auth.dart'
+  show
+    FirebaseAuth,
+    FirebaseUser;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     APPNAME,
@@ -22,9 +25,7 @@ import 'package:long_life_burning/utils/providers/all.dart';
 import './index.dart';
 
 class App extends StatelessWidget {
-
   App({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -32,6 +33,13 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<SettingProvider>(builder: (_) => SettingProvider(),),
         ChangeNotifierProvider<NavBarProvider>(builder: (_) => NavBarProvider(),),
         ChangeNotifierProvider<UserProvider>(builder: (_) => UserProvider(),),
+        FutureProvider<SharedPreferences>(
+          builder: (_) async => await SharedPreferences.getInstance(),
+          catchError: (_, err) {
+            print(err);
+            return null;
+          },
+        ),
         StreamProvider<QuerySnapshot>(
           builder: (_) => Firestore.instance
             .collection("Blog")
@@ -70,9 +78,12 @@ class App extends StatelessWidget {
         ),
         home: Index(),
         localizationsDelegates: <LocalizationsDelegate>[
+          GlobalWidgetsLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+          DefaultMaterialLocalizations.delegate,
+          DefaultCupertinoLocalizations.delegate,
         ],
         supportedLocales: <Locale>[
           Locale("en", "US"),
@@ -80,5 +91,4 @@ class App extends StatelessWidget {
       ),
     );
   }
-
 }
