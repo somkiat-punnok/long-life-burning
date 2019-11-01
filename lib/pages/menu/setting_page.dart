@@ -1,16 +1,11 @@
-
-// import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:ffi';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
+import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 
-// import 'package:long_life_burning/utils/helper/constants.dart';
 class SettingPage extends StatefulWidget {
   SettingPage({ Key key }) : super(key: key);
   static const String routeName = '/setting';
@@ -42,6 +37,7 @@ void updateData(String selectedDoc, newValues) {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  UserProvider userProvider;
   String name;
   String dateOfBirth;
   String height;
@@ -52,7 +48,7 @@ class _SettingPageState extends State<SettingPage> {
   DateTime _date = DateTime(2000, 1, 1);
   CrudMedthods crudObj = new CrudMedthods();
  
- Future<void> updateDialog(BuildContext context, selectedDoc) async {
+ Future<void> updateDialog(BuildContext context) async {
      return showDialog(
         context: context,
         barrierDismissible: false,
@@ -143,7 +139,7 @@ class _SettingPageState extends State<SettingPage> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   if (this.name != null || this._date != null || this.height != null || this.weight != null || this.gender != null) {
-                    crudObj.updateData(selectedDoc, {
+                    crudObj.updateData(userProvider.id, {
                       'name': this.name ?? "Anonymus",
                       'dateOfBirth': this._date ?? DateTime.now(),
                       'height': this.height ?? 170,
@@ -159,6 +155,7 @@ class _SettingPageState extends State<SettingPage> {
   }
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -197,17 +194,11 @@ class _SettingPageState extends State<SettingPage> {
           ],
       ),
         floatingActionButton:FloatingActionButton(
-                  onPressed: () async => await updateDialog(context, users),
+                  onPressed: () async => await updateDialog(context),
                   child: new Icon(Icons.edit),
                 ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-     body: StreamBuilder<QuerySnapshot>(
-       stream: Firestore.instance.collection('users').where(UserOptions.uid_field, isEqualTo: UserOptions.id).snapshots(),
-       builder: (context, snapshot){
-         if(!snapshot.hasData) return Text('Loading data.. Please Wait..');
-         users = snapshot.data.documents[0].documentID;
-         _date = DateTime.fromMicrosecondsSinceEpoch(snapshot.data.documents[0]['dateOfBirth'].microsecondsSinceEpoch);
-         return Card(
+     body: Card(
             elevation: 10.0,
             margin: EdgeInsets.all(15.0),
              child: new Container(
@@ -215,21 +206,19 @@ class _SettingPageState extends State<SettingPage> {
                child:Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-            Text('Name:\t'+(snapshot?.data?.documents[0]['name'] ?? ""), style: TextStyle(fontSize: 20.0),),
+            Text('Name:\t'+(userProvider.name ?? ""), style: TextStyle(fontSize: 20.0),),
              Divider(height: 40.0,),
-            new Text('Birth Day:\t'+(_date?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Birth Day:\t'+(userProvider.dateOfBirth?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
             Divider(height: 40.0,),
-            new Text('Gender:\t'+(snapshot?.data?.documents[0]['gender'] ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Gender:\t'+(userProvider.gender?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
             Divider(height: 40.0,),
-            new Text('Height:\t'+(snapshot?.data?.documents[0]['height']?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Height:\t'+(userProvider.height?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
             Divider(height: 40.0,),
-            new Text('Weight:\t'+(snapshot?.data?.documents[0]['weight']?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Weight:\t'+(userProvider.weight?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
                ],
               )
              )
-           );
-       },
-     )
+           ),
     );
   }
 }

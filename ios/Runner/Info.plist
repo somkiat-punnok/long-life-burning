@@ -2,14 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Used to read the user location.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used to tracking the user location.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Long Life Burning</string>
+	<string>Long Burn</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,11 +26,18 @@
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Used to read user data.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always/When in use description</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Always in use description</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>When in use description</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Used to tracks the user step count.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -51,5 +54,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>

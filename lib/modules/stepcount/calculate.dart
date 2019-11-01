@@ -7,22 +7,23 @@ num calculateCalories(
   Gender gender,
   num seconds,
   num steps,
-) => ( getMetForActivity(
-      kilometersToMiles(
-        calculateDistanceTravelledInKM(
-          steps,
-          calculateStepToMeters(1, height, gender)
-        )
-      ) / secondsToHours(seconds)) * (3.5 / convertKilocaloriesToMlKmin(
-        harrisBenedictRmr(
-          gender,
-          weight,
-          getAgeFromDateOfBirth(age),
-          centimeterToMeters(height)
-        ),
-        weight
-      ))
-    ) * secondsToHours(seconds) * weight;
+) => (  getMetForActivity(
+          kilometersToMiles(
+            calculateDistanceTravelledInKM(
+              steps,
+              calculateStepToMeters(1, height, gender)
+            )
+          ) / secondsToHours(seconds)
+        ) * (3.5 / convertKilocaloriesToMlKmin(
+          harrisBenedictRmr(
+            gender,
+            weight,
+            getAgeFromDateOfBirth(age),
+            centimeterToMeters(height)
+          ),
+          weight
+        ))
+      ) * secondsToHours(seconds) * weight;
 
 num getAgeFromDateOfBirth(DateTime dateOfBirth) {
   DateTime currentDate = DateTime.now();
@@ -100,5 +101,5 @@ num meterToCentimer(num m) {
 }
 
 num calculateStepToMeters(num steps, num height, Gender gender) {
-  return steps * centimeterToMeters(gender == Gender.FEMALE ? 0.413 : 0.415 * height);
+  return steps * centimeterToMeters((gender == Gender.FEMALE ? 0.413 : 0.415) * height);
 }

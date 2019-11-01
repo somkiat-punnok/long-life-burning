@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NotifyPage extends StatefulWidget {
   NotifyPage({Key key}) : super(key: key);
-  static const String routeName = '/notify';
+  static const String routeName = '/';
   @override
   _NotifyPageState createState() => _NotifyPageState();
 }
@@ -27,25 +27,6 @@ class _NotifyPageState extends State<NotifyPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () => Navigator.of(context).maybePop(),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              padding: EdgeInsets.all(12.0),
-              child: Text(
-                'Exit',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       body: Center(
         child: Column(

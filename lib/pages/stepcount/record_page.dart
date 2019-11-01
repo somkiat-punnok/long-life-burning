@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fit_kit/fit_kit.dart';
-import 'package:long_life_burning/modules/stepcount/record/records.dart';
-import 'package:long_life_burning/modules/stepcount/calculate.dart' show calculateCalories;
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
   show
     kHeight,
     kWeight,
-    kDateOfBirth;
+    kDateOfBirth,
+    RecordToList,
+    calculateCalories;
 import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
     CalendarController,
@@ -15,8 +15,11 @@ import 'package:long_life_burning/modules/calendar/calendar.dart'
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Gender,
-    isCupertino;
-import 'package:long_life_burning/utils/helper/constants.dart';
+    Configs;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    UserProvider;
 import 'package:long_life_burning/utils/widgets/date_utils.dart';
 
 import '../common/year_page.dart';
@@ -31,11 +34,12 @@ class RecordPage extends StatefulWidget {
 class _RecordPageState extends State<RecordPage> {
 
   CalendarController _calendarController;
+  UserProvider userProvider;
   DateTime _now;
   DateTime _selectedDay;
   num _step = 0;
   num _distence = 0;
-  num _second = 0;
+  num _calories = 0;
 
   @override
   void initState() {
@@ -43,9 +47,12 @@ class _RecordPageState extends State<RecordPage> {
     _now = DateTime.now();
     _calendarController = CalendarController();
     _selectedDay = DateTime(_now.year, _now.month, _now.day);
-    if (isCupertino) {
-      readDate(_selectedDay);
-    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    readDate(_selectedDay);
   }
 
   @override
@@ -55,7 +62,7 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   void _onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
-    for(final data in _calendarController.visibleDays){
+    for (final data in _calendarController.visibleDays){
       if (Utils.isSameDay(data, _now)) {
         _selectedDay = DateTime(_now.year, _now.month, _now.day);
         break;
@@ -69,9 +76,7 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   void _onDaySelected(DateTime date, List events) async {
-    if (isCupertino) {
-      await readDate(DateTime(date.year, date.month, date.day));
-    }
+    await readDate(DateTime(date.year, date.month, date.day));
     setState(() {
       _selectedDay = date;
     });
@@ -93,66 +98,98 @@ class _RecordPageState extends State<RecordPage> {
   );
 
   Future<void> readDate(DateTime date) async {
-    if ((date.year <= _now.year) && (date.month <= _now.month) && (date.day <= _now.day)) {
+    if (!mounted) return;
+    final DateTime now = DateTime.now();
+    if ((date.year <= now.year) && (date.month <= now.month) && (date.day <= now.day)) {
       try {
         if (!Configs.fitkit_permissions) {
-          await FitKit.requestPermissions(DataType.values).then((result) => Configs.fitkit_permissions = result);
+          await FitKit
+            .requestPermissions(DataType.values)
+            .then(
+              (result) => Configs.fitkit_permissions = result
+            );
           await readDate(date);
         } else {
           _step = 0;
           _distence = 0;
-          _second = 0;
-          final bool now = Utils.isSameDay(date, _now);
+          _calories = 0;
+          final bool dateNow = Utils.isSameDay(date, now);
           for (DataType type in DataType.values) {
             if (type == DataType.STEP_COUNT) {
-              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
+              await FitKit.read(
+                type,
+                dateNow
+                  ? DateTime.now().subtract(Duration(days: 1))
+                  : date,
+                dateNow
+                  ? DateTime.now()
+                  : date.add(Duration(days: 1))
+              )
               .then((data) {
                 if (data != null && data.isNotEmpty) {
-                  data.forEach((value) {
-                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
-                      if (value.value != 0) {
-                        setState(() {
-                          _step += value.value.round() ?? 0;
-                          _second += ((value.dateTo.millisecondsSinceEpoch - value.dateFrom.millisecondsSinceEpoch) / 1000.0);
-                        });
+                  data.forEach((d) {
+                    if (d.dateFrom.day == date.day && d.dateTo.day == date.day) {
+                      if (d.value != 0) {
+                        _step += d.value ?? 0;
+                        _calories += calculateCalories(
+                          userProvider?.height ?? kHeight,
+                          userProvider?.dateOfBirth ?? kDateOfBirth,
+                          userProvider?.weight ?? kWeight,
+                          userProvider?.gender ?? Gender.MALE,
+                          ((d.dateTo.millisecondsSinceEpoch - d.dateFrom.millisecondsSinceEpoch) / 1000.0),
+                          d.value,
+                        );
                       }
                     }
                   });
                 }
               });
-            }
-            else if (type == DataType.DISTANCE) {
-              await FitKit.read(type, now ? DateTime.now().subtract(Duration(days: 1)) : date, now ? DateTime.now() : date.add(Duration(days: 1)))
+            } else if (type == DataType.DISTANCE) {
+              await FitKit.read(
+                type,
+                dateNow
+                  ? DateTime.now().subtract(Duration(days: 1))
+                  : date,
+                dateNow
+                  ? DateTime.now()
+                  : date.add(Duration(days: 1))
+              )
               .then((data) {
                 if (data != null && data.isNotEmpty) {
-                  data.forEach((value) {
-                    if (value.dateFrom.day == date.day && value.dateTo.day == date.day) {
-                      if (value.value != 0) {
-                        setState(() {
-                          _distence += value.value.round() ?? 0;
-                        });
+                  data.forEach((d) {
+                    if (d.dateFrom.day == date.day && d.dateTo.day == date.day) {
+                      if (d.value != 0) {
+                        _distence += d.value ?? 0;
                       }
                     }
                   });
                 }
               });
+            } else {
+              continue;
             }
           }
+          setState(() {});
         }
       } catch (e) {
         print('Failed to read all values. $e');
+        _step = 0;
+        _distence = 0;
+        _calories = 0;
+        setState(() {});
       }
     }
     else {
       _step = 0;
       _distence = 0;
-      _second = 0;
+      _calories = 0;
+      setState(() {});
     }
-    if (!mounted) return;
   }
 
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -168,15 +205,8 @@ class _RecordPageState extends State<RecordPage> {
           ),
           RecordToList(
             step: _step ?? 0,
-            dist: _distence ?? 0,
-            cal: calculateCalories(
-              UserOptions.height ?? kHeight,
-              UserOptions.dateOfBirth ?? kDateOfBirth,
-              UserOptions.weight ?? kWeight,
-              UserOptions.gender ?? Gender.MALE,
-              _second ?? 0,
-              _step ?? 0,
-            ),
+            cal: _calories ?? 0,
+            dist: ((_distence ?? 0) / 1000.0),
           ),
         ],
       ),

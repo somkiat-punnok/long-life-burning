@@ -2,8 +2,8 @@ part of event;
 
 class EventCard extends StatelessWidget {
 
-  final EventModel event;
-  final void Function() onClick;
+  final Event event;
+  final EventCallback onClick;
 
   EventCard({
     Key key,
@@ -24,8 +24,9 @@ class EventCard extends StatelessWidget {
         vertical: 4.0,
       ),
       child: ListTile(
-        title: Text(event.detail.toString()),
-        onTap: onClick,
+        title: Text(event.title.toString()),
+        subtitle: Text(event.subtitle.toString()),
+        onTap: () => this.onClick != null ? this.onClick(event) : () {},
       ),
     );
   }

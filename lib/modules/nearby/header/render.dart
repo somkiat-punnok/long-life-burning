@@ -1,17 +1,7 @@
 part of nearby;
 
-/// Called every layout to provide the amount of stickyness a header is in.
-/// This lets the widgets animate their content and provide feedback.
-///
 typedef void RenderStickyHeaderCallback(double stuckAmount);
 
-/// RenderObject for StickyHeader widget.
-///
-/// Monitors given [Scrollable] and adjusts its layout based on its offset to
-/// the scrollable's [RenderObject]. The header will be placed above content
-/// unless overlapHeaders is set to true. The supplied callback will be used
-/// to report the
-///
 class RenderStickyHeader extends RenderBox
   with
     ContainerRenderObjectMixin<RenderBox, MultiChildLayoutParentData>,

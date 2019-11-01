@@ -5,7 +5,7 @@ class PlaceModel {
   final String id;
   final String title;
   final String detail;
-  final List<String> image;
+  final String image;
   final num lat;
   final num long;
 
@@ -21,10 +21,10 @@ class PlaceModel {
   factory PlaceModel.fromMap(Map<String, dynamic> map) => PlaceModel(
     id: map["id"],
     title: map["title"] ?? map["name"],
-    detail: map["detail"],
+    detail: map["message"],
     image: map["image"],
-    lat: map["lat"],
-    long: map["long"],
+    lat: num.parse(map["latitude"]),
+    long: num.parse(map["longitude"]),
   );
 
   factory PlaceModel.fromJson(String s) => PlaceModel.fromMap(json.decode(s));
@@ -63,7 +63,7 @@ class PlaceModel {
 
   @override
   String toString() {
-    return '$runtimeType{id: $id, title: $title, detail: $detail, image: $image, latitude: $lat, longitude: $long}';
+    return '$runtimeType{id: $id, title: $title, detail: $detail, latitude: $lat, longitude: $long}';
   }
 
 }

@@ -25,6 +25,11 @@ class IconAndroid {
     fontFamily: MaterialFamily,
   );
 
+  static const IconData notifications = IconData(
+    0xe7f4,
+    fontFamily: MaterialFamily,
+  );
+
   static const IconData menu = IconData(
     0xe5d2,
     fontFamily: MaterialFamily,
@@ -54,6 +59,11 @@ class IconiOS {
 
   static const IconData group = IconData(
     0xf47c,
+    fontFamily: CupertinoFamily,
+  );
+
+  static const IconData notifications = IconData(
+    0xf3e2,
     fontFamily: CupertinoFamily,
   );
 

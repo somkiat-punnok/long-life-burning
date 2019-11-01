@@ -50,13 +50,13 @@ class Utils {
   }
 
   static DateTime firstDayOfWeek(DateTime day) {
-    day = new DateTime.utc(day.year, day.month, day.day, 12);
+    day = new DateTime(day.year, day.month, day.day);
     var decreaseNum = day.weekday % 7;
     return day.subtract(new Duration(days: decreaseNum));
   }
 
   static DateTime lastDayOfWeek(DateTime day) {
-    day = new DateTime.utc(day.year, day.month, day.day, 12);
+    day = new DateTime(day.year, day.month, day.day);
     var increaseNum = day.weekday % 7;
     return day.add(new Duration(days: 7 - increaseNum));
   }
@@ -87,9 +87,9 @@ class Utils {
   }
 
   static bool isSameWeek(DateTime a, DateTime b) {
-    a = new DateTime.utc(a.year, a.month, a.day);
-    b = new DateTime.utc(b.year, b.month, b.day);
-    var diff = a.toUtc().difference(b.toUtc()).inDays;
+    a = new DateTime(a.year, a.month, a.day);
+    b = new DateTime(b.year, b.month, b.day);
+    var diff = a.difference(b).inDays;
     if (diff.abs() >= 7) {
       return false;
     }

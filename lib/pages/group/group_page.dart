@@ -3,9 +3,7 @@ import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-
-import 'package:long_life_burning/utils/helper/constants.dart' show UserOptions;
-
+import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import './create_group.dart';
 import './detail.dart';
 
@@ -26,7 +24,7 @@ class MyData {
   bool isPressed = false, animatingReveal = false;
   MyData(this.id, this.groupname, this.location, this.time, this.category, this.users);
 }
-    
+
 class _GroupPageState extends State<GroupPage> {
       List<MyData> allData = [];
 
@@ -109,7 +107,7 @@ class ListData extends StatefulWidget {
 class _ListDataState extends State<ListData> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return new Card(
       elevation: 10.0,
       margin: EdgeInsets.all(15.0),
@@ -150,7 +148,7 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
                   color: widget.data.state == 2 ? Colors.green : Colors.grey,
                   onPressed: () async {
                     List _users = widget.data.users.toList();
-                    _users.add(UserOptions.user?.uid ?? "join eiei");
+                    _users.add(userProvider.user?.uid ?? "join eiei");
                     Map<String, String> userMap = <String, String>{};
                     _users.asMap().forEach((i, user) => userMap[i.toString()] = user);
                     await FirebaseDatabase.instance.reference().child("GROUP").child(widget.data.id).update({ "users":  userMap});

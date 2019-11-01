@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 export 'package:long_life_burning/modules/stepcount/diagnose/diagnose.dart';
+export 'package:long_life_burning/modules/stepcount/record/records.dart';
+export 'package:long_life_burning/modules/stepcount/calculate.dart';
+export 'package:long_life_burning/modules/stepcount/calendar.dart';
 
 const num kHeight = 170;
 const num kWeight = 70;

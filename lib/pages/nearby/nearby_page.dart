@@ -1,6 +1,5 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:long_life_burning/modules/nearby/nearby.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 
@@ -15,55 +14,100 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
 
   final double _panelHeightClosed = SizeConfig.setHeight(200.0);
   final double _initRadius = 20.0;
-  final MapController controller = MapController();
-  final Location _locationService  = Location();
-  List<Marker> _marker = [];
-  Marker _userMarker;
+  final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   LocationData _location = LocationData.fromMap({
     'latitude': 19.027510,
     'longitude': 99.900178,
   });
-  bool _serviceStatus = false;
-  bool _permission = false;
   double _initFabHeight, _radius;
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    _initFabHeight = _panelHeightClosed + _initRadius;
     initPlatformState();
+    _initFabHeight = _panelHeightClosed + _initRadius;
   }
 
   void initPlatformState() async {
-    await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH, interval: 1000);
     try {
-      _serviceStatus = await _locationService.serviceEnabled();
-      if (_serviceStatus) {
-        _permission = await _locationService.requestPermission();
-        if (_permission) {
-          _location = await _locationService.getLocation();
-          _marker.clear();
-          _userMarker = Marker(
-            point: LatLng(_location?.latitude, _location?.longitude),
-            builder: (_) => Icon(
-              Icons.location_on,
-              color: Colors.blueAccent,
-            ),
-          );
-          _marker.add(_userMarker);
-          setState(() {});
+      await getCurrentLocation()
+        .then((data) {
+          if (data != null) {
+            _location = data;
+            _markers.clear();
+            _addMarker(
+              id: "user",
+              latitude: data?.latitude,
+              longitude: data?.longitude,
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+              toPlace: false,
+            );
+          }
+        });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<LocationData> getCurrentLocation() async {
+    Location location = Location();
+    try {
+      if (await location.serviceEnabled()) {
+        if (await location.hasPermission()) {
+          return await location.getLocation();
         } else {
-          _permission = await _locationService.requestPermission();
-          initPlatformState();
+          await location.requestPermission();
+          if (await location.hasPermission()) {
+            return await getCurrentLocation();
+          }
+          return null;
         }
       } else {
-        bool serviceStatusResult = await _locationService.requestService();
-        if (serviceStatusResult) {
-          initPlatformState();
+        await location.requestService();
+        if (await location.serviceEnabled()) {
+          return await getCurrentLocation();
         }
+        return null;
       }
     } catch (e) {
       print('Error: $e');
+      return null;
+    }
+  }
+
+  void _addMarker({
+    @required String id,
+    @required double latitude,
+    @required double longitude,
+    BitmapDescriptor icon,
+    bool toPlace = true,
+  }) async {
+    final GoogleMapController controller = await _controller.future;
+    final MarkerId markerId = MarkerId(id);
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(latitude, longitude),
+      icon: icon,
+    );
+    _markers[markerId] = marker;
+    if (toPlace) {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng((latitude ?? 0.0015) - 0.0015, longitude),
+            zoom: 16.0,
+          )
+        )
+      );
+    }
+    setState(() {});
+  }
+
+  void _remove({@required String id}) {
+    final MarkerId markerId = MarkerId(id);
+    if (_markers.containsKey(markerId)) {
+      _markers.remove(markerId);
     }
   }
 
@@ -76,9 +120,12 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
         alignment: Alignment.topCenter,
         children: [
           MapView(
-            controller: controller,
-            center: LatLng((_location?.latitude ?? 0.01) - 0.01, _location?.longitude),
-            listMark: _marker,
+            controller: _controller,
+            center: CameraPosition(
+              target: LatLng((_location?.latitude ?? 0.01) - 0.01, _location?.longitude),
+              zoom: 13.0,
+            ),
+            markers: Set<Marker>.of(_markers.values),
           ),
           Positioned(
             right: 8.0,
@@ -91,32 +138,18 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 color: Theme.of(context).primaryColor,
               ),
               onPressed: () async {
-                if (_serviceStatus) {
-                  if (_permission) {
-                    _location = await _locationService.getLocation();
-                    _userMarker = Marker(
-                      point: LatLng(_location?.latitude, _location?.longitude),
-                      builder: (_) => Icon(
-                        Icons.location_on,
-                        color: Colors.blueAccent,
-                      ),
-                    );
-                    _marker.removeAt(0);
-                    _marker.insert(0, _userMarker);
-                    setState(() {});
-                    controller.move(LatLng((_location?.latitude ?? 0.0015) - 0.0015, _location?.longitude), 16.0);
-                  } else {
-                    _permission = await _locationService.requestPermission();
-                  }
-                } else {
-                  bool serviceStatusResult = await _locationService.requestService();
-                  if (serviceStatusResult) {
-                    _serviceStatus = await _locationService.serviceEnabled();
-                    if (!_permission) {
-                      _permission = await _locationService.requestPermission();
+                await getCurrentLocation()
+                  .then((data) {
+                    if (data != null) {
+                      _remove(id: "user");
+                      _addMarker(
+                        id: "user",
+                        latitude: data?.latitude,
+                        longitude: data?.longitude,
+                        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
+                      );
                     }
-                  }
-                }
+                  });
               },
             ),
           ),
@@ -165,20 +198,14 @@ class _NearbyPageState extends State<NearbyPage> with TickerProviderStateMixin {
                 _radius = _initRadius * (1 - value);
               });
             },
-            onLocate: (double lat, double long) {
-              _marker.clear();
-              if (_serviceStatus) _marker.add(_userMarker);
-              _marker.add(
-                Marker(
-                  point: LatLng(lat, long),
-                  builder: (_) => Icon(
-                    Icons.location_on,
-                    color: Colors.redAccent,
-                  ),
-                )
+            onLocate: (double lat, double long) async {
+              _remove(id: "place");
+              _addMarker(
+                id: "place",
+                latitude: lat,
+                longitude: long,
+                icon: BitmapDescriptor.defaultMarker,
               );
-              setState(() {});
-              controller.move(LatLng((lat ?? 0.0015) - 0.0015, long), 16.0);
             },
           ),
         ],

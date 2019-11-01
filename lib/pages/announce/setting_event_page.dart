@@ -4,6 +4,10 @@ import 'package:long_life_burning/utils/helper/constants.dart'
   show
     PROVINCE,
     CATEGORIES;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    SettingProvider;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
 class SettingEventPage extends StatefulWidget {
@@ -15,15 +19,29 @@ class SettingEventPage extends StatefulWidget {
 
 class _SettingEventPageState extends State<SettingEventPage> {
 
-  int province = 0;
-  int category = 0;
-  Duration timer = Duration();
-  DateTime date = DateTime.now();
-  DateTime time = DateTime.now();
-  DateTime datetime = DateTime.now();
+  SettingProvider _setting;
+  int _province;
+  int _category;
+  bool _temp;
+
+  @override
+  void initState() {
+    super.initState();
+    _province = 0;
+    _category = 0;
+    _temp = true;
+  }
 
   @override
   Widget build(BuildContext context) {
+    _setting = Provider.of<SettingProvider>(context);
+    if (_temp) {
+      _province = PROVINCE.indexOf(_setting.province);
+      _category = CATEGORIES.indexOf(_setting.category);
+      if (_province < 0) _province = 0;
+      if (_category < 0) _category = 0;
+      _temp = false;
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -43,7 +61,11 @@ class _SettingEventPageState extends State<SettingEventPage> {
         ),
         actions: <Widget>[
           GestureDetector(
-            onTap: () => Navigator.of(context).maybePop(),
+            onTap: () async {
+              _setting.province = PROVINCE[_province];
+              _setting.category = CATEGORIES[_category];
+              await Navigator.of(context).maybePop();
+            },
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -63,70 +85,36 @@ class _SettingEventPageState extends State<SettingEventPage> {
       ),
       body: Settings(
         items: <Widget>[
-          SettingHeader('performed by'),
+          SettingHeader('filter by'),
           CusttomPicker(
             title: 'Province',
             items: PROVINCE,
-            currentIndex: province,
+            currentIndex: _province,
             onSelect: (int i) {
               setState(() {
-                province = i;
+                _province = i;
               });
             },
           ),
           CusttomPicker(
             title: 'Category',
             items: CATEGORIES,
-            currentIndex: category,
+            currentIndex: _category,
             onSelect: (int i) {
               setState(() {
-                category = i;
+                _category = i;
               });
             },
           ),
-          // SettingHeader(''),
-          // TimerPicker(
-          //   currentTimer: timer,
-          //   onSelect: (Duration t) {
-          //     setState(() {
-          //       timer = t;
-          //     });
-          //   },
-          // ),
-          // DatePicker(
-          //   currentDate: date,
-          //   onSelect: (DateTime t) {
-          //     setState(() {
-          //       date = t;
-          //     });
-          //   },
-          // ),
-          // TimePicker(
-          //   currentTime: time,
-          //   onSelect: (DateTime t) {
-          //     setState(() {
-          //       time = t;
-          //     });
-          //   },
-          // ),
-          // DateAndTimePicker(
-          //   currentDateAndTime: datetime,
-          //   onSelect: (DateTime t) {
-          //     setState(() {
-          //       datetime = t;
-          //     });
-          //   },
-          // ),
           SettingHeader(''),
           SettingButton(
             "Reset All Settings",
             () => setState(() {
-              province = 0;
-              category = 0;
+              _province = 0;
+              _category = 0;
             }),
             type: SettingButtonType.DESTRUCTIVE,
           ),
-          // SettingHeader(''),
         ],
       ),
     );
