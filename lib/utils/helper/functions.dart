@@ -14,6 +14,7 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
           Configs.login = true;
           userProvider.setUser(
             userNew: user,
+            idNew: data.documents[0].documentID,
             nameNew: data.documents[0].data[Configs.name_field],
             weightNew: data.documents[0].data[Configs.weight_field],
             heightNew: data.documents[0].data[Configs.height_field],
