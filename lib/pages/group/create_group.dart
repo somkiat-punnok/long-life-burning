@@ -1,6 +1,8 @@
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import 'package:long_life_burning/utils/helper/constants.dart'
     show GROUP_CATEGORIES, SizeConfig;
@@ -11,6 +13,7 @@ class CreateGroup extends StatefulWidget {
 
   CreateGroup({Key key}) : super(key: key);
   static const String routeName = '/create';
+  
 
   @override
   _CreateGroupState createState() => _CreateGroupState();
@@ -20,27 +23,32 @@ class _CreateGroupState extends State<CreateGroup> {
   int category = 0;
   DateTime time = DateTime.now();
   UserProvider userProvider;
+  
 
   GlobalKey<FormState> _key = new GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String groupname;
   String location;
+  
+  DateTime _date = DateTime.now();
+  
 
   _sendToServer() {
     if (_key.currentState.validate()) {
       _key.currentState.save();
-      DatabaseReference ref = FirebaseDatabase.instance.reference();
+      CollectionReference ref = Firestore.instance.collection('group');
       var data = {
         "groupname": groupname,
         "location": location,
         "category": GROUP_CATEGORIES[category],
+        "date":_date,
         "time": "${time.hour}:${time.minute}",
-        "users": {
-          "0": userProvider.user?.uid ?? "",
-        },
+        "users": [
+          userProvider.user?.uid ?? "",
+        ],
       };
-      ref.child('GROUP').push().set(data).then((v) {
+      ref.add(data).then((v) {
         _key.currentState.reset();
         Navigator.of(context).maybePop();
       });
@@ -103,6 +111,7 @@ class _CreateGroupState extends State<CreateGroup> {
   }
 
   Widget FormUI() {
+    
     return new Column(
       children: <Widget>[
         new Row(
@@ -127,6 +136,18 @@ class _CreateGroupState extends State<CreateGroup> {
           validator: validateLocation,
           maxLines: 5,
           maxLength: 256,
+        ),
+        DatePicker(
+          title: 'Date',
+          currentDate: _date,
+          onSelect: (DateTime t) {
+            setState(() {
+              _date = t;
+            });
+          },
+        ),
+        Divider(
+          height: 30.0,
         ),
         TimePicker(
           title: 'Time',

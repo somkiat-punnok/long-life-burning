@@ -52,7 +52,7 @@ class _RecordPageState extends State<RecordPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    readDate(_selectedDay);
+    // readDate(_selectedDay);
   }
 
   @override
@@ -76,7 +76,7 @@ class _RecordPageState extends State<RecordPage> {
   }
 
   void _onDaySelected(DateTime date, List events) async {
-    await readDate(DateTime(date.year, date.month, date.day));
+    // await readDate(DateTime(date.year, date.month, date.day));
     setState(() {
       _selectedDay = date;
     });

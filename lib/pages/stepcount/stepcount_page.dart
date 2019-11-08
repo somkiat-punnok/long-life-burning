@@ -46,7 +46,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    readDate();
+    // readDate();
     slidingListController.reopen();
   }
 
@@ -65,7 +65,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
           .then(
             (result) => Configs.fitkit_permissions = result
           );
-        await readDate();
+        if (Configs.fitkit_permissions) await readDate();
       } else {
         _step = 0;
         _distence = 0;
