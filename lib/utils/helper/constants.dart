@@ -11,15 +11,11 @@ import '../providers/all.dart' show UserProvider;
 export '../widgets/platform.dart';
 export '../widgets/size_config.dart';
 
+part './enums.dart';
 part './fonts.dart';
 part './functions.dart';
 part './icons.dart';
 part './options.dart';
-
-enum Gender {
-  MALE,
-  FEMALE,
-}
 
 const String APPNAME = 'Long Burn';
 
