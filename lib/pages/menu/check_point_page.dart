@@ -9,7 +9,7 @@ import 'package:long_life_burning/modules/nearby/nearby.dart'
     BitmapDescriptor;
 
 class CheckPointPage extends StatefulWidget {
-  CheckPointPage({Key key}) : super(key: key);
+  CheckPointPage({ Key key }) : super(key: key);
   static const String routeName = '/marking';
   @override
   _CheckPointPageState createState() => _CheckPointPageState();

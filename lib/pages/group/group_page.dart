@@ -8,7 +8,7 @@ import './create_group.dart';
 import './detail.dart';
 
 class GroupPage extends StatefulWidget {
-  GroupPage({Key key}) : super(key: key);
+  GroupPage({ Key key }) : super(key: key);
   static const String routeName = '/';
   @override
   _GroupPageState createState() => _GroupPageState();

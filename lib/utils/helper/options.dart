@@ -13,8 +13,9 @@ class Configs {
   static bool login = false;
 
   static const String collection_user = 'users';
+  static const String collection_event = 'Blog';
 
-  // Field
+  // Field user
   static const String uid_field = 'uid';
   static const String name_field = 'name';
   static const String gender_field = 'gender';

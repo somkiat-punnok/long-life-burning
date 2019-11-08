@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+
 class StatisticPage extends StatefulWidget {
-  StatisticPage({Key key}) : super(key: key);
+  StatisticPage({ Key key }) : super(key: key);
   static const String routeName = '/statistic';
   @override
   _StatisticPageState createState() => _StatisticPageState();
-  
 }
 
 class _StatisticPageState extends State<StatisticPage> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

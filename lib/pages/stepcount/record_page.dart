@@ -25,7 +25,7 @@ import 'package:long_life_burning/utils/widgets/date_utils.dart';
 import '../common/year_page.dart';
 
 class RecordPage extends StatefulWidget {
-  RecordPage({Key key}) : super(key: key);
+  RecordPage({ Key key }) : super(key: key);
   static const String routeName = '/record';
   @override
   _RecordPageState createState() => _RecordPageState();
@@ -169,6 +169,7 @@ class _RecordPageState extends State<RecordPage> {
               continue;
             }
           }
+          if (!mounted) return;
           setState(() {});
         }
       } catch (e) {
@@ -176,6 +177,7 @@ class _RecordPageState extends State<RecordPage> {
         _step = 0;
         _distence = 0;
         _calories = 0;
+        if (!mounted) return;
         setState(() {});
       }
     }
@@ -183,6 +185,7 @@ class _RecordPageState extends State<RecordPage> {
       _step = 0;
       _distence = 0;
       _calories = 0;
+      if (!mounted) return;
       setState(() {});
     }
   }

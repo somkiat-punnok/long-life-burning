@@ -11,7 +11,7 @@ import 'package:long_life_burning/utils/providers/all.dart'
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
 class SettingEventPage extends StatefulWidget {
-  SettingEventPage({Key key}) : super(key: key);
+  SettingEventPage({ Key key }) : super(key: key);
   static const String routeName = '/setevent';
   @override
   _SettingEventPageState createState() => _SettingEventPageState();

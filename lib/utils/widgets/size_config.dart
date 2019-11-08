@@ -18,7 +18,7 @@ class SizeConfig {
   static double scaleWidth;
   static double scaleHeight;
   static double scaleSize;
-  
+
   static void init(BuildContext context) {
     final MediaQueryData _mediaQueryData = MediaQuery.of(context);
     final double width = 411.42857142857144;

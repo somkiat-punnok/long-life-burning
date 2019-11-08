@@ -11,7 +11,6 @@ class SettingPage extends StatefulWidget {
   static const String routeName = '/setting';
   @override
   _SettingPageState createState() => _SettingPageState();
-  
 }
 class CrudMedthods {
   bool isLoggedIn() {

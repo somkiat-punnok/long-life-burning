@@ -20,7 +20,7 @@ import 'package:long_life_burning/utils/providers/all.dart'
 import './record_page.dart';
 
 class StepCountPage extends StatefulWidget {
-  StepCountPage({Key key}) : super(key: key);
+  StepCountPage({ Key key }) : super(key: key);
   static const String routeName = '/';
   @override
   _StepCountPageState createState() => _StepCountPageState();
@@ -110,6 +110,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
             continue;
           }
         }
+        if (!mounted) return;
         setState(() {});
       }
     } catch (e) {
@@ -117,6 +118,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
       _step = 0;
       _distence = 0;
       _calories = 0;
+      if (!mounted) return;
       setState(() {});
     }
   }
