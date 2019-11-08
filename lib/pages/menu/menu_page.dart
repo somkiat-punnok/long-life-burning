@@ -123,14 +123,7 @@ class _MenuPageState extends State<MenuPage> {
         ),
         onPressed: () async {
           await Configs.auth.signOut().then((_) async {
-            userProvider.setUser(
-              userNew: null,
-              nameNew: null,
-              weightNew: null,
-              heightNew: null,
-              dateOfBirthNew: null,
-              genderNew: null,
-            );
+            userProvider.resetUser();
             Configs.login = false;
             await Navigator.of(Configs.index_context).pushReplacement(
               MaterialPageRoute(

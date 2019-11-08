@@ -1,6 +1,4 @@
-part of nearby;
-
-typedef Widget StickyHeaderWidgetBuilder(BuildContext context, double stuckAmount);
+part of header;
 
 class StickyHeader extends MultiChildRenderObjectWidget {
   /// Constructs a new [StickyHeader] widget.

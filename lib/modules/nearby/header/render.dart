@@ -1,6 +1,4 @@
-part of nearby;
-
-typedef void RenderStickyHeaderCallback(double stuckAmount);
+part of header;
 
 class RenderStickyHeader extends RenderBox
   with
