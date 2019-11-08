@@ -1,7 +1,7 @@
-part of nearby;
+part of panel;
 
 class PanelController {
-  
+
   VoidCallback _closeListener;
   VoidCallback _openListener;
   VoidCallback _hideListener;

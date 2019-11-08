@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fit_kit/fit_kit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:long_life_burning/modules/stepcount/calendar.dart';
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
   show
     kHeight,
     kWeight,
     kDateOfBirth,
-    RecordToList,
-    calculateCalories;
+    RecordToList;
 import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
     CalendarController,
@@ -15,7 +15,10 @@ import 'package:long_life_burning/modules/calendar/calendar.dart'
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Gender,
-    Configs;
+    Configs,
+    isMaterial,
+    isCupertino,
+    calculateCalories;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
@@ -82,8 +85,9 @@ class _RecordPageState extends State<RecordPage> {
     });
   }
 
-  void _selection(BuildContext context) async => await Navigator.of(context).pushNamed(YearsCalendarPage.routeName).then(
-    (res) {
+  void _selection(BuildContext context) async => await Navigator.of(context)
+    .pushNamed(YearsCalendarPage.routeName)
+    .then((res) {
       if (res != null) {
         final result = res as List;
         if(_now.year == result[0] && _now.month == result[1]) {
@@ -94,25 +98,17 @@ class _RecordPageState extends State<RecordPage> {
         }
         _calendarController.setSelectedDay(_selectedDay, runCallback: true);
       }
-    }
-  );
+    });
 
   Future<void> readDate(DateTime date) async {
     if (!mounted) return;
     final DateTime now = DateTime.now();
     if ((date.year <= now.year) && (date.month <= now.month) && (date.day <= now.day)) {
       try {
-        if (!Configs.fitkit_permissions) {
-          await FitKit
-            .requestPermissions(DataType.values)
-            .then(
-              (result) => Configs.fitkit_permissions = result
-            );
-          await readDate(date);
-        } else {
+        if (isCupertino && Configs.fitkit_permissions) {
           _step = 0;
-          _distence = 0;
-          _calories = 0;
+          _distence = 0.0;
+          _calories = 0.0;
           final bool dateNow = Utils.isSameDay(date, now);
           for (DataType type in DataType.values) {
             if (type == DataType.STEP_COUNT) {
@@ -132,12 +128,12 @@ class _RecordPageState extends State<RecordPage> {
                       if (d.value != 0) {
                         _step += d.value ?? 0;
                         _calories += calculateCalories(
-                          userProvider?.height ?? kHeight,
-                          userProvider?.dateOfBirth ?? kDateOfBirth,
-                          userProvider?.weight ?? kWeight,
-                          userProvider?.gender ?? Gender.MALE,
-                          ((d.dateTo.millisecondsSinceEpoch - d.dateFrom.millisecondsSinceEpoch) / 1000.0),
-                          d.value,
+                          height: userProvider?.height ?? kHeight,
+                          age: userProvider?.dateOfBirth ?? kDateOfBirth,
+                          weight: userProvider?.weight ?? kWeight,
+                          gender: userProvider?.gender ?? Gender.MALE,
+                          seconds: ((d.dateTo.millisecondsSinceEpoch - d.dateFrom.millisecondsSinceEpoch) / 1000.0),
+                          steps: d.value,
                         );
                       }
                     }
@@ -170,20 +166,40 @@ class _RecordPageState extends State<RecordPage> {
             }
           }
           setState(() {});
+          return;
+        } else if (isCupertino && !Configs.fitkit_permissions) {
+          await FitKit
+            .requestPermissions(DataType.values)
+            .then(
+              (result) => Configs.fitkit_permissions = result
+            );
+          await readDate(date);
+          return;
+        } else if (isMaterial) {
+          final SharedPreferences _pref = await SharedPreferences.getInstance();
+          _step = _pref.getInt("${date.year}-${date.month}-${date.day}-step") ?? 0;
+          _distence = _pref.getDouble("${date.year}-${date.month}-${date.day}-distences") ?? 0.0;
+          _calories = _pref.getDouble("${date.year}-${date.month}-${date.day}-calories") ?? 0.0;
+          setState(() {});
+          return;
+        } else {
+          return;
         }
       } catch (e) {
         print('Failed to read all values. $e');
         _step = 0;
-        _distence = 0;
-        _calories = 0;
+        _distence = 0.0;
+        _calories = 0.0;
         setState(() {});
+        return;
       }
     }
     else {
       _step = 0;
-      _distence = 0;
-      _calories = 0;
+      _distence = 0.0;
+      _calories = 0.0;
       setState(() {});
+      return;
     }
   }
 
@@ -205,8 +221,8 @@ class _RecordPageState extends State<RecordPage> {
           ),
           RecordToList(
             step: _step ?? 0,
-            cal: _calories ?? 0,
-            dist: ((_distence ?? 0) / 1000.0),
+            cal: _calories ?? 0.0,
+            dist: ((_distence ?? 0.0) / 1000.0),
           ),
         ],
       ),

@@ -32,9 +32,9 @@ dependencies:
   firebase_auth: ^0.14.0+8
   cloud_firestore: ^0.12.10
   firebase_database: ^3.0.9
+  firebase_messaging: ^5.1.8
   #firebase_storage: ^3.0.8
   #firebase_storage_image: ^0.4.0
-  firebase_messaging: ^5.1.8
   #cloud_functions: ^0.4.1+4
 
   # Notify
@@ -52,12 +52,12 @@ dependencies:
 
   # Map
   location: ^2.3.5
-  #geolocator: ^5.1.4+2
-  #google_maps_webservice: ^0.0.16
+  geolocator: ^5.1.4+2
   google_maps_flutter: ^0.5.21+8
+  google_maps_webservice: ^0.0.16
+  #geoflutterfire: ^2.0.3+5
   #flutter_google_places: ^0.2.3
   #clustering_google_maps: ^0.1.2
-  geoflutterfire: ^2.0.3+5
   #flutter_polyline_points: ^0.1.0
 
   # Pedometer

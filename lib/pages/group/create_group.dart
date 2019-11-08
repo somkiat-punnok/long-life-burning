@@ -1,6 +1,7 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import 'package:long_life_burning/utils/helper/constants.dart'
     show GROUP_CATEGORIES, SizeConfig;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
@@ -18,6 +19,7 @@ class CreateGroup extends StatefulWidget {
 class _CreateGroupState extends State<CreateGroup> {
   int category = 0;
   DateTime time = DateTime.now();
+  UserProvider userProvider;
 
   GlobalKey<FormState> _key = new GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -34,6 +36,9 @@ class _CreateGroupState extends State<CreateGroup> {
         "location": location,
         "category": GROUP_CATEGORIES[category],
         "time": "${time.hour}:${time.minute}",
+        "users": {
+          "0": userProvider.user?.uid ?? "",
+        },
       };
       ref.child('GROUP').push().set(data).then((v) {
         _key.currentState.reset();
@@ -56,6 +61,7 @@ class _CreateGroupState extends State<CreateGroup> {
   
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: false,

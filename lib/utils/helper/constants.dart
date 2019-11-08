@@ -7,24 +7,21 @@ import 'package:firebase_auth/firebase_auth.dart'
     FirebaseAuth,
     FirebaseUser;
 import '../providers/all.dart' show UserProvider;
+import '../widgets/platform.dart' show isMaterial;
 
 export '../widgets/platform.dart';
 export '../widgets/size_config.dart';
 
+part './enums.dart';
 part './fonts.dart';
 part './functions.dart';
 part './icons.dart';
 part './options.dart';
 
-enum Gender {
-  MALE,
-  FEMALE,
-}
-
 const String APPNAME = 'Long Burn';
 
-// Key
-// const String API_Key = '';
+// Key AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE
+String Map_API_Key = isMaterial ? 'AIzaSyCngcsFoAznocj_aRI9CRwdtE6_gRAINGc' : 'AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE';
 
 const Map<String, String> MAP_PROVINCE = {
   '': '',

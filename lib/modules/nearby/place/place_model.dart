@@ -1,4 +1,4 @@
-part of nearby;
+part of place;
 
 class PlaceModel {
 
