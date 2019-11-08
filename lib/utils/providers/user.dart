@@ -69,6 +69,7 @@ class UserProvider extends ChangeNotifier {
 
   void setUser({
     FirebaseUser userNew,
+    String idNew,
     String nameNew,
     String genderNew,
     dynamic dateOfBirthNew,
@@ -76,13 +77,23 @@ class UserProvider extends ChangeNotifier {
     num weightNew,
   }) {
     _user = userNew;
-    _id = userNew?.uid;
+    _id = idNew;
     _name = nameNew;
     _height = heightNew;
     _weight = weightNew;
     _gender = genderNew != null ? genderNew?.toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE : null;
     _dateOfBirth = dateOfBirthNew != null ? DateTime.fromMicrosecondsSinceEpoch(dateOfBirthNew?.microsecondsSinceEpoch) : null;
     notifyListeners();
+  }
+
+  void resetUser() {
+    _user = null;
+    _id = null;
+    _name = null;
+    _height = null;
+    _weight = null;
+    _gender = null;
+    _dateOfBirth = null;
   }
 
 }
