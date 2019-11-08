@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import './create_group.dart';
@@ -15,14 +15,14 @@ class GroupPage extends StatefulWidget {
 }
 
 class MyData {
-  String id, groupname, location, time , category;
+  String id, groupname, location, time , category,date;
   List users;
   Animation animation;
   AnimationController controller;
   final GlobalKey<dynamic> key = GlobalKey();
   int state = 0;
   bool isPressed = false, animatingReveal = false;
-  MyData(this.id, this.groupname, this.location, this.time, this.category, this.users);
+  MyData(this.id, this.groupname, this.location, this.time, this.category, this.users, this.date);
 }
 
 class _GroupPageState extends State<GroupPage> {
@@ -54,28 +54,26 @@ class _GroupPageState extends State<GroupPage> {
               ),
             ],
           ),
-          body: StreamBuilder<DataSnapshot>(
-            stream: FirebaseDatabase.instance.reference().child("GROUP").once().asStream(),
+          body: StreamBuilder<QuerySnapshot>(
+            stream: Firestore.instance.collection('group').snapshots(),
             builder: (_, snapshot) {
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               }
-              var KEYS = snapshot.data?.value?.keys;
-              if (KEYS == null) return Container();
-              var DATA = snapshot.data?.value;
               allData.clear();
-              for(var individualKey in KEYS)
-              {
+              snapshot.data.documents.forEach((doc) {
+                var d = doc.data['date'] != null ? DateTime.fromMicrosecondsSinceEpoch(doc.data['date']?.microsecondsSinceEpoch) : null;
                 MyData data = new MyData(
-                  individualKey,
-                  DATA[individualKey]['groupname'],
-                  DATA[individualKey]['location'],
-                  DATA[individualKey]['time'],
-                  DATA[individualKey]['category'],
-                  DATA[individualKey]['users'],
+                  doc.documentID,
+                  doc.data['groupname'],
+                  doc.data['location'],
+                  doc.data['time'],
+                  doc.data['category'],
+                  doc.data['users'],
+                  "${d?.day?.toString()?.padLeft(2,"0") ?? "XX"}-${d?.month?.toString()?.padLeft(2,"0") ?? "XX"}-${d?.year ?? "XXXX"}",
                 );
                 allData.add(data);
-              }
+              });
               return allData.length == 0 ? new Text("No Data available") : new ListView.builder(
                 itemCount: allData.length,
                 itemBuilder: (_, index)
@@ -108,139 +106,123 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
-    return new Card(
-      elevation: 10.0,
-      margin: EdgeInsets.all(15.0),
-      child: new Container(
-        padding: new EdgeInsets.all(14.0),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                  new Text
-            (widget.data.groupname ?? "",style: Theme.of(context).textTheme.subtitle,
-            textAlign:TextAlign.center,
-            ),
-            new Text
-            (widget.data.time ?? "",style: Theme.of(context).textTheme.subtitle,
-            textAlign:TextAlign.center,
-            ),
-            IconButton(
-            icon: Icon(Icons.list,
-            color: Colors.red,
-            ),
-            onPressed:() => Navigator.of(widget.contexts).pushNamed(
-              DetailGroup.routeName,
-              arguments: {
-                "groupname": widget.data.groupname,
-                "category": widget.data.category,
-                "location": widget.data.location,
-                "time": widget.data.time,
-              }
+    return GestureDetector(
+      onTap: () => Navigator.of(widget.contexts).pushNamed(
+                DetailGroup.routeName,
+                arguments: {
+                  "groupname": widget.data.groupname,
+                  "category": widget.data.category,
+                  "location": widget.data.location,
+                  "time": widget.data.time,
+                  "date": widget.data.date,
+                }
+                ),
+      child: new Card(
+        elevation: 10.0,
+        margin: EdgeInsets.all(15.0),
+        child: new Container(
+          padding: new EdgeInsets.all(14.0),
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                    new Text
+              (widget.data.groupname ?? "",style: Theme.of(context).textTheme.subtitle,
+              textAlign:TextAlign.center,
               ),
-            ),
-                RaisedButton(
-                  elevation: 4.0,
-                  child: buildButtonChild(),
-                  key: widget.data.key,
-                  color: widget.data.state == 2 ? Colors.green : Colors.grey,
-                  onPressed: () async {
-                    List _users = widget.data.users.toList();
-                    _users.add(userProvider.user?.uid ?? "join eiei");
-                    Map<String, String> userMap = <String, String>{};
-                    _users.asMap().forEach((i, user) => userMap[i.toString()] = user);
-                    await FirebaseDatabase.instance.reference().child("GROUP").child(widget.data.id).update({ "users":  userMap});
-                  },
-                  onHighlightChanged: (isPressed){
-                    setState(() {
-                      widget.data.isPressed = isPressed;
-                      if (widget.data.state == 0) {
-                        animateButton();
-                      }
-                    });
-                  }
+              new Text
+              (widget.data.time ?? "",style: Theme.of(context).textTheme.subtitle,
+              textAlign:TextAlign.center,
               ),
-              ],
-            ),
-            SizedBox(height: 10.0,),
-                new Text
-            (widget.data.category ?? "",style: Theme.of(context).textTheme.subtitle,
-            textAlign:TextAlign.start,
-            ),
-            new Text
-              (widget.data.location ?? "",style: Theme.of(context).textTheme.subtitle,
-            textAlign:TextAlign.start
-            ),
-          ],
+                  RaisedButton(
+                    elevation: 4.0,
+                    color: Colors.grey,
+                    child: Text('join',style:
+                    TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold
+                      ,),
+                      ),
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("join the group."),
+                            content: Text("Will you confirm to join this group?"),
+                            actions: [
+                              FlatButton(
+                                child: Text("Cancel"),
+                                onPressed:  () async => await Navigator.of(context).maybePop(),
+                              ),
+                              FlatButton(
+                                child: Text("Accept"),
+                                onPressed: () async {
+                                      List _users = widget.data.users.toList();
+                                      _users.add(userProvider.user?.uid ?? "join");
+                                      await Firestore.instance.collection('group').document(widget.data.id).updateData(
+                                        {
+                                        "users" :_users,         
+                                        }
+                                      );
+                                       Navigator.of(context).maybePop();
+                                       setState(() {
+                                         _users == true;
+                                       });
+                                      // RaisedButton(
+                                      //   elevation: 4.0,
+                                      //   color: Colors.grey,
+                                      //   child: Text('cancel',style:
+                                      //   TextStyle(
+                                      //     color: Colors.white,
+                                      //     fontWeight: FontWeight.bold
+                                      //     ,),
+                                      //     ),
+                                      //     onPressed: () => showDialog(
+                                      //       context: context,
+                                      //       builder: (BuildContext context) {
+                                      //         return AlertDialog(
+                                      //           title: Text("cancel the group."),
+                                      //           content: Text("Will you confirm to cancel this group?"),
+                                      //           actions: [
+                                      //             FlatButton(
+                                      //               child: Text("Cancel"),
+                                      //               onPressed:  () async => await Navigator.of(context).maybePop(),
+                                      //             ),
+                                      //             FlatButton(
+                                      //               child: Text("Accept"),
+                                      //               onPressed: () async {
+                                      //                     Navigator.of(context).maybePop();
+                                      //                   },
+                                      //             ),
+                                      //           ],
+                                      //         );
+                                      //       },
+                                      //     ),
+                                      //   );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                 ],
+              ),
+              SizedBox(height: 10.0,),
+              //     new Text
+              // (widget.data.category ?? "",style: Theme.of(context).textTheme.subtitle,
+              // textAlign:TextAlign.start,
+              // ),
+              new Text
+                (widget.data.location ?? "",style: Theme.of(context).textTheme.subtitle,
+              textAlign:TextAlign.start
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  void animateButton() {
-    double initialWidth = widget.data.key.currentContext.size.width;
-    widget.data.controller = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
-    widget.data.animation = Tween(begin: 0.0, end: 1.0).animate(widget.data.controller)
-    ..addListener((){
-      setState((){
-        initialWidth = ((initialWidth - 48.0) * widget.data.animation.value);
-      });
-    });
-
-    widget.data.controller.forward();
-
-    setState(() {
-      widget.data.state = 1;
-    });
-
-    Timer(Duration(milliseconds: 3300), () {
-      setState(() {
-        widget.data.state = 2;
-      });
-      widget.data.controller.dispose();
-    });
-
-    Timer(Duration(milliseconds: 3600), () {
-      widget.data.animatingReveal = true;
-      widget.callback();
-    });
-  }
-
-Widget buildButtonChild() {
-if (widget.data.state == 1) {
-return SizedBox(
-  height: 30.0,
-  width: 30.0,
-  child: CircularProgressIndicator(
-    value: null,
-    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-  ),
-);
-} else if (widget.data.state == 2) {
-return Icon(Icons.check, color: Colors.white);
-} else {
-return Text(
-  'join',
-  style: TextStyle(color: Colors.white, fontSize: 16.0),
-);
 }
-}
-double calculateElevation(MyData data) {
-if (data.animatingReveal) {
-return 0.0;
-} else {
-return data.isPressed ? 6.0 : 4.0;
-}
-}
-
-void reset(MyData data) {
-double.infinity;
-data.animatingReveal = false;
-data.state = 0;
-}
-}
-
-
-

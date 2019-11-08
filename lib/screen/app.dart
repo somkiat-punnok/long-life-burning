@@ -34,13 +34,6 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<SettingProvider>(builder: (_) => SettingProvider(),),
         ChangeNotifierProvider<NavBarProvider>(builder: (_) => NavBarProvider(),),
         ChangeNotifierProvider<UserProvider>(builder: (_) => UserProvider(),),
-        FutureProvider<SharedPreferences>(
-          builder: (_) async => await SharedPreferences.getInstance(),
-          catchError: (_, err) {
-            print(err);
-            return null;
-          },
-        ),
         StreamProvider<QuerySnapshot>(
           builder: (_) => Firestore.instance
             .collection(Configs.collection_event)

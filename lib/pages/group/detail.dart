@@ -12,8 +12,10 @@ class Todo {
   final String location;
   final String time;
   final String category;
+  final String date;
+  final String users;
 
-  Todo({this.groupname, this.location, this.time, this.category});
+  Todo( {this.groupname, this.location, this.time, this.category,this.date,this.users});
 
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
@@ -21,6 +23,8 @@ class Todo {
       category: json['category'],
       location: json['location'],
       time: json['time'],
+      date: json['date'],
+      users: json['users'],
     );
   }
 }
@@ -56,7 +60,7 @@ class _DetailGroupState extends State<DetailGroup> {
             Row(
                mainAxisAlignment: MainAxisAlignment.end,
               children:<Widget>[
-                    new Text('Time:'+data.time,
+                    new Text('Time: ${data.time}',
                   style: TextStyle(
                     fontSize:15.0),
                     ),
@@ -69,17 +73,23 @@ class _DetailGroupState extends State<DetailGroup> {
                     Divider(height: 40.0,),
             new Text(data.location,
             style: TextStyle(
-              fontSize: 15.0
+              fontSize: 17.0
             ),
             ),
              Divider(height: 40.0,),
+               new Text('Date : ${data.date}',
+            style: TextStyle(
+              fontSize: 15.0
+            ),
+             ),
+              Divider(height: 40.0,),
              new Text('Category : '+data.category,
             style: TextStyle(
               fontSize: 15.0
             ),
              ),
               Divider(height: 40.0,),
-               new Text('Users join : ',
+               new Text('Users join :${data.users} ',
             style: TextStyle(
               fontSize: 15.0
             ),
