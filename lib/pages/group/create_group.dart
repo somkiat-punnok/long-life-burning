@@ -9,11 +9,8 @@ import 'package:long_life_burning/modules/announce/setting/settings.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 
 class CreateGroup extends StatefulWidget {
-
-  CreateGroup({Key key}) : super(key: key);
+  CreateGroup({ Key key }) : super(key: key);
   static const String routeName = '/create';
-  
-
   @override
   _CreateGroupState createState() => _CreateGroupState();
 }
@@ -22,16 +19,12 @@ class _CreateGroupState extends State<CreateGroup> {
   int category = 0;
   DateTime time = DateTime.now();
   UserProvider userProvider;
-  
-
   GlobalKey<FormState> _key = new GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool _autovalidate = false;
   String groupname;
   String location;
-  
   DateTime _date = DateTime.now();
-  
 
   _sendToServer() {
     if (_key.currentState.validate()) {
@@ -57,7 +50,7 @@ class _CreateGroupState extends State<CreateGroup> {
       });
     }
   }
-  
+
   String validateGroupName(String val) {
     return val.length == 0 ? "Enter Name First" : null;
   }
@@ -65,7 +58,7 @@ class _CreateGroupState extends State<CreateGroup> {
   String validateLocation(String val) {
     return val.length == 0 ? "Enter Location First" : null;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
@@ -110,7 +103,6 @@ class _CreateGroupState extends State<CreateGroup> {
   }
 
   Widget FormUI() {
-    
     return new Column(
       children: <Widget>[
         new Row(

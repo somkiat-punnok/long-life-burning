@@ -8,7 +8,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
     Map_API_Key;
 
 class NearbyPage extends StatefulWidget {
-  NearbyPage({Key key}) : super(key: key);
+  NearbyPage({ Key key }) : super(key: key);
   static const String routeName = '/';
   @override
   _NearbyPageState createState() => _NearbyPageState();

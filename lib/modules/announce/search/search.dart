@@ -67,19 +67,19 @@ class SearchEventDelegate extends SearchDelegate<Event> {
 
     final Iterable<Event> suggestions = query.isNotEmpty
       ? _data.where((Event e) {
-          if (e.title.startsWith(query)) {
+          if (e.title.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.title;
             return true;
           }
-          if (e.subtitle.startsWith(query)) {
+          if (e.subtitle.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.subtitle;
             return true;
           }
-          if (e.province.startsWith(query)) {
+          if (e.province.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.province;
             return true;
           }
-          if (e.category.startsWith(query)) {
+          if (e.category.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.category;
             return true;
           }
@@ -126,7 +126,7 @@ class SearchEventDelegate extends SearchDelegate<Event> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return null;
+    return Container();
   }
 
 }

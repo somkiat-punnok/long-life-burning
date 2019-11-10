@@ -10,7 +10,7 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
       )
       .snapshots()
       .listen((data) {
-        if (data.documents.isNotEmpty) {
+        if (data?.documents?.isNotEmpty ?? false) {
           Configs.login = true;
           userProvider.setUser(
             userNew: user,

@@ -94,6 +94,7 @@ class UserProvider extends ChangeNotifier {
     _weight = null;
     _gender = null;
     _dateOfBirth = null;
+    notifyListeners();
   }
 
 }

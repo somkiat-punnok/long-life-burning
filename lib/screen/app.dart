@@ -19,6 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     APPNAME,
+    Configs,
     isMaterial;
 import 'package:long_life_burning/utils/providers/all.dart';
 
@@ -33,16 +34,9 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<SettingProvider>(builder: (_) => SettingProvider(),),
         ChangeNotifierProvider<NavBarProvider>(builder: (_) => NavBarProvider(),),
         ChangeNotifierProvider<UserProvider>(builder: (_) => UserProvider(),),
-        FutureProvider<SharedPreferences>(
-          builder: (_) async => await SharedPreferences.getInstance(),
-          catchError: (_, err) {
-            print(err);
-            return null;
-          },
-        ),
         StreamProvider<QuerySnapshot>(
           builder: (_) => Firestore.instance
-            .collection("Blog")
+            .collection(Configs.collection_event)
             .orderBy("date", descending: true)
             .snapshots(),
           catchError: (_, err) {
