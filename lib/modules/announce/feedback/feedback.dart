@@ -1,8 +1,39 @@
 library feedback;
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'
+  show
+    Firestore,
+    DocumentReference;
+import 'package:long_life_burning/utils/helper/constants.dart' show Configs;
 
 part './rating.dart';
+
+Future<T> showFeedBackDialog<T>({ BuildContext context, String eventId }) async {
+  num _rating;
+  String _comment;
+  return await showDialog<T>(
+    context: context,
+    builder: (BuildContext context) => FeedBack(
+      title: "Feedback",
+      subtitle: "Please send feedback",
+      onRating: (double rate) => _rating = rate,
+      onComment: (String message) => _comment = message,
+      onSend: () async {
+        final DocumentReference eventRef = Firestore.instance
+            .collection(Configs.collection_event)
+            .document(eventId);
+        await eventRef.collection("feedback").add({
+          "date": DateTime.now(),
+          "rate": _rating ?? 0,
+          "comment": _comment ?? "",
+        });
+        await Navigator.of(context).maybePop();
+      },
+      onCancel: () async => await Navigator.of(context).maybePop(),
+    ),
+  );
+}
 
 class FeedBack extends StatelessWidget {
   final String title;

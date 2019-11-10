@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:long_life_burning/modules/announce/event/events.dart' show Event;
-import 'package:long_life_burning/modules/announce/feedback/feedback.dart' show FeedBack;
+import 'package:cloud_firestore/cloud_firestore.dart'
+  show
+    Firestore,
+    DocumentSnapshot,
+    DocumentReference;
+import 'package:long_life_burning/pages/announce/record_event_page.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Configs,
     SizeConfig;
-// import 'package:long_life_burning/utils/providers/all.dart'
-//   show
-//     Provider,
-//     UserProvider;
+import 'package:long_life_burning/modules/announce/event/events.dart' show Event;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    UserProvider;
 
 class EventDetailPage extends StatefulWidget {
   EventDetailPage({ Key key }) : super(key: key);
@@ -19,17 +23,29 @@ class EventDetailPage extends StatefulWidget {
 }
 
 class _EventDetailPageState extends State<EventDetailPage> {
-  num _rating;
-  String _comment;
   @override
   Widget build(BuildContext context) {
     final Event event = ModalRoute.of(context).settings.arguments;
-    // final UserProvider provider = Provider.of<UserProvider>(context);
+    final UserProvider provider = Provider.of<UserProvider>(context);
     PreferredSizeWidget _appBar = AppBar(
       automaticallyImplyLeading: false,
       brightness: Brightness.dark,
       backgroundColor: Colors.transparent,
       leading: BackButton(),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.directions_run),
+          onPressed: () async {
+            await Navigator.of(Configs.index_context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => RecordEventPage(
+                  eventId: event.id,
+                ),
+              ),
+            );
+          },
+        )
+      ],
     );
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -94,33 +110,43 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       padding: EdgeInsets.symmetric(vertical: 16.0),
                       width: SizeConfig.screenWidth,
                       child: RaisedButton(
-                        onPressed: () => _showDialog(event.id),
-                        // provider.user != null ? () async {
-                        //   final DocumentReference eventRef = Firestore.instance
-                        //       .collection(Configs.collection_event)
-                        //       .document(event.id);
-                        //   final DocumentReference userRef = Firestore.instance
-                        //       .collection(Configs.collection_user)
-                        //       .document(provider.id)
-                        //       .collection("events")
-                        //       .document(event.id);
-                        //   final DocumentSnapshot doc = await eventRef.get();
-                        //   final Map<String, dynamic> data = doc.data;
-                        //   if (data["users"]?.isEmpty ?? true) data["users"] = [];
-                        //   final List join = data["users"];
-                        //   if (!join.contains(provider.user.uid)) join.add(provider.user.uid);
-                        //   await eventRef.setData({
-                        //     "users": join,
-                        //   }, merge: true);
-                        //   await userRef.setData({
-                        //     "eventId": event.id,
-                        //     "date": DateTime.now(),
-                        //     "step": 0,
-                        //     "calories": 0.0,
-                        //     "distance": 0.0,
-                        //   }, merge: true);
-                        //   await Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                        // } : () async => await Navigator.of(context).popUntil(ModalRoute.withName('/')),
+                        onPressed: provider.user != null ? () async {
+                          final DocumentReference eventRef = Firestore.instance
+                              .collection(Configs.collection_event)
+                              .document(event.id);
+                          final DocumentReference userRef = Firestore.instance
+                              .collection(Configs.collection_user)
+                              .document(provider.id)
+                              .collection("events")
+                              .document(event.id);
+                          final DocumentSnapshot doc = await eventRef.get();
+                          final Map<String, dynamic> data = doc.data;
+                          if (data["users"]?.isEmpty ?? true) data["users"] = [];
+                          final List join = data["users"];
+                          if (!join.contains(provider.user.uid)) {
+                            join.add(provider.user.uid);
+                            await eventRef.setData({
+                              "users": join,
+                            }, merge: true);
+                          }
+                          await userRef.setData({
+                            "eventId": event.id,
+                            "date": DateTime.now(),
+                            "duration": {
+                              "hour": 0,
+                              "minute": 0,
+                              "second": 0,
+                            },
+                            "avgpace": {
+                              "hour": 0,
+                              "minute": 0,
+                              "second": 0,
+                            },
+                            "calories": 0.0,
+                            "distance": 0.0,
+                          }, merge: true);
+                          await Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                        } : () async => await Navigator.of(context).popUntil(ModalRoute.withName('/')),
                         color: Color.fromRGBO(58, 66, 86, 1.0),
                         child: Text(
                           "TAKE THIS LESSON",
@@ -136,30 +162,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showDialog(String eventId) async {
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => FeedBack(
-        title: "Feedback",
-        subtitle: "Please send feedback",
-        onRating: (double rate) => _rating = rate,
-        onComment: (String message) => _comment = message,
-        onSend: () async {
-          final DocumentReference eventRef = Firestore.instance
-              .collection(Configs.collection_event)
-              .document(eventId);
-          await eventRef.collection("feedback").add({
-            "date": DateTime.now(),
-            "rate": _rating ?? 0,
-            "comment": _comment ?? "",
-          });
-          await Navigator.of(context).maybePop();
-        },
-        onCancel: () async => await Navigator.of(context).maybePop(),
       ),
     );
   }

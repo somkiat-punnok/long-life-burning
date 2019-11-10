@@ -2,8 +2,8 @@ library search;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
-import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
 import 'package:long_life_burning/pages/announce/detail_page.dart';
+import 'package:long_life_burning/utils/providers/all.dart' show Provider, EventProvider;
 import '../event/events.dart'
   show
     Event,
@@ -55,18 +55,11 @@ class SearchEventDelegate extends SearchDelegate<Event> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final QuerySnapshot provider = Provider.of<QuerySnapshot>(context);
-    List<Event> _data = <Event>[];
+    final EventProvider provider = Provider.of<EventProvider>(context);
     Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
 
-    provider.documents.forEach((doc) {
-      var d = doc.data;
-      d["id"] = doc.documentID;
-      _data.add(Event.fromMap(d));
-    });
-
     final Iterable<Event> suggestions = query.isNotEmpty
-      ? _data.where((Event e) {
+      ? provider?.events?.where((Event e) {
           if (e.title.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.title;
             return true;
@@ -84,7 +77,7 @@ class SearchEventDelegate extends SearchDelegate<Event> {
             return true;
           }
           return false;
-        })
+        }) ?? <Event>[]
       : <Event>[];
 
     if (query.isNotEmpty && suggestions.isEmpty) {

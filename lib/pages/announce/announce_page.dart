@@ -19,6 +19,7 @@ import 'package:long_life_burning/modules/announce/event/events.dart'
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
+    EventProvider,
     SettingProvider;
 
 import './detail_page.dart';
@@ -87,8 +88,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
   @override
   Widget build(BuildContext context) {
     final SettingProvider provider = Provider.of<SettingProvider>(context);
-    final String filterProvince = MAP_PROVINCE[provider.province];
-    final String filterCategory = MAP_CATEGORIES[provider.category];
+    final EventProvider eventProvider = Provider.of<EventProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -101,29 +101,37 @@ class _AnnouncePageState extends State<AnnouncePage> {
           if (!snapshot.hasData) {
             return _buildBody(context);
           }
-          _buildData(snapshot.data, filterProvince, filterCategory);
+          _buildData(
+            provider: eventProvider,
+            data: snapshot.data,
+            province: MAP_PROVINCE[provider.province] ?? "",
+            category: MAP_CATEGORIES[provider.category] ?? "",
+          );
           return _buildBody(context);
         }
       ),
     );
   }
 
-  void _buildData(QuerySnapshot data, String province, String category) {
+  void _buildData({ EventProvider provider, QuerySnapshot data, String province, String category }) async {
     _events?.clear();
     _onDayEvents?.clear();
+    final List<Event> _data = <Event>[];
     _events = <DateTime, List>{};
     if (data?.documents?.isNotEmpty ?? false) {
       data.documents.forEach((doc) {
         var data = doc.data;
         data["id"] = doc.documentID;
-        var e = Event.fromMap(data);
+        Event e = Event.fromMap(data);
+        _data.add(e);
         if ((province?.isNotEmpty ?? false) || (category?.isNotEmpty ?? false)) {
-          if (!e.province.contains(province)) return;
+          if (!e.province.contains(province ?? "") && !e.province.contains(category ?? "")) return;
         }
         if (_events[e.date] == null) _events[e.date] = [];
         _events[e.date].add(e);
       });
     }
+    provider.events = _data;
     _onDayEvents = _events[_selectedDay] ?? [];
   }
 
@@ -185,7 +193,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
                     right: 8.0,
                   ),
                   child: Icon(
-                    _arrow_icon,
+                    _arrow_icon ?? Icons.arrow_drop_down,
                   ),
                 ),
               ],
@@ -200,7 +208,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
           ),
         ),
         EventView(
-          events: _onDayEvents,
+          events: _onDayEvents ?? [],
           onClick: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
         ),
       ],

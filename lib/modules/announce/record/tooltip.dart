@@ -75,7 +75,7 @@ class _CustomTooltipState extends State<CustomTooltip> with SingleTickerProvider
       reverseDuration: _fadeOutDuration,
       vsync: this,
     )
-      ..addStatusListener(_handleStatusChanged);
+    ..addStatusListener(_handleStatusChanged);
     RendererBinding.instance.mouseTracker.addListener(_handleMouseTrackerChange);
     GestureBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
   }

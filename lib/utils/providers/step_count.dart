@@ -149,3 +149,82 @@ class StepCountProvider extends ChangeNotifier {
   void _onDoneLocate() => print("Finished pedometer tracking");
   void _onErrorLocate(err) => print("Flutter Location Error: $err");
 }
+
+class StepToDayProvider extends ChangeNotifier {
+
+  StreamSubscription _subscription;
+  SharedPreferences _pref;
+  num _currentStep, _previousStep;
+  DateTime _currentTime, _previousTime;
+  num _steps, _calories, _distences;
+  num _stepOld, _distenceOld, _caloriesOld;
+
+  StepToDayProvider({
+    @required this.user,
+  }) {
+    reset();
+  }
+
+  final UserProvider user;
+
+  num get steps => _steps;
+  num get calories => _calories;
+  num get distences => _distences;
+
+  void reset() async {
+    _subscription = null;
+    notifyListeners();
+  }
+
+  void startListening() async {
+    final Pedometer _pedometer = new Pedometer();
+    final DateTime _now = DateTime.now();
+    _pref = await SharedPreferences.getInstance();
+    _stepOld = _pref?.getInt("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_steps") ?? 0;
+    _distenceOld = _pref?.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_distences") ?? 0.0;
+    _caloriesOld = _pref?.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_calories") ?? 0.0;
+    _steps = _stepOld ?? 0;
+    _distences = _distenceOld ?? 0.0;
+    _calories = _caloriesOld ?? 0.0;
+    _currentStep = _steps ?? 0;
+    _previousStep = _steps ?? 0;
+    _currentTime = DateTime.now();
+    _previousTime = DateTime.now();
+    _subscription = _pedometer.pedometerStream.listen(_onData,
+        onError: _onError, onDone: _onDone, cancelOnError: true);
+    notifyListeners();
+  }
+
+  void stopListening() async {
+    await _subscription?.cancel();
+    notifyListeners();
+  }
+
+  void _onData(int steps) async {
+    _steps = _stepOld + steps;
+    _currentStep = _steps;
+    _currentTime = DateTime.now();
+    final num _stepNow = (_currentStep - _previousStep).abs();
+    if (_stepNow > 0) {
+      final Duration _elapsed = _currentTime.difference(_previousTime).abs();
+      _calories += calculateCalories(
+        height: user?.height ?? kHeight,
+        weight: user?.weight ?? kWeight,
+        age: user?.dateOfBirth ?? kDateOfBirth,
+        gender: user?.gender ?? Gender.MALE,
+        seconds: _elapsed.inSeconds,
+        steps: _stepNow,
+      );
+      _distences = _distenceOld + calculateDistanceInKm(steps, calculateStepToMeters(175, Gender.MALE));
+      await _pref?.setInt("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_steps", _steps ?? 0);
+      await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_distences", _distences ?? 0.0);
+      await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_calories", _calories ?? 0.0);
+      notifyListeners();
+    }
+    _previousTime = _currentTime;
+    _previousStep = _currentStep;
+  }
+
+  void _onDone() => print("Finished pedometer tracking");
+  void _onError(err) => print("Flutter Pedometer Error: $err");
+}
