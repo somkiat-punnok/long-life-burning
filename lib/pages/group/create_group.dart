@@ -2,7 +2,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import 'package:long_life_burning/utils/helper/constants.dart'
     show GROUP_CATEGORIES, SizeConfig;
