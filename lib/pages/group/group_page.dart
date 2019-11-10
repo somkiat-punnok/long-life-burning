@@ -1,8 +1,7 @@
 
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import './create_group.dart';
 import './detail.dart';
@@ -103,6 +102,7 @@ class ListData extends StatefulWidget {
 }
 
 class _ListDataState extends State<ListData> with TickerProviderStateMixin {
+   final notifications = FlutterLocalNotificationsPlugin();
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -219,6 +219,7 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
                 (widget.data.location ?? "",style: Theme.of(context).textTheme.subtitle,
               textAlign:TextAlign.start
               ),
+               
             ],
           ),
         ),
@@ -226,3 +227,4 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
     );
   }
 }
+
