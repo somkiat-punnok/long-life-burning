@@ -6,9 +6,6 @@ class EventProvider extends ChangeNotifier {
   List<Event> get events => _events;
 
   set events(List<Event> newValue) {
-    if (_events == newValue)
-      return;
     _events = newValue;
-    notifyListeners();
   }
 }

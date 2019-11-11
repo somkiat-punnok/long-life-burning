@@ -96,6 +96,10 @@ class _AnnouncePageState extends State<AnnouncePage> {
         stream: Firestore.instance
           .collection(Configs.collection_event)
           .orderBy("date", descending: true)
+          .orderBy("time", descending: false)
+          .orderBy("price", descending: true)
+          .orderBy("subject", descending: false)
+          .orderBy("tags", descending: false)
           .snapshots(),
         builder: (_, snapshot) {
           if (!snapshot.hasData) {
@@ -119,13 +123,13 @@ class _AnnouncePageState extends State<AnnouncePage> {
     final List<Event> _data = <Event>[];
     _events = <DateTime, List>{};
     if (data?.documents?.isNotEmpty ?? false) {
-      data.documents.forEach((doc) {
-        var data = doc.data;
-        data["id"] = doc.documentID;
-        Event e = Event.fromMap(data);
+      data?.documents?.forEach((doc) {
+        var dataTemp = doc.data;
+        dataTemp["id"] = doc.documentID;
+        Event e = Event.fromMap(dataTemp);
         _data.add(e);
         if ((province?.isNotEmpty ?? false) || (category?.isNotEmpty ?? false)) {
-          if (!e.province.contains(province ?? "") && !e.province.contains(category ?? "")) return;
+          if (!e.province.contains(province ?? "") || !e.category.contains(category ?? "")) return;
         }
         if (_events[e.date] == null) _events[e.date] = [];
         _events[e.date].add(e);

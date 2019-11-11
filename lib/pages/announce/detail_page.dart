@@ -31,7 +31,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
       automaticallyImplyLeading: false,
       brightness: Brightness.dark,
       backgroundColor: Colors.transparent,
-      leading: BackButton(),
+      leading: IconButton(
+        icon: const BackButtonIcon(),
+        color: Colors.white,
+        tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        onPressed: () async => await Navigator.of(context).popUntil(ModalRoute.withName('/')),
+      ),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.directions_run),

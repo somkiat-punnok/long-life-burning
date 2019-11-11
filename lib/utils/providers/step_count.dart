@@ -162,7 +162,7 @@ class StepToDayProvider extends ChangeNotifier {
   StepToDayProvider({
     @required this.user,
   }) {
-    reset();
+    startListening();
   }
 
   final UserProvider user;
@@ -170,11 +170,6 @@ class StepToDayProvider extends ChangeNotifier {
   num get steps => _steps;
   num get calories => _calories;
   num get distences => _distences;
-
-  void reset() async {
-    _subscription = null;
-    notifyListeners();
-  }
 
   void startListening() async {
     final Pedometer _pedometer = new Pedometer();

@@ -16,7 +16,8 @@ import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
-    UserProvider;
+    UserProvider,
+    StepToDayProvider;
 
 import './record_page.dart';
 
@@ -31,6 +32,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
 
   SlidingRadialListController slidingListController;
   UserProvider userProvider;
+  StepToDayProvider stepProvider;
   num _step, _distence, _calories;
 
   @override
@@ -45,8 +47,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (isCupertino) readDate();
-    slidingListController?.reopen();
+    reDo();
   }
 
   @override
@@ -55,13 +56,18 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
     super.dispose();
   }
 
+  void reDo() async {
+    await readDate();
+    slidingListController?.reopen();
+  }
+
   Future<void> readDate() async {
     if (!mounted) return;
     try {
       if (isCupertino && Configs.fitkit_permissions) {
         _step = 0;
-        _distence = 0;
-        _calories = 0;
+        _distence = 0.0;
+        _calories = 0.0;
         final DateTime _now = DateTime.now();
         for (DataType type in DataType.values) {
           if (type == DataType.STEP_COUNT) {
@@ -121,14 +127,21 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
           );
         await readDate();
         return;
+      } else if (isMaterial) {
+        _step = stepProvider?.steps ?? 0;
+        _distence = stepProvider?.distences ?? 0.0;
+        _calories = stepProvider?.calories ?? 0.0;
+        if (!mounted) return;
+        setState(() {});
+        return;
       } else {
         return;
       }
     } catch (e) {
       print('Failed to read all values. $e');
       _step = 0;
-      _distence = 0;
-      _calories = 0;
+      _distence = 0.0;
+      _calories = 0.0;
       if (!mounted) return;
       setState(() {});
       return;
@@ -138,6 +151,7 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
+    if (isMaterial) { stepProvider = Provider.of<StepToDayProvider>(context); }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -151,17 +165,17 @@ class _StepCountPageState extends State<StepCountPage> with TickerProviderStateM
                 RadialListItemViewModel(
                   icon: AssetImage(RUNNERICON),
                   title: 'Steps',
-                  subtitle: '${NumberFormat('#,###', 'en_US').format(_step)} step',
+                  subtitle: '${NumberFormat('#,###', 'en_US').format(_step ?? 0)} step',
                 ),
                 RadialListItemViewModel(
                   icon: AssetImage(BURNICON),
                   title: 'Calories',
-                  subtitle: '${NumberFormat('#,###.##', 'en_US').format(_calories)} kCal',
+                  subtitle: '${NumberFormat('#,###.##', 'en_US').format(_calories ?? 0.0)} kCal',
                 ),
                 RadialListItemViewModel(
                   icon: AssetImage(DISTANCEICON),
                   title: 'Distances',
-                  subtitle: '${NumberFormat('#.##', 'en_US').format(_distence / 1000.0)} km',
+                  subtitle: '${NumberFormat('#.##', 'en_US').format((_distence ?? 0.0) / 1000.0)} km',
                 ),
               ],
             ),
