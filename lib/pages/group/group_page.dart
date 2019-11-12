@@ -1,8 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 import './create_group.dart';
 import './detail.dart';
 
@@ -73,7 +71,17 @@ class _GroupPageState extends State<GroupPage> {
                 );
                 allData.add(data);
               });
-              return allData.length == 0 ? new Text("No Data available") : new ListView.builder(
+              return allData.length == 0 ? Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: <Widget>[
+           new Text(
+              "No Data available",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ]) : 
+              new ListView.builder(
                 itemCount: allData.length,
                 itemBuilder: (_, index)
                 {
@@ -102,19 +110,20 @@ class ListData extends StatefulWidget {
 }
 
 class _ListDataState extends State<ListData> with TickerProviderStateMixin {
-   final notifications = FlutterLocalNotificationsPlugin();
+  
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
     return GestureDetector(
       onTap: () => Navigator.of(widget.contexts).pushNamed(
                 DetailGroup.routeName,
                 arguments: {
+                  "id": widget.data.id,
                   "groupname": widget.data.groupname,
                   "category": widget.data.category,
                   "location": widget.data.location,
                   "time": widget.data.time,
                   "date": widget.data.date,
+                  "users": widget.data.users,
                 }
                 ),
       child: new Card(
@@ -136,78 +145,6 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
               (widget.data.time ?? "",style: Theme.of(context).textTheme.subtitle,
               textAlign:TextAlign.center,
               ),
-                  RaisedButton(
-                    elevation: 4.0,
-                    color: Colors.grey,
-                    child: Text('join',style:
-                    TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold
-                      ,),
-                      ),
-                      onPressed: () => showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("join the group."),
-                            content: Text("Will you confirm to join this group?"),
-                            actions: [
-                              FlatButton(
-                                child: Text("Cancel"),
-                                onPressed:  () async => await Navigator.of(context).maybePop(),
-                              ),
-                              FlatButton(
-                                child: Text("Accept"),
-                                onPressed: () async {
-                                      List _users = widget.data.users.toList();
-                                      _users.add(userProvider.user?.uid ?? "join");
-                                      await Firestore.instance.collection('group').document(widget.data.id).updateData(
-                                        {
-                                        "users" :_users,         
-                                        }
-                                      );
-                                       Navigator.of(context).maybePop();
-                                       setState(() {
-                                         _users == true;
-                                       });
-                                      // RaisedButton(
-                                      //   elevation: 4.0,
-                                      //   color: Colors.grey,
-                                      //   child: Text('cancel',style:
-                                      //   TextStyle(
-                                      //     color: Colors.white,
-                                      //     fontWeight: FontWeight.bold
-                                      //     ,),
-                                      //     ),
-                                      //     onPressed: () => showDialog(
-                                      //       context: context,
-                                      //       builder: (BuildContext context) {
-                                      //         return AlertDialog(
-                                      //           title: Text("cancel the group."),
-                                      //           content: Text("Will you confirm to cancel this group?"),
-                                      //           actions: [
-                                      //             FlatButton(
-                                      //               child: Text("Cancel"),
-                                      //               onPressed:  () async => await Navigator.of(context).maybePop(),
-                                      //             ),
-                                      //             FlatButton(
-                                      //               child: Text("Accept"),
-                                      //               onPressed: () async {
-                                      //                     Navigator.of(context).maybePop();
-                                      //                   },
-                                      //             ),
-                                      //           ],
-                                      //         );
-                                      //       },
-                                      //     ),
-                                      //   );
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
                  ],
               ),
               SizedBox(height: 10.0,),
@@ -219,7 +156,6 @@ class _ListDataState extends State<ListData> with TickerProviderStateMixin {
                 (widget.data.location ?? "",style: Theme.of(context).textTheme.subtitle,
               textAlign:TextAlign.start
               ),
-               
             ],
           ),
         ),
