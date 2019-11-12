@@ -20,35 +20,62 @@ import 'package:long_life_burning/utils/routes/routing.dart'
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
+    ChangeNotifierProvider,
     NavBarProvider,
-    UserProvider;
+    UserProvider,
+    StepToDayProvider;
 
 import './login/login_screen.dart';
 
-class Index extends StatefulWidget {
-  Index({Key key}) : super(key: key);
+class Index extends StatelessWidget {
+
+  Index({ Key key }) : super(key: key);
+
   @override
-  _IndexState createState() => _IndexState();
+  Widget build(BuildContext context) {
+    Configs.index_context = context;
+    SizeConfig.init(context);
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final FirebaseUser user = Provider.of<FirebaseUser>(context);
+    check(userProvider, user);
+    Widget _child = isMaterial ? ChangeNotifierProvider(
+      builder: (_) => StepToDayProvider(
+        user: userProvider,
+      ),
+      child: IndexWidget(),
+    ) : IndexWidget();
+    return _child;
+  }
+
+  void check(UserProvider userProvider, FirebaseUser user) async {
+    if (userProvider.user == null && !Configs.login) {
+      await checkAuth(userProvider, user);
+    }
+  }
 }
 
-class _IndexState extends State<Index> {
+class IndexWidget extends StatefulWidget {
+  IndexWidget({ Key key }) : super(key: key);
+  @override
+  _IndexWidgetState createState() => _IndexWidgetState();
+}
+
+class _IndexWidgetState extends State<IndexWidget> {
 
   NavBarProvider provider;
+  StepToDayProvider stepProvider;
   List<BottomNavigationBarItem> navBarItems;
 
   @override
-  void initState() {
-    super.initState();
-    Configs.index_context = context;
+  void dispose() {
+    if (isMaterial) stepProvider?.stopListening();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final UserProvider userProvider = Provider.of<UserProvider>(context);
-    final FirebaseUser user = Provider.of<FirebaseUser>(context);
-    check(userProvider, user);
     provider = Provider.of<NavBarProvider>(context);
-    SizeConfig.init(context);
+    if (isMaterial) { stepProvider = Provider.of<StepToDayProvider>(context); }
     navBarItems = [
       navBarItem(kStepCount.name, kStepCount.icon),
       navBarItem(kNearby.name, kNearby.icon),
@@ -66,12 +93,6 @@ class _IndexState extends State<Index> {
         bottomNavigationBar: _buildNavBar(),
       ),
     );
-  }
-
-  void check(UserProvider userProvider, FirebaseUser user) async {
-    if (userProvider.user == null && !Configs.login) {
-      await checkAuth(userProvider, user);
-    }
   }
 
   Widget _buildPageBody() => Stack(

@@ -4,6 +4,10 @@ class SettingProvider extends ChangeNotifier {
   String _province = "";
   String _category = "";
 
+  SettingProvider() {
+    init();
+  }
+
   String get province => _province;
   String get category => _category;
 
@@ -21,9 +25,10 @@ class SettingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void reset() {
-    _province = "";
-    _category = "";
+  void init() async {
+    final SharedPreferences _pref = await SharedPreferences.getInstance();
+    _province = _pref.getString("${Prefix_KEY}province") ?? "";
+    _category = _pref.getString("${Prefix_KEY}category") ?? "";
     notifyListeners();
   }
 }

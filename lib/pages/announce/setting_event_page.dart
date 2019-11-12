@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart' show CupertinoColors;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     PROVINCE,
-    CATEGORIES;
+    CATEGORIES,
+    Prefix_KEY;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
-    SettingProvider;
+    SettingProvider,
+    SharedPreferences;
 import 'package:long_life_burning/modules/announce/setting/settings.dart';
 
 class SettingEventPage extends StatefulWidget {
@@ -19,7 +21,6 @@ class SettingEventPage extends StatefulWidget {
 
 class _SettingEventPageState extends State<SettingEventPage> {
 
-  SettingProvider _setting;
   int _province;
   int _category;
   bool _temp;
@@ -34,7 +35,7 @@ class _SettingEventPageState extends State<SettingEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    _setting = Provider.of<SettingProvider>(context);
+    final SettingProvider _setting = Provider.of<SettingProvider>(context);
     if (_temp) {
       _province = PROVINCE.indexOf(_setting.province);
       _category = CATEGORIES.indexOf(_setting.category);
@@ -62,8 +63,11 @@ class _SettingEventPageState extends State<SettingEventPage> {
         actions: <Widget>[
           GestureDetector(
             onTap: () async {
+              final SharedPreferences _pref = await SharedPreferences.getInstance();
               _setting.province = PROVINCE[_province];
               _setting.category = CATEGORIES[_category];
+              await _pref.setString("${Prefix_KEY}province", PROVINCE[_province] ?? "");
+              await _pref.setString("${Prefix_KEY}category", CATEGORIES[_category] ?? "");
               await Navigator.of(context).maybePop();
             },
             child: Container(

@@ -4,12 +4,8 @@ class Configs {
 
   Configs._();
 
-  static final FirebaseAuth auth = FirebaseAuth.instance;
-  static final Firestore store = Firestore.instance;
   static BuildContext index_context;
   static bool fitkit_permissions;
-  static String province;
-  static String categories;
   static bool login = false;
 
   static const String collection_user = 'users';

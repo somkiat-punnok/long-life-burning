@@ -2,8 +2,8 @@ library search;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
-import 'package:cloud_firestore/cloud_firestore.dart' show QuerySnapshot;
 import 'package:long_life_burning/pages/announce/detail_page.dart';
+import 'package:long_life_burning/utils/providers/all.dart' show Provider, EventProvider;
 import '../event/events.dart'
   show
     Event,
@@ -55,18 +55,11 @@ class SearchEventDelegate extends SearchDelegate<Event> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final QuerySnapshot provider = Provider.of<QuerySnapshot>(context);
-    List<Event> _data = <Event>[];
+    final EventProvider provider = Provider.of<EventProvider>(context);
     Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
 
-    provider.documents.forEach((doc) {
-      var d = doc.data;
-      d["id"] = doc.documentID;
-      _data.add(Event.fromMap(d));
-    });
-
     final Iterable<Event> suggestions = query.isNotEmpty
-      ? _data.where((Event e) {
+      ? provider?.events?.where((Event e) {
           if (e.title.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.title;
             return true;
@@ -84,7 +77,7 @@ class SearchEventDelegate extends SearchDelegate<Event> {
             return true;
           }
           return false;
-        })
+        }) ?? <Event>[]
       : <Event>[];
 
     if (query.isNotEmpty && suggestions.isEmpty) {
@@ -126,7 +119,66 @@ class SearchEventDelegate extends SearchDelegate<Event> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    final EventProvider provider = Provider.of<EventProvider>(context);
+    Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
+
+    final Iterable<Event> suggestions = query.isNotEmpty
+      ? provider?.events?.where((Event e) {
+          if (e.title.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
+            _map[e] = SearchWhere.title;
+            return true;
+          }
+          if (e.subtitle.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
+            _map[e] = SearchWhere.subtitle;
+            return true;
+          }
+          if (e.province.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
+            _map[e] = SearchWhere.province;
+            return true;
+          }
+          if (e.category.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
+            _map[e] = SearchWhere.category;
+            return true;
+          }
+          return false;
+        }) ?? <Event>[]
+      : <Event>[];
+
+    if (query.isNotEmpty && suggestions.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.search,
+              size: 100.0,
+            ),
+            Text(
+              'No Result',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Try a more general keyword.\nSearch try again.',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return _SuggestionList(
+      query: query,
+      mapCategory: _map,
+      suggestions: suggestions.toList(),
+      onSelected: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
+    );
   }
 
 }
