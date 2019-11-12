@@ -8,7 +8,10 @@ import 'package:flutter/services.dart'
     SystemUiOverlayStyle,
     DeviceOrientation;
 import 'package:fit_kit/fit_kit.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show isCupertino, Configs;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    isCupertino,
+    Configs;
 import 'package:long_life_burning/screen/app.dart';
 
 Future<void> main() async {

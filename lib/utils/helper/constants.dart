@@ -23,6 +23,8 @@ const String APPNAME = 'Long Burn';
 // Key AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE
 String Map_API_Key = isMaterial ? 'AIzaSyCngcsFoAznocj_aRI9CRwdtE6_gRAINGc' : 'AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE';
 
+const String Prefix_KEY = 'long_burn_';
+
 const Map<String, String> MAP_PROVINCE = {
   '': '',
   'All Province': '',
@@ -266,12 +268,21 @@ const List<String> PROVINCE = [
 //   'ยโสธร',
 // ];
 
+const Map<String, String> MAP_CATEGORIES = {
+  '': '',
+  'All Category': '',
+  'Fun Run': 'funrun',
+  'Mini Marathon': 'minimarathon',
+  'Half Marathon': 'halfmarathon',
+  'Marathon': 'marathon',
+};
+
 const List<String> CATEGORIES = [
   'All Category',
   'Fun Run',
   'Mini Marathon',
   'Half Marathon',
-  'Marathon'
+  'Marathon',
 ];
 
 const List<String> GROUP_CATEGORIES = [

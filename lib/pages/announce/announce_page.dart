@@ -3,7 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:long_life_burning/modules/announce/search/search.dart';
 import 'package:long_life_burning/modules/announce/calendar.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show MAP_PROVINCE;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    Configs,
+    MAP_PROVINCE,
+    MAP_CATEGORIES;
 import 'package:long_life_burning/modules/calendar/calendar.dart'
   show
     CalendarController,
@@ -15,6 +19,7 @@ import 'package:long_life_burning/modules/announce/event/events.dart'
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
+    EventProvider,
     SettingProvider;
 
 import './detail_page.dart';
@@ -22,7 +27,7 @@ import './setting_event_page.dart';
 import '../common/year_page.dart';
 
 class AnnouncePage extends StatefulWidget {
-  AnnouncePage({Key key}) : super(key: key);
+  AnnouncePage({ Key key }) : super(key: key);
   static const String routeName = '/';
   @override
   _AnnouncePageState createState() => _AnnouncePageState();
@@ -32,7 +37,6 @@ class _AnnouncePageState extends State<AnnouncePage> {
 
   CalendarController _calendarController;
   Map<DateTime, List> _events;
-  List<Event> _eventList;
   List _onDayEvents;
   IconData _arrow_icon;
   DateTime _selectedDay;
@@ -46,7 +50,6 @@ class _AnnouncePageState extends State<AnnouncePage> {
     _calendarController = CalendarController();
     _selectedDay = DateTime(_now.year, _now.month, _now.day);
     _events = <DateTime, List>{};
-    _eventList = <Event>[];
     _onDayEvents = [];
   }
 
@@ -85,42 +88,55 @@ class _AnnouncePageState extends State<AnnouncePage> {
   @override
   Widget build(BuildContext context) {
     final SettingProvider provider = Provider.of<SettingProvider>(context);
-    final String filter = MAP_PROVINCE[provider.province];
+    final EventProvider eventProvider = Provider.of<EventProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-          .collection("Blog")
+          .collection(Configs.collection_event)
           .orderBy("date", descending: true)
+          .orderBy("time", descending: false)
+          .orderBy("price", descending: true)
+          .orderBy("subject", descending: false)
+          .orderBy("tags", descending: false)
           .snapshots(),
         builder: (_, snapshot) {
           if (!snapshot.hasData) {
             return _buildBody(context);
           }
-          _events?.clear();
-          _eventList?.clear();
-          _onDayEvents?.clear();
-          _events = <DateTime, List>{};
-          _eventList = <Event>[];
-          if (snapshot?.data?.documents?.isNotEmpty ?? false) {
-            snapshot.data.documents.forEach((snap) {
-              var data = snap.data;
-              data["id"] = snap.documentID;
-              var e = Event.fromMap(data);
-              _eventList.add(e);
-              if (filter != null && filter.isNotEmpty) {
-                if (!e.province.contains(filter)) return;
-              }
-              if (_events[e.date] == null) _events[e.date] = [];
-              _events[e.date].add(e);
-            });
-          }
-          _onDayEvents = _events[_selectedDay] ?? [];
+          _buildData(
+            provider: eventProvider,
+            data: snapshot.data,
+            province: MAP_PROVINCE[provider.province] ?? "",
+            category: MAP_CATEGORIES[provider.category] ?? "",
+          );
           return _buildBody(context);
         }
       ),
     );
+  }
+
+  void _buildData({ EventProvider provider, QuerySnapshot data, String province, String category }) async {
+    _events?.clear();
+    _onDayEvents?.clear();
+    final List<Event> _data = <Event>[];
+    _events = <DateTime, List>{};
+    if (data?.documents?.isNotEmpty ?? false) {
+      data?.documents?.forEach((doc) {
+        var dataTemp = doc.data;
+        dataTemp["id"] = doc.documentID;
+        Event e = Event.fromMap(dataTemp);
+        _data.add(e);
+        if ((province?.isNotEmpty ?? false) || (category?.isNotEmpty ?? false)) {
+          if (!e.province.contains(province ?? "") || !e.category.contains(category ?? "")) return;
+        }
+        if (_events[e.date] == null) _events[e.date] = [];
+        _events[e.date].add(e);
+      });
+    }
+    provider.events = _data;
+    _onDayEvents = _events[_selectedDay] ?? [];
   }
 
   Widget _buildBody(BuildContext context) {
@@ -157,22 +173,31 @@ class _AnnouncePageState extends State<AnnouncePage> {
                 Opacity(
                   opacity: 0.0,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                    padding: EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                    ),
                     child: Icon(
                       Icons.arrow_drop_down,
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                  padding: EdgeInsets.only(
+                    left: 8.0,
+                    right: 8.0,
+                  ),
                   child: Text(
-                    "${_selectedDay.year} - ${_selectedDay.month > 9 ? _selectedDay.month : "0" + _selectedDay.month.toString()} - ${_selectedDay.day > 9 ? _selectedDay.day : "0" + _selectedDay.day.toString()}",
+                    "${_selectedDay?.year} - ${_selectedDay?.month.toString().padLeft(2, "0")} - ${_selectedDay?.day.toString().padLeft(2, "0")}",
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                  padding: EdgeInsets.only(
+                    left: 8.0,
+                    right: 8.0,
+                  ),
                   child: Icon(
-                    _arrow_icon,
+                    _arrow_icon ?? Icons.arrow_drop_down,
                   ),
                 ),
               ],
@@ -187,7 +212,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
           ),
         ),
         EventView(
-          events: _onDayEvents,
+          events: _onDayEvents ?? [],
           onClick: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
         ),
       ],

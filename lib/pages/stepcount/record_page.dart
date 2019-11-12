@@ -16,6 +16,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Gender,
     Configs,
+    Prefix_KEY,
     isMaterial,
     isCupertino,
     calculateCalories;
@@ -28,7 +29,7 @@ import 'package:long_life_burning/utils/widgets/date_utils.dart';
 import '../common/year_page.dart';
 
 class RecordPage extends StatefulWidget {
-  RecordPage({Key key}) : super(key: key);
+  RecordPage({ Key key }) : super(key: key);
   static const String routeName = '/record';
   @override
   _RecordPageState createState() => _RecordPageState();
@@ -125,7 +126,7 @@ class _RecordPageState extends State<RecordPage> {
                 if (data != null && data.isNotEmpty) {
                   data.forEach((d) {
                     if (d.dateFrom.day == date.day && d.dateTo.day == date.day) {
-                      if (d.value != 0) {
+                      if (d.value > 0) {
                         _step += d.value ?? 0;
                         _calories += calculateCalories(
                           height: userProvider?.height ?? kHeight,
@@ -165,6 +166,7 @@ class _RecordPageState extends State<RecordPage> {
               continue;
             }
           }
+          if (!mounted) return;
           setState(() {});
           return;
         } else if (isCupertino && !Configs.fitkit_permissions) {
@@ -177,9 +179,10 @@ class _RecordPageState extends State<RecordPage> {
           return;
         } else if (isMaterial) {
           final SharedPreferences _pref = await SharedPreferences.getInstance();
-          _step = _pref.getInt("${date.year}-${date.month}-${date.day}-step") ?? 0;
-          _distence = _pref.getDouble("${date.year}-${date.month}-${date.day}-distences") ?? 0.0;
-          _calories = _pref.getDouble("${date.year}-${date.month}-${date.day}-calories") ?? 0.0;
+          _step = _pref.getInt("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_steps") ?? 0;
+          _distence = _pref.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_distences") ?? 0.0;
+          _calories = _pref.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_calories") ?? 0.0;
+          if (!mounted) return;
           setState(() {});
           return;
         } else {
@@ -190,6 +193,7 @@ class _RecordPageState extends State<RecordPage> {
         _step = 0;
         _distence = 0.0;
         _calories = 0.0;
+        if (!mounted) return;
         setState(() {});
         return;
       }
@@ -198,6 +202,7 @@ class _RecordPageState extends State<RecordPage> {
       _step = 0;
       _distence = 0.0;
       _calories = 0.0;
+      if (!mounted) return;
       setState(() {});
       return;
     }

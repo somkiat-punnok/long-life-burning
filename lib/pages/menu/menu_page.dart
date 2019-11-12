@@ -15,16 +15,14 @@ import './setting_page.dart';
 import './statistic_page.dart';
 
 class MenuPage extends StatefulWidget {
-  MenuPage({Key key}) : super(key: key);
+  MenuPage({ Key key }) : super(key: key);
   static const String routeName = '/';
   @override
   _MenuPageState createState() => _MenuPageState();
 }
 
 class _MenuPageState extends State<MenuPage> {
-
   UserProvider userProvider;
-
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
@@ -122,15 +120,17 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
         onPressed: () async {
-          await Configs.auth.signOut().then((_) async {
-            userProvider.resetUser();
-            Configs.login = false;
-            await Navigator.of(Configs.index_context).pushReplacement(
-              MaterialPageRoute(
-                builder: (BuildContext context) => LoginScreen(),
-              )
-            );
-          });
+          await Configs.auth
+            .signOut()
+            .then((_) async {
+              userProvider.resetUser();
+              Configs.login = false;
+              await Navigator.of(Configs.index_context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => LoginScreen(),
+                )
+              );
+            });
         },
       ),
     ]);
@@ -188,5 +188,4 @@ class _MenuPageState extends State<MenuPage> {
       ),
     ];
   }
-
 }

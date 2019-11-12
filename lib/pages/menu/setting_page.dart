@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:long_life_burning/modules/announce/setting/widgets/lib.dart';
 import 'package:long_life_burning/utils/helper/constants.dart';
 import 'package:long_life_burning/utils/providers/all.dart' show Provider, UserProvider;
 
@@ -11,7 +12,6 @@ class SettingPage extends StatefulWidget {
   static const String routeName = '/setting';
   @override
   _SettingPageState createState() => _SettingPageState();
-  
 }
 class CrudMedthods {
   bool isLoggedIn() {
@@ -45,7 +45,7 @@ class _SettingPageState extends State<SettingPage> {
   String gender;
   var users;
 
-  DateTime _date = DateTime(2000, 1, 1);
+  DateTime _date = DateTime.now();
   CrudMedthods crudObj = new CrudMedthods();
  
  Future<void> updateDialog(BuildContext context) async {
@@ -66,46 +66,15 @@ class _SettingPageState extends State<SettingPage> {
                       this.name = value;
                     },
                   ),
-                 Container(
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.only(top: 12),
-                  decoration: BoxDecoration(
-                      color: Colors.grey[50], borderRadius: BorderRadius.circular(16)),
-                  child: GestureDetector(
-                    onTap: () async => await showCupertinoModalPopup<void>(
-                      context: context,
-                      builder: (BuildContext context) => _buildBottomPicker(
-                        CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.date,
-                          initialDateTime: _date,
-                          maximumYear: DateTime.now().year - 1,
-                          onDateTimeChanged: (DateTime t) {
-                            setState(() {
-                              _date = t;
-                            });
-                          },
-                        ),
-            title: 'Date of Birth',
-            context: context,
-          ),
+                 DatePicker(
+              title: 'Birth',
+              currentDate: _date,
+              onSelect: (DateTime t) {
+                setState(() {
+                  _date = t;
+                });
+              },
         ),
-        child: Container(
-          alignment: AlignmentDirectional.center,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: SafeArea(
-              child: Text(
-                DateFormat.yMMMMd().format(_date),
-                style: TextStyle(
-                  fontSize: 18,
-                  color: CupertinoColors.inactiveGray,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
                   SizedBox(height: 5.0),
                   TextField(
                     decoration: InputDecoration(hintText: 'Height cm.'),
@@ -140,11 +109,11 @@ class _SettingPageState extends State<SettingPage> {
                   Navigator.of(context).pop();
                   if (this.name != null || this._date != null || this.height != null || this.weight != null || this.gender != null) {
                     crudObj.updateData(userProvider.id, {
-                      'name': this.name ?? "Anonymus",
-                      'dateOfBirth': this._date ?? DateTime.now(),
-                      'height': this.height ?? 170,
-                      'weight': this.weight ?? 70,
-                      'gender': this.gender ?? "male"
+                      'name': this.name ?? userProvider.name ?? 'Anonymus',
+                      'dateOfBirth': this._date ?? userProvider.dateOfBirth ?? DateTime.now(),
+                      'height': this.height != null ? num.parse(this.height) : (userProvider.height ?? 170),
+                      'weight': this.weight != null ? num.parse(this.weight) : (userProvider.weight ?? 70),
+                      'gender': this.gender ?? (userProvider.gender != null ? (userProvider.gender == Gender.MALE ? 'male' : 'female') : ""),
                     });
                   }
                 },
@@ -203,18 +172,18 @@ class _SettingPageState extends State<SettingPage> {
             margin: EdgeInsets.all(15.0),
              child: new Container(
                padding: new EdgeInsets.all(14.0),
-               child:Column(
+               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-            Text('Name:\t'+(userProvider.name ?? ""), style: TextStyle(fontSize: 20.0),),
+            Text('Name:\t${(userProvider.name ?? "")}', style: TextStyle(fontSize: 20.0),),
              Divider(height: 40.0,),
-            new Text('Birth Day:\t'+(userProvider.dateOfBirth?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Birth Day:\t${(userProvider.dateOfBirth?.toString() ?? "")}', style: TextStyle(fontSize: 20.0),),
             Divider(height: 40.0,),
-            new Text('Gender:\t'+(userProvider.gender?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Gender:\t${userProvider.gender != null ? (userProvider.gender == Gender.MALE ? 'male' : 'female') : ""}', style: TextStyle(fontSize: 20.0),),
             Divider(height: 40.0,),
-            new Text('Height:\t'+(userProvider.height?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Height:\t${(userProvider.height?.toString() ?? "")}', style: TextStyle(fontSize: 20.0),),
             Divider(height: 40.0,),
-            new Text('Weight:\t'+(userProvider.weight?.toString() ?? ""), style: TextStyle(fontSize: 20.0),),
+            new Text('Weight:\t${(userProvider.weight?.toString() ?? "")}', style: TextStyle(fontSize: 20.0),),
                ],
               )
              )
@@ -223,70 +192,3 @@ class _SettingPageState extends State<SettingPage> {
   }
 }
 
- Widget _buildBottomPicker(Widget picker,
-      {String title, BuildContext context}) {
-    return Container(
-      height: SizeConfig.setHeight(268.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(18.0),
-          topRight: Radius.circular(18.0),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: DefaultTextStyle(
-              style: TextStyle(
-                color: CupertinoColors.inactiveGray,
-                fontSize: 18.0,
-              ),
-              child: Container(
-                alignment: Alignment.topCenter,
-                padding: EdgeInsets.only(
-                  top: 18.0,
-                  left: 24.0,
-                  right: 24.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(title),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        child: Text(
-                          'Done',
-                          style: TextStyle(
-                            color: CupertinoColors.activeBlue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 8,
-            child: DefaultTextStyle(
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 22.0,
-              ),
-              child: GestureDetector(
-                onTap: () {},
-                child: SafeArea(
-                  child: picker,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }

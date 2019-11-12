@@ -10,7 +10,7 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
       )
       .snapshots()
       .listen((data) {
-        if (data.documents.isNotEmpty) {
+        if (data?.documents?.isNotEmpty ?? false) {
           Configs.login = true;
           userProvider.setUser(
             userNew: user,
@@ -92,7 +92,7 @@ num getAgeFromDateOfBirth(DateTime date) {
 }
 
 num convertKilocaloriesToMlKmin(num kilocalories, num weightKgs) {
-  return ((((kilocalories / 1440.0) / 5.0) / (weightKgs)) * 1000.0);
+  return ((((kilocalories / 1440.0) / 5.0) / weightKgs) * 1000.0);
 }
 
 num calculateDistanceInKm(num steps, num entityStrideLength) {

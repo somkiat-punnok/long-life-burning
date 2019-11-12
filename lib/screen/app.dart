@@ -8,10 +8,6 @@ import 'package:flutter_localizations/flutter_localizations.dart'
     GlobalMaterialLocalizations,
     GlobalCupertinoLocalizations,
     GlobalWidgetsLocalizations;
-import 'package:cloud_firestore/cloud_firestore.dart'
-  show
-    Firestore,
-    QuerySnapshot;
 import 'package:firebase_auth/firebase_auth.dart'
   show
     FirebaseAuth,
@@ -25,31 +21,15 @@ import 'package:long_life_burning/utils/providers/all.dart';
 import './index.dart';
 
 class App extends StatelessWidget {
-  App({Key key}) : super(key: key);
+  App({ Key key }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<SettingProvider>(builder: (_) => SettingProvider(),),
         ChangeNotifierProvider<NavBarProvider>(builder: (_) => NavBarProvider(),),
+        ChangeNotifierProvider<EventProvider>(builder: (_) => EventProvider(),),
         ChangeNotifierProvider<UserProvider>(builder: (_) => UserProvider(),),
-        FutureProvider<SharedPreferences>(
-          builder: (_) async => await SharedPreferences.getInstance(),
-          catchError: (_, err) {
-            print(err);
-            return null;
-          },
-        ),
-        StreamProvider<QuerySnapshot>(
-          builder: (_) => Firestore.instance
-            .collection("Blog")
-            .orderBy("date", descending: true)
-            .snapshots(),
-          catchError: (_, err) {
-            print(err);
-            return null;
-          },
-        ),
         StreamProvider<FirebaseUser>(
           builder: (_) => FirebaseAuth.instance.currentUser().asStream(),
           catchError: (_, err) {
