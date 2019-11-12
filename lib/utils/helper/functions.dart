@@ -2,7 +2,7 @@ part of constant;
 
 Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
   if (user != null) {
-    await Configs.store
+    await Firestore.instance
       .collection(Configs.collection_user)
       .where(
         Configs.uid_field,

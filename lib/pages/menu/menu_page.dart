@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoButton;
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:long_life_burning/screen/login/login_screen.dart' show LoginScreen;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
-    SizeConfig,
-    Configs;
+    Configs,
+    SizeConfig;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
@@ -22,7 +23,9 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+
   UserProvider userProvider;
+
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<UserProvider>(context);
@@ -65,7 +68,7 @@ class _MenuPageState extends State<MenuPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              userProvider.name ?? 'Username',
+              userProvider?.name ?? 'Username',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 24.0,
@@ -73,7 +76,7 @@ class _MenuPageState extends State<MenuPage> {
               ),
             ),
             Text(
-              'ID: ${userProvider.name?.toLowerCase()}',
+              'ID: ${userProvider?.name?.toLowerCase() ?? ""}',
               style: TextStyle(
                 color: Colors.grey,
               ),
@@ -120,7 +123,7 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
         onPressed: () async {
-          await Configs.auth
+          await FirebaseAuth.instance
             .signOut()
             .then((_) async {
               userProvider.resetUser();

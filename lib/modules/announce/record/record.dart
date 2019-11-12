@@ -52,16 +52,15 @@ class RecordEvent extends StatelessWidget {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        elevation: 0.0,
         brightness: Brightness.light,
         backgroundColor: Colors.transparent,
         actions: provider.state == RecordState.INIT ? <Widget>[
           GestureDetector(
             onLongPress: () async {
-              provider.stopListening();
-              provider.reset();
-              stopwatch.stop();
-              stopwatch.reset();
+              provider?.stopListening();
+              provider?.reset();
+              stopwatch?.stop();
+              stopwatch?.reset();
               await Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => Index(),
@@ -69,7 +68,7 @@ class RecordEvent extends StatelessWidget {
               );
             },
             child: CustomTooltip(
-              message: "Hold on button for exit",
+              message: "Press and hold button for exit",
               align: AlignMessage.CENTERLEFT,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -148,8 +147,8 @@ class RecordEvent extends StatelessWidget {
                       .document(eventId);
                   final List<String> _avgPace = provider?.avgPace?.split(":") ?? <String>[];
                   num _hour = 0, _minute = 0, _second = 0;
-                  if (_avgPace.isNotEmpty) {
-                    switch (_avgPace.length) {
+                  if (_avgPace?.isNotEmpty ?? false) {
+                    switch (_avgPace?.length) {
                       case 2:
                         _minute = num.parse(_avgPace[0]) ?? 0;
                         _second = num.parse(_avgPace[1]) ?? 0;
@@ -165,7 +164,7 @@ class RecordEvent extends StatelessWidget {
                         _second = 0;
                     }
                   }
-                  await userRef.setData({
+                  await userRef?.setData({
                     "recordDate": DateTime.now(),
                     "duration": {
                       "hour": stopwatch?.hour ?? 0,

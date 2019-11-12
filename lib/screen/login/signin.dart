@@ -59,7 +59,7 @@ class _SignInPageState extends State<SignInPage> {
       try {
         String email = emailController.text.trim();
         String password = passwordController.text.trim();
-        await Configs.auth
+        await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password)
           .then((result) async {
             if (result != null && result.user != null) {
