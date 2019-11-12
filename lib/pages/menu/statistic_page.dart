@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:long_life_burning/utils/providers/all.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StatisticPage extends StatefulWidget {
@@ -10,6 +11,7 @@ class StatisticPage extends StatefulWidget {
   @override
   _StatisticPageState createState() => _StatisticPageState();
 }
+
 
 class DataEvent {
   bool isLoggedIn() {
@@ -20,14 +22,11 @@ class DataEvent {
     }
   }
 
-  getData() async {
-    Firestore.instance.collection('users').document().collection('events').document().snapshots();
-     builder: (_, snapshot) {
-              if (!snapshot.hasData) {
-                return CircularProgressIndicator();
-              }
-     };
-  }
+  //  final DocumentReference userRef = Firestore.instance
+  //                             .collection(Configs.collection_user)
+  //                             .document(provider.id)
+  //                             .collection("events")
+  //                             .document(event.id);
 }
 
 class _StatisticPageState extends State<StatisticPage> {
@@ -63,14 +62,13 @@ List<Widget> charts = [Center(
             ),
           ]
         ),
-        
       ),
       Divider(height: 24.0,),
      
         Container(
         child: SfCartesianChart(
           primaryXAxis: CategoryAxis(),
-          title: ChartTitle(text: 'Distance for month'), 
+          title: ChartTitle(text: 'Statistics for month'), 
           legend: Legend(isVisible: true), 
           series: <LineSeries<EventData, String>>[
             LineSeries<EventData, String>(
@@ -134,7 +132,7 @@ List<Widget> charts = [Center(
         Container(
         child: SfCartesianChart(
           primaryXAxis: CategoryAxis(),
-          title: ChartTitle(text: 'Distance for years'), 
+          title: ChartTitle(text: 'Statistics for years'), 
           legend: Legend(isVisible: true), 
           series: <LineSeries<EventData, String>>[
             LineSeries<EventData, String>(
@@ -161,6 +159,8 @@ List<Widget> charts = [Center(
 
   @override
   Widget build(BuildContext context) {
+    
+    // final UserProvider provider = Provider.of<UserProvider>(context);
     return DefaultTabController(
       length:2,
      child: Scaffold(

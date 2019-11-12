@@ -40,15 +40,13 @@ class _EventDetailPageState extends State<EventDetailPage> {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.directions_run),
-          onPressed: () async {
-            await Navigator.of(Configs.index_context).pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => RecordEventPage(
-                  eventId: event.id,
-                ),
+          onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => RecordEventPage(
+                eventId: event.id,
               ),
-            );
-          },
+            ),
+          ),
         )
       ],
     );
@@ -102,7 +100,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
               ),
             ),
             Container(
-              width: SizeConfig.screenWidth,
               padding: EdgeInsets.all(20.0),
               child: Center(
                 child: Column(
@@ -113,7 +110,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
-                      width: SizeConfig.screenWidth,
                       child: RaisedButton(
                         onPressed: provider.user != null ? () async {
                           final DocumentReference eventRef = Firestore.instance

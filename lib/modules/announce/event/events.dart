@@ -3,6 +3,7 @@ library event;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoColors;
+import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
 
 part './event_view.dart';
 part './event_card.dart';
@@ -17,7 +18,11 @@ class Event {
   final String category;
   final String province;
   final String detail;
+  final String locateName;
+  final LatLng location;
   final DateTime date;
+  final num price;
+  final List users;
 
   Event({
     this.id,
@@ -26,7 +31,11 @@ class Event {
     this.category,
     this.province,
     this.detail,
+    this.price,
+    this.locateName,
+    this.location,
     this.date,
+    this.users,
   });
 
   factory Event.fromMap(Map<String, dynamic> map) => Event(
@@ -36,7 +45,11 @@ class Event {
     category: map["tags"],
     province: map["province"],
     detail: map["detail"],
-    date: DateTime.parse(map["date"]),
+    price: num.parse(map["price"]),
+    locateName: map["name"],
+    location: LatLng(num.parse(map["latitude"]), num.parse(map["longitude"])),
+    date: DateTime.parse("${map["date"]} ${map["time"].split(".")[0]}:${map["time"].split(".")[1]}:00"),
+    users: map["users"],
   );
 
   factory Event.fromJson(String s) => Event.fromMap(json.decode(s));
@@ -48,7 +61,10 @@ class Event {
     "category": this.category,
     "province": this.province,
     "detail": this.detail,
-    "date": this.date.toIso8601String(),
+    "date": this.date,
+    "price": this.price,
+    "location": "${this.location.latitude},${this.location.longitude}",
+    "users": this.users,
   };
 
   String toJson() => json.encode(this.toMap());
@@ -64,7 +80,10 @@ class Event {
               category == other.category &&
               province == other.province &&
               detail == other.detail &&
-              date == other.date;
+              date == other.date &&
+              price == other.price &&
+              location == other.location &&
+              users == other.users;
 
   @override
   int get hashCode => (
@@ -74,7 +93,10 @@ class Event {
     category.hashCode ^
     province.hashCode ^
     detail.hashCode ^
-    date.hashCode
+    date.hashCode ^
+    price.hashCode ^
+    location.hashCode ^
+    users.hashCode
   );
 
   @override

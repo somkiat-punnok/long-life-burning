@@ -17,12 +17,12 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (provider.state) {
+    switch (provider?.state) {
       case RecordState.INIT:
         return GestureDetector(
           onTap: () {
-            provider.startListening();
-            stopwatch.start();
+            provider?.startListening();
+            stopwatch?.start();
           },
           child: Container(
             decoration: BoxDecoration(
@@ -48,12 +48,12 @@ class ButtonWidget extends StatelessWidget {
         break;
       case RecordState.START:
         return CustomTooltip(
-          message: "Hold on button for finish",
+          message: "Press and hold button for finish",
           align: AlignMessage.BOTTOM,
           child: GestureDetector(
             onLongPress: () {
-              provider.stopListening();
-              stopwatch.stop();
+              provider?.stopListening();
+              stopwatch?.stop();
             },
             child: Container(
               decoration: BoxDecoration(
@@ -79,11 +79,11 @@ class ButtonWidget extends StatelessWidget {
         return Container(
           child: OutlineButton(
             onPressed: this.onEnd ?? () {
-              provider.reset();
-              stopwatch.reset();
+              provider?.reset();
+              stopwatch?.reset();
             },
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 "Record Data and Exit".toUpperCase(),
               ),

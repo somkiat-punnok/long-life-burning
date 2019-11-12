@@ -6,6 +6,7 @@ import 'package:long_life_burning/modules/nearby/nearby.dart'
     Marker,
     LatLng,
     MarkerId,
+    InfoWindow,
     BitmapDescriptor;
 
 class CheckPointPage extends StatefulWidget {
@@ -88,24 +89,11 @@ class _CheckPointPageState extends State<CheckPointPage> {
             child: FloatingActionButton(
               mini: true,
               backgroundColor: Colors.white,
-              onPressed: () => Navigator.of(context).maybePop(),
+              onPressed: () async => await Navigator.of(context).maybePop(),
               child: Icon(
                 Icons.arrow_back,
                 color: Colors.black,
               ),
-            ),
-          ),
-          Positioned(
-            right: 8.0,
-            top: SizeConfig.statusBarHeight,
-            child: FloatingActionButton(
-              mini: true,
-              backgroundColor: Colors.white,
-              child: Icon(
-                Icons.share,
-                color: Colors.black,
-              ),
-              onPressed: () => print('share'),
             ),
           ),
         ],
@@ -118,6 +106,10 @@ class _CheckPointPageState extends State<CheckPointPage> {
         markerId: MarkerId("mark" + (i+1).toString()),
         position: LatLng(lat[i], long[i]),
         icon: BitmapDescriptor.defaultMarker,
+        infoWindow: InfoWindow(
+          title: "",
+          snippet: "",
+        ),
       ),
     );
   }

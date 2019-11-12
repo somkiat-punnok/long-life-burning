@@ -26,8 +26,6 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController confirmController;
   TextEditingController heightController;
   TextEditingController weightController;
-  TextEditingController birthController;
-  TextEditingController genderController;
 
   @override
   void initState() {
@@ -39,7 +37,6 @@ class _SignUpPageState extends State<SignUpPage> {
     confirmController = TextEditingController();
     heightController = TextEditingController();
     weightController = TextEditingController();
-    genderController = TextEditingController();
   }
 
   @override
@@ -55,7 +52,6 @@ class _SignUpPageState extends State<SignUpPage> {
     confirmController.dispose();
     heightController.dispose();
     weightController.dispose();
-    genderController.dispose();
     super.dispose();
   }
 
@@ -86,24 +82,23 @@ class _SignUpPageState extends State<SignUpPage> {
 
         if (password.length >= 8) {
           if (password == confirmPassword) {
-            await Configs.auth
+            await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password)
               .then((result) async {
                 if (result != null && result.user != null) {
-                  await Configs.store
+                  await Firestore.instance
                     .collection(Configs.collection_user)
-                    .add({
+                    .document(result.user.uid)
+                    .setData({
                       Configs.uid_field: result.user.uid,
                       Configs.name_field: 'Anonymus',
                       Configs.height_field: height,
                       Configs.weight_field: weight,
                       Configs.dateOfBirth_field: _date,
                       Configs.gender_field: gender,
-                    })
-                    .then((ref) {
-                      if (ref != null && ref.documentID.isNotEmpty) {
-                        widget.signin();
-                      }
+                    }, merge: true)
+                    .then((_) {
+                      widget.signin();
                     });
                 }
               });

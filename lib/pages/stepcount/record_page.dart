@@ -104,7 +104,7 @@ class _RecordPageState extends State<RecordPage> {
   Future<void> readDate(DateTime date) async {
     if (!mounted) return;
     final DateTime now = DateTime.now();
-    if ((date.year <= now.year) && (date.month <= now.month) && (date.day <= now.day)) {
+    if (((date.year <= now.year) && (date.month < now.month)) || ((date.year == now.year) && (date.month == now.month) && (date.day <= now.day))) {
       try {
         if (isCupertino && Configs.fitkit_permissions) {
           _step = 0;

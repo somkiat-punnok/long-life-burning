@@ -35,7 +35,7 @@ class _CreateGroupState extends State<CreateGroup> {
         "location": location,
         "category": GROUP_CATEGORIES[category],
         "date":_date,
-        "time": "${time.hour}:${time.minute}",
+        "time": "${time?.hour?.toString()?.padLeft(2, "0") ?? "00"}:${time?.minute?.toString()?.padLeft(2, "0") ?? "00"}",
         "users": [
           userProvider.user?.uid ?? "",
         ],
