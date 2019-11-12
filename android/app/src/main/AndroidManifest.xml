@@ -12,7 +12,7 @@
     <application
         tools:replace="android:label"
         android:name=".Application"
-        android:label="long_life_burning"
+        android:label="Long Burn"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.gms.version"

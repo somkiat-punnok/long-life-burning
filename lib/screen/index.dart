@@ -21,8 +21,8 @@ import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
     ChangeNotifierProvider,
-    NavBarProvider,
     UserProvider,
+    NavBarProvider,
     StepToDayProvider;
 
 import './login/login_screen.dart';
@@ -68,7 +68,7 @@ class _IndexWidgetState extends State<IndexWidget> {
 
   @override
   void dispose() {
-    if (isMaterial) stepProvider?.stopListening();
+    stepProvider?.stopListening();
     super.dispose();
   }
 

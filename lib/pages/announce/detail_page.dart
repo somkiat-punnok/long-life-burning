@@ -124,32 +124,37 @@ class _EventDetailPageState extends State<EventDetailPage> {
                               .document(provider.id)
                               .collection("events")
                               .document(event.id);
-                          final DocumentSnapshot doc = await eventRef.get();
-                          final Map<String, dynamic> data = doc.data;
-                          if (data["users"]?.isEmpty ?? true) data["users"] = [];
-                          final List join = data["users"];
-                          if (!join.contains(provider.user.uid)) {
-                            join.add(provider.user.uid);
-                            await eventRef.setData({
-                              "users": join,
+                          final DocumentSnapshot eventDoc = await eventRef.get();
+                          if (eventDoc.exists) {
+                            final Map<String, dynamic> data = eventDoc.data;
+                            if (data["users"]?.isEmpty ?? true) data["users"] = [];
+                            final List join = List.of(data["users"] ?? []);
+                            if (!(join?.contains(provider.user.uid) ?? true)) {
+                              join.add(provider.user.uid);
+                              await eventRef.setData({
+                                "users": join,
+                              }, merge: true);
+                            }
+                          }
+                          final DocumentSnapshot userDoc = await userRef.get();
+                          if (!userDoc.exists) {
+                            await userRef.setData({
+                              "eventId": event.id,
+                              "date": DateTime.now(),
+                              "duration": {
+                                "hour": 0,
+                                "minute": 0,
+                                "second": 0,
+                              },
+                              "avgpace": {
+                                "hour": 0,
+                                "minute": 0,
+                                "second": 0,
+                              },
+                              "calories": 0.0,
+                              "distance": 0.0,
                             }, merge: true);
                           }
-                          await userRef.setData({
-                            "eventId": event.id,
-                            "date": DateTime.now(),
-                            "duration": {
-                              "hour": 0,
-                              "minute": 0,
-                              "second": 0,
-                            },
-                            "avgpace": {
-                              "hour": 0,
-                              "minute": 0,
-                              "second": 0,
-                            },
-                            "calories": 0.0,
-                            "distance": 0.0,
-                          }, merge: true);
                           await Navigator.of(context).popUntil(ModalRoute.withName('/'));
                         } : () async => await Navigator.of(context).popUntil(ModalRoute.withName('/')),
                         color: Color.fromRGBO(58, 66, 86, 1.0),
