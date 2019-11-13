@@ -25,8 +25,8 @@ import 'package:long_life_burning/utils/providers/all.dart'
   show
     Provider,
     ChangeNotifierProvider,
-    NavBarProvider,
     UserProvider,
+    NavBarProvider,
     StepToDayProvider;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -112,7 +112,7 @@ class _IndexWidgetState extends State<IndexWidget> {
 
   @override
   void dispose() {
-    if (isMaterial) stepProvider?.stopListening();
+    stepProvider?.stopListening();
     super.dispose();
   }
 

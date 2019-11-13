@@ -124,19 +124,23 @@ class _AnnouncePageState extends State<AnnouncePage> {
     _events = <DateTime, List>{};
     if (data?.documents?.isNotEmpty ?? false) {
       data?.documents?.forEach((doc) {
-        var dataTemp = doc.data;
-        dataTemp["id"] = doc.documentID;
-        Event e = Event.fromMap(dataTemp);
-        _data.add(e);
-        if ((province?.isNotEmpty ?? false) || (category?.isNotEmpty ?? false)) {
-          if (!e.province.contains(province ?? "") || !e.category.contains(category ?? "")) return;
+        if (doc?.exists ?? false) {
+          var dataTemp = doc.data;
+          dataTemp["id"] = doc.documentID;
+          final Event e = Event.fromMap(dataTemp);
+          _data.add(e);
+          if ((province?.isNotEmpty ?? false) || (category?.isNotEmpty ?? false)) {
+            if (!e.province.contains(province ?? "") || !e.category.contains(category ?? "")) return;
+          }
+          final DateTime _date = DateTime(e.date.year, e.date.month, e.date.day);
+          if (_events[_date] == null) _events[_date] = [];
+          _events[_date].add(e);
+          print(e.date.toString());
         }
-        if (_events[e.date] == null) _events[e.date] = [];
-        _events[e.date].add(e);
       });
     }
-    provider.events = _data;
     _onDayEvents = _events[_selectedDay] ?? [];
+    provider.events = _data;
   }
 
   Widget _buildBody(BuildContext context) {
