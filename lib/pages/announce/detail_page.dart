@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'
   show
     Firestore,
     DocumentSnapshot,
-    DocumentReference;
+    DocumentReference,
+    CollectionReference;
 import 'package:long_life_burning/pages/announce/record_event_page.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
@@ -37,18 +38,6 @@ class _EventDetailPageState extends State<EventDetailPage> {
         tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         onPressed: () async => await Navigator.of(context).popUntil(ModalRoute.withName('/')),
       ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.directions_run),
-          onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => RecordEventPage(
-                eventId: event.id,
-              ),
-            ),
-          ),
-        )
-      ],
     );
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -61,31 +50,31 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(color: Color.fromRGBO(58, 66, 86, .9)),
+                    decoration: BoxDecoration(color: Theme.of(context).primaryColor),
                     child: Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: _appBar.preferredSize.height + SizeConfig.statusBarHeight),
-                          Icon(
-                            Icons.directions_car,
-                            color: Colors.white,
-                            size: 40.0,
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '${event.title}',
+                              style: TextStyle(color: Colors.white, fontSize: 24.0),
+                            ),
                           ),
-                          Container(
-                            width: 90.0,
-                            child: Divider(color: Colors.green),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 8.0,
+                              right: 8.0,
+                              top: 8.0,
+                              bottom: 16.0,
+                            ),
+                            child: Text(
+                              '${event.subtitle}',
+                              style: TextStyle(color: Colors.white, fontSize: 24.0),
+                            ),
                           ),
-                          SizedBox(height: 10.0),
-                          Text(
-                            '${event.title}',
-                            style: TextStyle(color: Colors.white, fontSize: 24.0),
-                          ),
-                          Text(
-                            '${event.subtitle}',
-                            style: TextStyle(color: Colors.white, fontSize: 24.0),
-                          ),
-                          SizedBox(height: 10.0),
                         ],
                       ),
                     ),
@@ -100,7 +89,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                top: 24.0,
+                bottom: 48.0,
+              ),
               child: Center(
                 child: Column(
                   children: <Widget>[
@@ -108,66 +102,213 @@ class _EventDetailPageState extends State<EventDetailPage> {
                       '${event.detail}',
                       style: TextStyle(fontSize: 18.0),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: RaisedButton(
-                        onPressed: provider.user != null ? () async {
-                          final DocumentReference eventRef = Firestore.instance
-                              .collection(Configs.collection_event)
-                              .document(event.id);
-                          final DocumentReference userRef = Firestore.instance
-                              .collection(Configs.collection_user)
-                              .document(provider.id)
-                              .collection("events")
-                              .document(event.id);
-                          final DocumentSnapshot eventDoc = await eventRef.get();
-                          if (eventDoc.exists) {
-                            final Map<String, dynamic> data = eventDoc.data;
-                            if (data["users"]?.isEmpty ?? true) data["users"] = [];
-                            final List join = List.of(data["users"] ?? []);
-                            if (!(join?.contains(provider.user.uid) ?? true)) {
-                              join.add(provider.user.uid);
-                              await eventRef.setData({
-                                "users": join,
-                              }, merge: true);
-                            }
-                          }
-                          final DocumentSnapshot userDoc = await userRef.get();
-                          if (!userDoc.exists) {
-                            await userRef.setData({
-                              "eventId": event.id,
-                              "date": DateTime.now(),
-                              "duration": {
-                                "hour": 0,
-                                "minute": 0,
-                                "second": 0,
-                              },
-                              "avgpace": {
-                                "hour": 0,
-                                "minute": 0,
-                                "second": 0,
-                              },
-                              "calories": 0.0,
-                              "distance": 0.0,
-                            }, merge: true);
-                          }
-                          await Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                        } : () async => await Navigator.of(context).popUntil(ModalRoute.withName('/')),
-                        color: Color.fromRGBO(58, 66, 86, 1.0),
-                        child: Text(
-                          "TAKE THIS LESSON",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+      floatingActionButton: provider.user != null ? _ButtonWidget(
+        user: provider,
+        event: event,
+      ) : null,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+}
+
+class _ButtonWidget extends StatelessWidget {
+
+  final Event event;
+  final UserProvider user;
+  final ValueChanged<bool> onLoad;
+
+  const _ButtonWidget({
+    Key key,
+    this.event,
+    this.user,
+    this.onLoad,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (user?.events?.contains(event?.id) ?? false) {
+      return Container(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                top: 2.0,
+                bottom: 2.0,
+              ),
+              child: RaisedButton(
+                onPressed: () async {
+                  if (this.onLoad != null) this.onLoad(true);
+                  final DocumentReference eventRef = Firestore.instance
+                      .collection(Configs.collection_event)
+                      .document(event.id);
+                  final DocumentReference userRef = Firestore.instance
+                      .collection(Configs.collection_user)
+                      .document(user.id)
+                      .collection("events")
+                      .document(event.id);
+                  final CollectionReference _ref = Firestore.instance
+                      .collection(Configs.collection_user)
+                      .document(user.id)
+                      .collection("events");
+                  final DocumentSnapshot eventDoc = await eventRef.get();
+                  if (eventDoc?.exists ?? false) {
+                    final Map<String, dynamic> data = eventDoc.data;
+                    if (data["users"]?.isEmpty ?? true) data["users"] = [];
+                    final List join = List.of(data["users"] ?? []);
+                    if (join?.remove(user.user.uid) ?? false) {
+                      await eventRef.setData({
+                        "users": join,
+                      }, merge: true);
+                    }
+                  }
+                  final DocumentSnapshot userDoc = await userRef.get();
+                  if (userDoc?.exists ?? false) {
+                    await userRef.delete();
+                  }
+                  if (this.onLoad != null) this.onLoad(false);
+                  final List<String> _e = <String>[];
+                  await Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                  await _ref
+                    .getDocuments()
+                    .then((snap) async {
+                      snap.documents.forEach((d) {
+                        if (d.exists) _e.add(d.documentID);
+                      });
+                      user.events = _e;
+                    });
+                },
+                color: Colors.red,
+                child: Text(
+                  "cancel join".toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                top: 2.0,
+                bottom: 2.0,
+              ),
+              child: OutlineButton(
+                color: Colors.green,
+                child: Container(
+                  padding: const EdgeInsets.only(
+                    left: 8.0,
+                    right: 8.0,
+                    top: 2.0,
+                    bottom: 2.0,
+                  ),
+                  child: Text("record".toUpperCase()),
+                ),
+                onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => RecordEventPage(
+                      eventId: event.id,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Container(
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.only(
+              left: 8.0,
+              right: 8.0,
+              top: 2.0,
+              bottom: 2.0,
+            ),
+            child: RaisedButton(
+              onPressed: () async {
+                if (this.onLoad != null) this.onLoad(true);
+                final DocumentReference eventRef = Firestore.instance
+                    .collection(Configs.collection_event)
+                    .document(event.id);
+                final DocumentReference userRef = Firestore.instance
+                    .collection(Configs.collection_user)
+                    .document(user.id)
+                    .collection("events")
+                    .document(event.id);
+                final CollectionReference _ref = Firestore.instance
+                    .collection(Configs.collection_user)
+                    .document(user.id)
+                    .collection("events");
+                final DocumentSnapshot eventDoc = await eventRef.get();
+                if (eventDoc.exists) {
+                  final Map<String, dynamic> data = eventDoc.data;
+                  if (data["users"]?.isEmpty ?? true) data["users"] = [];
+                  final List join = List.of(data["users"] ?? []);
+                  if (!(join?.contains(user.user.uid) ?? true)) {
+                    join.add(user.user.uid);
+                    await eventRef.setData({
+                      "users": join,
+                    }, merge: true);
+                  }
+                }
+                final DocumentSnapshot userDoc = await userRef.get();
+                if (!userDoc.exists) {
+                  await userRef.setData({
+                    "eventId": event.id,
+                    "date": DateTime.now(),
+                    "duration": {
+                      "hour": 0,
+                      "minute": 0,
+                      "second": 0,
+                    },
+                    "avgpace": {
+                      "hour": 0,
+                      "minute": 0,
+                      "second": 0,
+                    },
+                    "calories": 0.0,
+                    "distance": 0.0,
+                  }, merge: true);
+                }
+                if (this.onLoad != null) this.onLoad(false);
+                final List<String> _e = <String>[];
+                await Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                await _ref
+                  .getDocuments()
+                  .then((snap) async {
+                    snap.documents.forEach((d) {
+                      if (d.exists) _e.add(d.documentID);
+                    });
+                    user.events = _e;
+                  });
+              },
+              color: Color.fromRGBO(58, 66, 86, 1.0),
+              child: Text(
+                "join this event".toUpperCase(),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
