@@ -26,6 +26,47 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
   }
 }
 
+Future<void> showNotification({ String action, String payload }) async {
+  var androidSpecifics = AndroidNotificationDetails(
+    'long_burn_app',
+    'long life burning',
+    'application for workout community',
+    importance: Importance.Max,
+    priority: Priority.High,
+  );
+  var iosSpecifics = IOSNotificationDetails();
+  var specifics = NotificationDetails(
+      androidSpecifics, iosSpecifics);
+  await Configs.notifyPlugin.show(
+    0,
+    '$action event',
+    'event: $payload',
+    specifics,
+    payload: payload,
+  );
+}
+
+Future<void> cancelNotification() async {
+  await Configs.notifyPlugin.cancel(0);
+}
+
+Future<void> scheduleNotification({ DateTime date }) async {
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'long_burn_app',
+    'long life burning',
+    'application for workout community',
+  );
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  var platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  await Configs.notifyPlugin.schedule(
+      0,
+      'scheduled title',
+      'scheduled body',
+      date,
+      platformChannelSpecifics);
+}
+
 num calculateCalories({
   DateTime age,
   Gender gender,
