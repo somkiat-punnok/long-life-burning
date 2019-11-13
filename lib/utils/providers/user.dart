@@ -9,6 +9,7 @@ class UserProvider extends ChangeNotifier {
   num _weight;
   Gender _gender;
   DateTime _dateOfBirth;
+  List<String> _events;
 
   FirebaseUser get user => _user;
   String get id => _id;
@@ -17,54 +18,10 @@ class UserProvider extends ChangeNotifier {
   num get weight => _weight;
   Gender get gender => _gender;
   DateTime get dateOfBirth => _dateOfBirth;
+  List<String> get events => _events;
 
-  set user(FirebaseUser newValue) {
-    if (_user == newValue)
-      return;
-    _user = newValue;
-    notifyListeners();
-  }
-
-  set id(String newValue) {
-    if (_id == newValue)
-      return;
-    _id = newValue;
-    notifyListeners();
-  }
-
-  set name(String newValue) {
-    if (_name == newValue)
-      return;
-    _name = newValue;
-    notifyListeners();
-  }
-
-  set height(num newValue) {
-    if (_height == newValue)
-      return;
-    _height = newValue;
-    notifyListeners();
-  }
-
-  set weight(num newValue) {
-    if (_weight == newValue)
-      return;
-    _weight = newValue;
-    notifyListeners();
-  }
-
-  set gender(Gender newValue) {
-    if (_gender == newValue)
-      return;
-    _gender = newValue;
-    notifyListeners();
-  }
-
-  set dateOfBirth(DateTime newValue) {
-    if (_dateOfBirth == newValue)
-      return;
-    _dateOfBirth = newValue;
-    notifyListeners();
+  set events(List<String> eventNew) {
+    _events = eventNew;
   }
 
   void setUser({
@@ -82,7 +39,7 @@ class UserProvider extends ChangeNotifier {
     _height = heightNew;
     _weight = weightNew;
     _gender = genderNew != null ? genderNew?.toLowerCase() != 'female' ? Gender.MALE : Gender.FEMALE : null;
-    _dateOfBirth = dateOfBirthNew != null ? DateTime.fromMicrosecondsSinceEpoch(dateOfBirthNew?.microsecondsSinceEpoch) : null;
+    _dateOfBirth = dateOfBirthNew != null ? DateTime.fromMicrosecondsSinceEpoch(dateOfBirthNew?.microsecondsSinceEpoch ?? 0) : null;
     notifyListeners();
   }
 
@@ -94,6 +51,7 @@ class UserProvider extends ChangeNotifier {
     _weight = null;
     _gender = null;
     _dateOfBirth = null;
+    _events = null;
     notifyListeners();
   }
 

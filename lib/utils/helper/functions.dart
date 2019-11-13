@@ -9,21 +9,74 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
         isEqualTo: user.uid,
       )
       .snapshots()
-      .listen((data) {
-        if (data?.documents?.isNotEmpty ?? false) {
+      .listen((snap) async {
+        if (snap?.documents?.isNotEmpty ?? false) {
           Configs.login = true;
+          final List<String> _e = <String>[];
+          await Firestore.instance
+            .collection(Configs.collection_user)
+            .document(snap.documents[0].documentID)
+            .collection("events")
+            .getDocuments()
+            .then((snapshot) async {
+              snapshot.documents.forEach((d) {
+                if (d.exists) _e.add(d.documentID);
+              });
+              userProvider.events = _e;
+            });
           userProvider.setUser(
             userNew: user,
-            idNew: data.documents[0].documentID,
-            nameNew: data.documents[0].data[Configs.name_field],
-            weightNew: data.documents[0].data[Configs.weight_field],
-            heightNew: data.documents[0].data[Configs.height_field],
-            dateOfBirthNew: data.documents[0].data[Configs.dateOfBirth_field],
-            genderNew: data.documents[0].data[Configs.gender_field],
+            idNew: snap.documents[0].documentID,
+            nameNew: snap.documents[0].data[Configs.name_field],
+            weightNew: snap.documents[0].data[Configs.weight_field],
+            heightNew: snap.documents[0].data[Configs.height_field],
+            dateOfBirthNew: snap.documents[0].data[Configs.dateOfBirth_field],
+            genderNew: snap.documents[0].data[Configs.gender_field],
           );
         }
       });
   }
+}
+
+Future<void> showNotification({ String action, String payload }) async {
+  var androidSpecifics = AndroidNotificationDetails(
+    'long_burn_app',
+    'long life burning',
+    'application for workout community',
+    importance: Importance.Max,
+    priority: Priority.High,
+  );
+  var iosSpecifics = IOSNotificationDetails();
+  var specifics = NotificationDetails(
+      androidSpecifics, iosSpecifics);
+  await Configs.notifyPlugin.show(
+    0,
+    '$action event',
+    'event: $payload',
+    specifics,
+    payload: payload,
+  );
+}
+
+Future<void> cancelNotification() async {
+  await Configs.notifyPlugin.cancel(0);
+}
+
+Future<void> scheduleNotification({ DateTime date }) async {
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'long_burn_app',
+    'long life burning',
+    'application for workout community',
+  );
+  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  var platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  await Configs.notifyPlugin.schedule(
+      0,
+      'scheduled title',
+      'scheduled body',
+      date,
+      platformChannelSpecifics);
 }
 
 num calculateCalories({

@@ -192,7 +192,6 @@ class StepToDayProvider extends ChangeNotifier {
 
   void stopListening() async {
     await _subscription?.cancel();
-    notifyListeners();
   }
 
   void _onData(int steps) async {
