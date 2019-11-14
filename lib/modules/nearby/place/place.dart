@@ -8,7 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:long_life_burning/utils/widgets/carousel_card.dart';
-import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
+import 'package:long_life_burning/utils/helper/constants.dart'
+  show
+    IMAGES,
+    SizeConfig;
 import '../header/header.dart' show StickyHeaderBuilder;
 import '../utils.dart';
 
@@ -94,11 +97,18 @@ class _PlaceState extends State<Place> {
   }
 
   Future<List<Widget>> mapItem(List<DocumentSnapshot> list) async {
-    List<Widget> result = <Widget>[];
+    final List<Widget> _result = <Widget>[];
+    final List<String> _image = <String>[
+      "$IMAGES/216155.jpg",
+      "$IMAGES/216178.jpg",
+      "$IMAGES/216197.jpg",
+    ];
+    num i = 0;
     list.forEach((l) async {
+      if (i == 3) i = 0;
       final Map<String, dynamic> data = l.data;
       data["id"] = l.documentID;
-      data["image"] = "https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80";
+      data["image"] = _image[i];
       final PlaceModel p = PlaceModel.fromMap(data);
       final Geolocator geo = new Geolocator();
       final double dist = await geo
@@ -108,7 +118,7 @@ class _PlaceState extends State<Place> {
           p.lat,
           p.long,
         );
-      result.add(
+      _result.add(
         PlaceDetail(
           item: p,
           distance: dist,
@@ -118,8 +128,9 @@ class _PlaceState extends State<Place> {
               : () {},
         )
       );
+      i++;
     });
-    return result;
+    return _result;
   }
 
 }

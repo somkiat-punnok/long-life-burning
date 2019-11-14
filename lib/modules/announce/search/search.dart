@@ -3,7 +3,10 @@ library search;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
 import 'package:long_life_burning/pages/announce/detail_page.dart';
-import 'package:long_life_burning/utils/providers/all.dart' show Provider, EventProvider;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    EventProvider;
 import '../event/events.dart'
   show
     Event,
@@ -24,6 +27,9 @@ class SearchEventDelegate extends SearchDelegate<Event> {
     keyboardType: keyboardType,
     textInputAction: textInputAction,
   );
+
+  Iterable<Event> _suggestions;
+  Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -56,9 +62,8 @@ class SearchEventDelegate extends SearchDelegate<Event> {
   @override
   Widget buildSuggestions(BuildContext context) {
     final EventProvider provider = Provider.of<EventProvider>(context);
-    Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
 
-    final Iterable<Event> suggestions = query.isNotEmpty
+    _suggestions = query.isNotEmpty
       ? provider?.events?.where((Event e) {
           if (e.title.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
             _map[e] = SearchWhere.title;
@@ -80,7 +85,7 @@ class SearchEventDelegate extends SearchDelegate<Event> {
         }) ?? <Event>[]
       : <Event>[];
 
-    if (query.isNotEmpty && suggestions.isEmpty) {
+    if (query.isNotEmpty && _suggestions.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -112,39 +117,14 @@ class SearchEventDelegate extends SearchDelegate<Event> {
     return _SuggestionList(
       query: query,
       mapCategory: _map,
-      suggestions: suggestions.toList(),
+      suggestions: _suggestions.toList(),
       onSelected: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    final EventProvider provider = Provider.of<EventProvider>(context);
-    Map<Event, SearchWhere> _map = <Event, SearchWhere>{};
-
-    final Iterable<Event> suggestions = query.isNotEmpty
-      ? provider?.events?.where((Event e) {
-          if (e.title.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
-            _map[e] = SearchWhere.title;
-            return true;
-          }
-          if (e.subtitle.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
-            _map[e] = SearchWhere.subtitle;
-            return true;
-          }
-          if (e.province.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
-            _map[e] = SearchWhere.province;
-            return true;
-          }
-          if (e.category.toLowerCase().trim().startsWith(query.toLowerCase().trim())) {
-            _map[e] = SearchWhere.category;
-            return true;
-          }
-          return false;
-        }) ?? <Event>[]
-      : <Event>[];
-
-    if (query.isNotEmpty && suggestions.isEmpty) {
+    if (query.isNotEmpty && _suggestions.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +156,7 @@ class SearchEventDelegate extends SearchDelegate<Event> {
     return _SuggestionList(
       query: query,
       mapCategory: _map,
-      suggestions: suggestions.toList(),
+      suggestions: _suggestions.toList(),
       onSelected: (Event data) async => await Navigator.of(context).pushNamed(EventDetailPage.routeName, arguments: data),
     );
   }

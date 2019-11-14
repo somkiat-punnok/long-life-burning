@@ -2,10 +2,7 @@ library constant;
 
 import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
-import 'package:firebase_auth/firebase_auth.dart'
-  show
-    FirebaseAuth,
-    FirebaseUser;
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
 import '../providers/all.dart' show UserProvider;
 import '../widgets/platform.dart' show isMaterial;
 

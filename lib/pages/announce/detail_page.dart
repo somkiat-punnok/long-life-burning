@@ -28,6 +28,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
   Widget build(BuildContext context) {
     final Event event = ModalRoute.of(context).settings.arguments;
     final UserProvider provider = Provider.of<UserProvider>(context);
+    final DateTime _now = DateTime.now();
     PreferredSizeWidget _appBar = AppBar(
       automaticallyImplyLeading: false,
       brightness: Brightness.dark,
@@ -109,7 +110,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
           ],
         ),
       ),
-      floatingActionButton: provider.user != null ? _ButtonWidget(
+      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMinutes ?? 0)) && (provider.user != null)) ? _ButtonWidget(
         user: provider,
         event: event,
       ) : null,
