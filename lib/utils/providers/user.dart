@@ -10,6 +10,7 @@ class UserProvider extends ChangeNotifier {
   Gender _gender;
   DateTime _dateOfBirth;
   List<String> _events;
+  List<Notify> _notify;
 
   FirebaseUser get user => _user;
   String get id => _id;
@@ -19,9 +20,14 @@ class UserProvider extends ChangeNotifier {
   Gender get gender => _gender;
   DateTime get dateOfBirth => _dateOfBirth;
   List<String> get events => _events;
+  List<Notify> get notify => _notify;
 
   set events(List<String> eventNew) {
     _events = eventNew;
+  }
+
+  set notify(List<Notify> notifyNew) {
+    _notify = notifyNew;
   }
 
   void setUser({
@@ -52,6 +58,7 @@ class UserProvider extends ChangeNotifier {
     _gender = null;
     _dateOfBirth = null;
     _events = null;
+    _notify = null;
     notifyListeners();
   }
 

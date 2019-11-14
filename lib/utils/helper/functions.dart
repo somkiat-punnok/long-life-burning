@@ -46,9 +46,12 @@ Future<void> showNotification({ String action, String payload }) async {
     importance: Importance.Max,
     priority: Priority.High,
   );
-  var iosSpecifics = IOSNotificationDetails();
-  var specifics = NotificationDetails(
-      androidSpecifics, iosSpecifics);
+  var iosSpecifics = IOSNotificationDetails(
+    presentAlert: true,
+    presentBadge: true,
+    presentSound: true,
+  );
+  var specifics = NotificationDetails(androidSpecifics, iosSpecifics);
   await Configs.notifyPlugin.show(
     0,
     '$action event',
@@ -58,25 +61,29 @@ Future<void> showNotification({ String action, String payload }) async {
   );
 }
 
-Future<void> cancelNotification() async {
-  await Configs.notifyPlugin.cancel(0);
-}
-
-Future<void> scheduleNotification({ DateTime date }) async {
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+Future<void> scheduleNotification({ String action, String payload, DateTime date }) async {
+  var androidSpecifics = AndroidNotificationDetails(
     'long_burn_app',
     'long life burning',
     'application for workout community',
   );
-  var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-  var platformChannelSpecifics = NotificationDetails(
-      androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  var iosSpecifics = IOSNotificationDetails(
+    presentAlert: true,
+    presentBadge: true,
+    presentSound: true,
+  );
+  var specifics = NotificationDetails(androidSpecifics, iosSpecifics);
   await Configs.notifyPlugin.schedule(
-      0,
-      'scheduled title',
-      'scheduled body',
-      date,
-      platformChannelSpecifics);
+    0,
+    '$action event',
+    'event: $payload',
+    date,
+    specifics,
+  );
+}
+
+Future<void> cancelNotification({ int id }) async {
+  await Configs.notifyPlugin.cancel(id);
 }
 
 num calculateCalories({

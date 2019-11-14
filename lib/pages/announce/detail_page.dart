@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
   show
@@ -9,7 +10,9 @@ import 'package:long_life_burning/pages/announce/record_event_page.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Configs,
-    SizeConfig;
+    SizeConfig,
+    showNotification,
+    scheduleNotification;
 import 'package:long_life_burning/modules/announce/event/events.dart' show Event;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
@@ -51,17 +54,24 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 children: <Widget>[
                   Container(
                     padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                    ),
                     child: Center(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          SizedBox(height: _appBar.preferredSize.height + SizeConfig.statusBarHeight),
+                          SizedBox(
+                            height: _appBar.preferredSize.height + SizeConfig.statusBarHeight,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '${event.title}',
-                              style: TextStyle(color: Colors.white, fontSize: 24.0),
+                              '${event?.title ?? ""}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                              ),
                             ),
                           ),
                           Padding(
@@ -72,8 +82,11 @@ class _EventDetailPageState extends State<EventDetailPage> {
                               bottom: 16.0,
                             ),
                             child: Text(
-                              '${event.subtitle}',
-                              style: TextStyle(color: Colors.white, fontSize: 24.0),
+                              '${event?.subtitle ?? ""}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                              ),
                             ),
                           ),
                         ],
@@ -100,8 +113,10 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${event.detail}',
-                      style: TextStyle(fontSize: 18.0),
+                      '${event?.detail ?? ""}',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
                     ),
                   ],
                 ),
@@ -110,10 +125,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
           ],
         ),
       ),
-      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMinutes ?? 0)) && (provider.user != null)) ? _ButtonWidget(
-        user: provider,
-        event: event,
-      ) : null,
+      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMinutes ?? 0)) && (provider.user != null))
+          ? _ButtonWidget(
+            user: provider,
+            event: event,
+          )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -149,35 +166,68 @@ class _ButtonWidget extends StatelessWidget {
               ),
               child: RaisedButton(
                 onPressed: () async {
-                  if (this.onLoad != null) this.onLoad(true);
-                  final DocumentReference eventRef = Firestore.instance
-                      .collection(Configs.collection_event)
-                      .document(event.id);
-                  final DocumentReference userRef = Firestore.instance
-                      .collection(Configs.collection_user)
-                      .document(user.id)
-                      .collection("events")
-                      .document(event.id);
                   final CollectionReference _ref = Firestore.instance
                       .collection(Configs.collection_user)
                       .document(user.id)
                       .collection("events");
-                  final DocumentSnapshot eventDoc = await eventRef.get();
-                  if (eventDoc?.exists ?? false) {
-                    final Map<String, dynamic> data = eventDoc.data;
-                    if (data["users"]?.isEmpty ?? true) data["users"] = [];
-                    final List join = List.of(data["users"] ?? []);
-                    if (join?.remove(user.user.uid) ?? false) {
-                      await eventRef.setData({
-                        "users": join,
-                      }, merge: true);
-                    }
-                  }
-                  final DocumentSnapshot userDoc = await userRef.get();
-                  if (userDoc?.exists ?? false) {
-                    await userRef.delete();
-                  }
-                  if (this.onLoad != null) this.onLoad(false);
+                  await showDialog(
+                    context: context,
+                    builder: (context) => CupertinoAlertDialog(
+                      title: Text("Cancel join event"),
+                      content: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "You\'re sure cancel join this event.",
+                        ),
+                      ),
+                      actions: [
+                        CupertinoDialogAction(
+                          isDefaultAction: true,
+                          child: Text('YES'),
+                          onPressed: () async {
+                            if (this.onLoad != null) this.onLoad(true);
+                            await scheduleNotification(
+                              action: "Cancel",
+                              payload: event.id,
+                              date: DateTime.now().add(Duration(seconds: 10)),
+                            );
+                            final DocumentReference eventRef = Firestore.instance
+                                .collection(Configs.collection_event)
+                                .document(event.id);
+                            final DocumentReference userRef = Firestore.instance
+                                .collection(Configs.collection_user)
+                                .document(user.id)
+                                .collection("events")
+                                .document(event.id);
+                            final DocumentSnapshot eventDoc = await eventRef.get();
+                            if (eventDoc?.exists ?? false) {
+                              final Map<String, dynamic> data = eventDoc.data;
+                              if (data["users"]?.isEmpty ?? true) data["users"] = [];
+                              final List join = List.of(data["users"] ?? []);
+                              if (join?.remove(user.user.uid) ?? false) {
+                                await eventRef.setData({
+                                  "users": join,
+                                }, merge: true);
+                              }
+                            }
+                            final DocumentSnapshot userDoc = await userRef.get();
+                            if (userDoc?.exists ?? false) {
+                              await userRef.delete();
+                            }
+                            if (this.onLoad != null) this.onLoad(false);
+                            await Navigator.of(context).maybePop();
+                          },
+                        ),
+                        CupertinoDialogAction(
+                          isDestructiveAction: true,
+                          child: Text('NO'),
+                          onPressed: () async {
+                            await Navigator.of(context).maybePop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
                   final List<String> _e = <String>[];
                   await Navigator.of(context).popUntil(ModalRoute.withName('/'));
                   await _ref
@@ -214,7 +264,9 @@ class _ButtonWidget extends StatelessWidget {
                     top: 2.0,
                     bottom: 2.0,
                   ),
-                  child: Text("record".toUpperCase()),
+                  child: Text(
+                    "record".toUpperCase(),
+                  ),
                 ),
                 onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
                   MaterialPageRoute(
@@ -245,6 +297,10 @@ class _ButtonWidget extends StatelessWidget {
             child: RaisedButton(
               onPressed: () async {
                 if (this.onLoad != null) this.onLoad(true);
+                await showNotification(
+                  action: "Join",
+                  payload: event.id,
+                );
                 final DocumentReference eventRef = Firestore.instance
                     .collection(Configs.collection_event)
                     .document(event.id);
@@ -300,7 +356,7 @@ class _ButtonWidget extends StatelessWidget {
                     user.events = _e;
                   });
               },
-              color: Color.fromRGBO(58, 66, 86, 1.0),
+              color: Theme.of(context).primaryColor,
               child: Text(
                 "join this event".toUpperCase(),
                 style: TextStyle(

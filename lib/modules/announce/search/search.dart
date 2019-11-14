@@ -10,6 +10,7 @@ import 'package:long_life_burning/utils/providers/all.dart'
 import '../event/events.dart'
   show
     Event,
+    EventCard,
     EventCallback;
 
 part './widgets.dart';
