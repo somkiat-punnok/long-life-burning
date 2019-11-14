@@ -103,14 +103,13 @@ class _RecordPageState extends State<RecordPage> {
 
   Future<void> readDate(DateTime date) async {
     if (!mounted) return;
-    final DateTime now = DateTime.now();
-    if (((date.year <= now.year) && (date.month < now.month)) || ((date.year == now.year) && (date.month == now.month) && (date.day <= now.day))) {
+    if (((date.year <= _now.year) && (date.month < _now.month)) || ((date.year == _now.year) && (date.month == _now.month) && (date.day <= _now.day))) {
       try {
         if (isCupertino && Configs.fitkit_permissions) {
           _step = 0;
           _distence = 0.0;
           _calories = 0.0;
-          final bool dateNow = Utils.isSameDay(date, now);
+          final bool dateNow = Utils.isSameDay(date, _now);
           for (DataType type in DataType.values) {
             if (type == DataType.STEP_COUNT) {
               await FitKit.read(
@@ -179,9 +178,9 @@ class _RecordPageState extends State<RecordPage> {
           return;
         } else if (isMaterial) {
           final SharedPreferences _pref = await SharedPreferences.getInstance();
-          _step = _pref.getInt("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_steps") ?? 0;
-          _distence = _pref.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_distences") ?? 0.0;
-          _calories = _pref.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_calories") ?? 0.0;
+          _step = _pref.getInt("$Prefix_KEY${date.year}-${date.month}-${date.day}_steps") ?? 0;
+          _distence = _pref.getDouble("$Prefix_KEY${date.year}-${date.month}-${date.day}_distences") ?? 0.0;
+          _calories = _pref.getDouble("$Prefix_KEY${date.year}-${date.month}-${date.day}_calories") ?? 0.0;
           if (!mounted) return;
           setState(() {});
           return;

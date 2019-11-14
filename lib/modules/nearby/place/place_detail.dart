@@ -58,7 +58,7 @@ class PlaceDetail extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18.0),
                       image: DecorationImage(
-                        image: NetworkImage(item.image),
+                        image: AssetImage(item.image),
                         fit: BoxFit.cover,
                       ),
                     ),

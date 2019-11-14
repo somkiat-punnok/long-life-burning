@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/modules/announce/event/events.dart';
 import 'package:long_life_burning/utils/helper/constants.dart' show SizeConfig;
 import 'package:long_life_burning/modules/nearby/nearby.dart'
   show
     MapView,
     Marker,
-    LatLng,
     MarkerId,
     InfoWindow,
     BitmapDescriptor;
+import 'package:long_life_burning/utils/providers/all.dart'
+  show
+    Provider,
+    UserProvider,
+    EventProvider;
 
 class CheckPointPage extends StatefulWidget {
   CheckPointPage({ Key key }) : super(key: key);
@@ -17,29 +22,6 @@ class CheckPointPage extends StatefulWidget {
 }
 
 class _CheckPointPageState extends State<CheckPointPage> {
-
-  final List<double> lat = <double>[
-    18.793867,
-    19.027510,
-    18.027510,
-    16.027510,
-    16.427510,
-    14.268217,
-    13.361143,
-    13.814029,
-  ];
-
-  final List<double> long = <double>[
-    98.997116,
-    99.900178,
-    100.200178,
-    99.500178,
-    101.800178,
-    100.614021,
-    100.984673,
-    100.037292,
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +31,8 @@ class _CheckPointPageState extends State<CheckPointPage> {
         alignment: Alignment.topCenter,
         children: [
           MapView(
-            markers: Set<Marker>.of(_buildMarker()),
+            markers: Set<Marker>.of(_buildMarker(context)),
+            mapToolbarEnabled: false,
           ),
           Positioned(
             top: 0.0,
@@ -101,17 +84,19 @@ class _CheckPointPageState extends State<CheckPointPage> {
     );
   }
 
-  Iterable<Marker> _buildMarker() {
-    return Iterable<Marker>.generate(lat.length, (i) => Marker(
-        markerId: MarkerId("mark" + (i+1).toString()),
-        position: LatLng(lat[i], long[i]),
+  Iterable<Marker> _buildMarker(BuildContext context) {
+    final EventProvider _event = Provider.of<EventProvider>(context);
+    final UserProvider _user = Provider.of<UserProvider>(context);
+    final List<Event> _mark = _event.events.where((e) => _user.events.contains(e.id)).toList();
+    return Iterable<Marker>.generate(_mark.length, (i) => Marker(
+        markerId: MarkerId("mark-${i+1}"),
+        position: _mark[i].location,
         icon: BitmapDescriptor.defaultMarker,
         infoWindow: InfoWindow(
-          title: "",
-          snippet: "",
+          title: _mark[i].title,
+          snippet: _mark[i].subtitle,
         ),
       ),
     );
   }
-
 }

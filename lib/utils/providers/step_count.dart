@@ -157,7 +157,7 @@ class StepToDayProvider extends ChangeNotifier {
   num _currentStep, _previousStep;
   DateTime _currentTime, _previousTime;
   num _steps, _calories, _distences;
-  num _stepOld, _distenceOld, _caloriesOld;
+  num _stepInit, _stepOld, _distenceOld, _caloriesOld;
 
   StepToDayProvider({
     @required this.user,
@@ -176,11 +176,11 @@ class StepToDayProvider extends ChangeNotifier {
     final DateTime _now = DateTime.now();
     _pref = await SharedPreferences.getInstance();
     _stepOld = _pref?.getInt("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_steps") ?? 0;
-    _distenceOld = _pref?.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_distences") ?? 0.0;
     _caloriesOld = _pref?.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_calories") ?? 0.0;
+    _distenceOld = _pref?.getDouble("$Prefix_KEY${_now.year}-${_now.month}-${_now.day}_distences") ?? 0.0;
     _steps = _stepOld ?? 0;
-    _distences = _distenceOld ?? 0.0;
     _calories = _caloriesOld ?? 0.0;
+    _distences = _distenceOld ?? 0.0;
     _currentStep = _steps ?? 0;
     _previousStep = _steps ?? 0;
     _currentTime = DateTime.now();
@@ -195,7 +195,8 @@ class StepToDayProvider extends ChangeNotifier {
   }
 
   void _onData(int steps) async {
-    _steps = _stepOld + steps;
+    if (_stepInit == null) _stepInit = steps;
+    _steps = _stepOld + (steps - _stepInit).abs();
     _currentStep = _steps;
     _currentTime = DateTime.now();
     final num _stepNow = (_currentStep - _previousStep).abs();
@@ -209,10 +210,10 @@ class StepToDayProvider extends ChangeNotifier {
         seconds: _elapsed.inSeconds,
         steps: _stepNow,
       );
-      _distences = _distenceOld + calculateDistanceInKm(steps, calculateStepToMeters(175, Gender.MALE));
+      _distences = _distenceOld + ((steps - _stepInit).abs() * calculateStepToMeters(user?.height ?? kHeight, user?.gender ?? Gender.MALE));
       await _pref?.setInt("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_steps", _steps ?? 0);
-      await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_distences", _distences ?? 0.0);
       await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_calories", _calories ?? 0.0);
+      await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_distences", _distences ?? 0.0);
       notifyListeners();
     }
     _previousTime = _currentTime;
