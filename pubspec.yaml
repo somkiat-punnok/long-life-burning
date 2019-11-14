@@ -51,12 +51,12 @@ dependencies:
 
   # Database
   sqflite: ^1.1.7+2
-  shared_preferences: ^0.5.4+3
+  shared_preferences: ^0.5.4+5
 
   # Map
   location: ^2.3.5
   geolocator: ^5.1.5
-  google_maps_flutter: ^0.5.21+8
+  google_maps_flutter: ^0.5.21+10
   google_maps_webservice: ^0.0.16
   #geoflutterfire: ^2.0.3+5
   #flutter_google_places: ^0.2.3

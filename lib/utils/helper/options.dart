@@ -5,6 +5,7 @@ class Configs {
   Configs._();
 
   static BuildContext index_context;
+  static FlutterLocalNotificationsPlugin notifyPlugin;
   static bool fitkit_permissions;
   static bool login = false;
 

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart' show CupertinoColors;
+import 'package:flutter/cupertino.dart'
+  show
+    CupertinoColors,
+    CupertinoAlertDialog,
+    CupertinoDialogAction;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
@@ -24,12 +28,26 @@ import 'package:long_life_burning/utils/providers/all.dart'
     UserProvider,
     NavBarProvider,
     StepToDayProvider;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import './login/login_screen.dart';
 
-class Index extends StatelessWidget {
-
+class Index extends StatefulWidget {
   Index({ Key key }) : super(key: key);
+  @override
+  _IndexState createState() => _IndexState();
+}
+
+class _IndexState extends State<Index> {
+
+  @override
+  void initState() { 
+    super.initState();
+    var initAndroid = AndroidInitializationSettings('ic_launcher');
+    var initIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotify);
+    var initSetting = InitializationSettings(initAndroid, initIOS);
+    Configs.notifyPlugin.initialize(initSetting, onSelectNotification: onSelectNotify);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +69,32 @@ class Index extends StatelessWidget {
     if (userProvider.user == null && !Configs.login) {
       await checkAuth(userProvider, user);
     }
+  }
+
+  Future<void> onSelectNotify(String payload) async {
+    final NavBarProvider provider = Provider.of<NavBarProvider>(context);
+    provider.value = 2;
+  }
+
+  Future<void> onDidReceiveLocalNotify(int id, String title, String body, String payload) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: title != null ? Text(title) : null,
+        content: body != null ? Text(body) : null,
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: Text('Ok'),
+            onPressed: () async {
+              await Navigator.of(context, rootNavigator: true).maybePop();
+              final NavBarProvider provider = Provider.of<NavBarProvider>(context);
+              provider.value = 2;
+            },
+          )
+        ],
+      ),
+    );
   }
 }
 
