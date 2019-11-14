@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:long_life_burning/modules/notify/notify.dart' show NotifyWidget;
 
 class NotifyPage extends StatefulWidget {
   NotifyPage({ Key key }) : super(key: key);
@@ -28,19 +29,9 @@ class _NotifyPageState extends State<NotifyPage> {
           ),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Hasn\'t notifications.',
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
+      // body: NotifyWidget(
+      //   notify: ,
+      // ),
     );
   }
 }

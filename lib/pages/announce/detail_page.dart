@@ -11,7 +11,8 @@ import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Configs,
     SizeConfig,
-    showNotification;
+    showNotification,
+    scheduleNotification;
 import 'package:long_life_burning/modules/announce/event/events.dart' show Event;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
@@ -66,7 +67,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              '${event.title}',
+                              '${event?.title ?? ""}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24.0,
@@ -81,7 +82,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
                               bottom: 16.0,
                             ),
                             child: Text(
-                              '${event.subtitle}',
+                              '${event?.subtitle ?? ""}',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 24.0,
@@ -112,7 +113,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${event.detail}',
+                      '${event?.detail ?? ""}',
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
@@ -124,10 +125,12 @@ class _EventDetailPageState extends State<EventDetailPage> {
           ],
         ),
       ),
-      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMinutes ?? 0)) && (provider.user != null)) ? _ButtonWidget(
-        user: provider,
-        event: event,
-      ) : null,
+      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMinutes ?? 0)) && (provider.user != null))
+          ? _ButtonWidget(
+            user: provider,
+            event: event,
+          )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -183,9 +186,10 @@ class _ButtonWidget extends StatelessWidget {
                           child: Text('YES'),
                           onPressed: () async {
                             if (this.onLoad != null) this.onLoad(true);
-                            showNotification(
-                              action: "cancel",
+                            await scheduleNotification(
+                              action: "Cancel",
                               payload: event.id,
+                              date: DateTime.now().add(Duration(seconds: 10)),
                             );
                             final DocumentReference eventRef = Firestore.instance
                                 .collection(Configs.collection_event)
@@ -260,7 +264,9 @@ class _ButtonWidget extends StatelessWidget {
                     top: 2.0,
                     bottom: 2.0,
                   ),
-                  child: Text("record".toUpperCase()),
+                  child: Text(
+                    "record".toUpperCase(),
+                  ),
                 ),
                 onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
                   MaterialPageRoute(
@@ -291,8 +297,8 @@ class _ButtonWidget extends StatelessWidget {
             child: RaisedButton(
               onPressed: () async {
                 if (this.onLoad != null) this.onLoad(true);
-                showNotification(
-                  action: "join",
+                await showNotification(
+                  action: "Join",
                   payload: event.id,
                 );
                 final DocumentReference eventRef = Firestore.instance

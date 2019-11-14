@@ -1,33 +1,44 @@
-import 'dart:async';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+library notify;
 
-class Notification {
+import 'dart:convert';
+import 'package:flutter/material.dart';
 
-  FlutterLocalNotificationsPlugin notify;
+part './notify_card.dart';
+part './notify_model.dart';
 
-  Notification(){
-    _initNotify();
+class NotifyWidget extends StatelessWidget {
+
+  final List<Notify> notify;
+
+  NotifyWidget({
+    Key key,
+    this.notify,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return this.notify != null ? SingleChildScrollView(
+      child: Column(
+        children: List<Widget>.generate(
+          this.notify.length,
+          (int i) => NotifyCard(
+            title: this.notify[i].title ?? "",
+            body: this.notify[i].body ?? "",
+          ),
+        ),
+      ),
+    ) : Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Hasn\'t notifications.',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
   }
-
-  void _initNotify() {
-    notify = FlutterLocalNotificationsPlugin();
-    AndroidInitializationSettings initSettingsAndroid = AndroidInitializationSettings('secondary_icon');
-    IOSInitializationSettings initSettingsIOS = IOSInitializationSettings();
-    InitializationSettings initSettings = InitializationSettings(initSettingsAndroid, initSettingsIOS);
-    notify.initialize(initSettings, onSelectNotification: _onSelectNotify);
-  }
-
-  Future showNotification(int id, String title, String body, String payload) async {
-    AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('GTF', 'Long Burn', 'Long Life Burning', importance: Importance.Max, priority: Priority.High);
-    IOSNotificationDetails iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
-    NotificationDetails platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await notify.show(id, title, body, platformChannelSpecifics, payload: payload);
-  }
-
-  Future _onSelectNotify(String payload) async {
-    if (payload != null) {
-      print('notification payload pressed: ' + payload);
-    }
-  }
-
 }
