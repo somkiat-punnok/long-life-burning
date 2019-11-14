@@ -90,7 +90,8 @@ class FeedBack extends StatelessWidget {
             Container(
               child: TextField(
                 decoration: InputDecoration(
-                  labelText: "Feedback Comments",
+                  labelText: "Feedback Comment",
+                  hintText: "Comment...",
                 ),
                 onChanged: this.onComment,
               ),
