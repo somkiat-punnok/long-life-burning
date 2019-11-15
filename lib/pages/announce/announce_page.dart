@@ -135,7 +135,6 @@ class _AnnouncePageState extends State<AnnouncePage> {
           final DateTime _date = DateTime(e.date.year, e.date.month, e.date.day);
           if (_events[_date] == null) _events[_date] = [];
           _events[_date].add(e);
-          print(e.date.toString());
         }
       });
     }

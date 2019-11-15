@@ -1,10 +1,10 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/modules/announce/event/events.dart';
-import 'package:long_life_burning/utils/helper/constants.dart';
-import 'package:long_life_burning/utils/providers/all.dart';
+// import 'package:long_life_burning/modules/announce/event/events.dart';
+// import 'package:long_life_burning/utils/helper/constants.dart';
+// import 'package:long_life_burning/utils/providers/all.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StatisticPage extends StatefulWidget {
@@ -15,7 +15,6 @@ class StatisticPage extends StatefulWidget {
 }
 
 class EventData {
-
   EventData(this.year, this.clories,);
   final String year;
   final num clories;
@@ -23,7 +22,8 @@ class EventData {
 }
 
 class _StatisticPageState extends State<StatisticPage> {
-List<Widget> charts = [Center(
+List<Widget> charts = [
+  Center(
           child:SingleChildScrollView(
           child:Column(
             children:<Widget>[
@@ -31,13 +31,13 @@ List<Widget> charts = [Center(
         child: SfCartesianChart(
           primaryXAxis: CategoryAxis(),
           title: ChartTitle(text: 'Events for month'), 
-          legend: Legend(isVisible: true), 
+          legend: Legend(isVisible: true),
           series: <LineSeries<EventData, String>>[
             LineSeries<EventData, String>(
               name: "Events",
                color: Colors.red,
               dataSource: [
-                EventData('Jan,', 2),
+                EventData('Jan', 2),
                 EventData('Feb', 3),
                 EventData('Mar', 1),
                 EventData('Apr', 0),
@@ -86,22 +86,65 @@ List<Widget> charts = [Center(
               yValueMapper: (EventData events, _) => events.clories,
               dataLabelSettings: DataLabelSettings(isVisible: true) 
             ),
-             LineSeries<EventData, String>(
+          ]
+        ),
+            ),
+             Divider(height: 24.0,),
+     
+        Container(
+        child: SfCartesianChart(
+          primaryXAxis: CategoryAxis(),
+          title: ChartTitle(text: 'Distance for month'), 
+          legend: Legend(isVisible: true), 
+          series: <LineSeries<EventData, String>>[
+            LineSeries<EventData, String>(
               name: "Distance",
                color: Colors.blue,
               dataSource: [
-                EventData('Jan,', 20),
-                EventData('Feb', 30),
-                EventData('Mar', 50),
+                EventData('Jan,', 50),
+                EventData('Feb', 70),
+                EventData('Mar', 60),
                 EventData('Apr', 20),
                 EventData('May', 40),
-                EventData('Jun', 50),
+                EventData('Jun', 100),
                 EventData('Jul', 40),
-                EventData('Aug', 15),
+                EventData('Aug', 90),
                 EventData('Sep', 80),
                 EventData('Oct', 20),
-                EventData('Nov', 20),
-                EventData('Dec', 200),
+                EventData('Nov', 120),
+                EventData('Dec', 300),
+              ],
+              xValueMapper: (EventData events, _) => events.year,
+              yValueMapper: (EventData events, _) => events.clories,
+              dataLabelSettings: DataLabelSettings(isVisible: true) 
+            ),
+          ]
+        ),
+            ),
+             Divider(height: 24.0,),
+     
+        Container(
+        child: SfCartesianChart(
+          primaryXAxis: CategoryAxis(),
+          title: ChartTitle(text: 'Fast rate for month'), 
+          legend: Legend(isVisible: true), 
+          series: <LineSeries<EventData, String>>[
+            LineSeries<EventData, String>(
+              name: "Fast rate",
+               color: Colors.amber,
+              dataSource: [
+                EventData('Jan,', 50),
+                EventData('Feb', 70),
+                EventData('Mar', 60),
+                EventData('Apr', 20),
+                EventData('May', 40),
+                EventData('Jun', 100),
+                EventData('Jul', 40),
+                EventData('Aug', 90),
+                EventData('Sep', 80),
+                EventData('Oct', 20),
+                EventData('Nov', 120),
+                EventData('Dec', 300),
               ],
               xValueMapper: (EventData events, _) => events.year,
               yValueMapper: (EventData events, _) => events.clories,
@@ -127,13 +170,13 @@ List<Widget> charts = [Center(
           series: <LineSeries<EventData, String>>[
             LineSeries<EventData, String>(
                color: Colors.red,
+               name: "Event",
               dataSource: [
                 EventData('2015,', 10),
                 EventData('2016', 12),
                 EventData('2017', 14),
                 EventData('2018', 20),
                 EventData('2019', 30),
-             
               ],
               xValueMapper: (EventData events, _) => events.year,
               yValueMapper: (EventData events, _) => events.clories,
@@ -141,19 +184,18 @@ List<Widget> charts = [Center(
             ),
           ]
         ),
-        
       ),
       Divider(height: 24.0,),
      
         Container(
         child: SfCartesianChart(
           primaryXAxis: CategoryAxis(),
-          title: ChartTitle(text: 'Statistics for years'), 
+          title: ChartTitle(text: 'Calories for years'), 
           legend: Legend(isVisible: true), 
           series: <LineSeries<EventData, String>>[
             LineSeries<EventData, String>(
               name: "Calories",
-               color: Colors.blue,
+               color: Colors.green,
               dataSource: [
                 EventData('2015,', 5000),
                 EventData('2016', 2000),
@@ -165,16 +207,51 @@ List<Widget> charts = [Center(
               yValueMapper: (EventData events, _) => events.clories,
               dataLabelSettings: DataLabelSettings(isVisible: true) 
             ),
+          ]
+        ),
+            ),
+             Divider(height: 24.0,),
+     
+        Container(
+        child: SfCartesianChart(
+          primaryXAxis: CategoryAxis(),
+          title: ChartTitle(text: 'Distance for years'), 
+          legend: Legend(isVisible: true), 
+          series: <LineSeries<EventData, String>>[
              LineSeries<EventData, String>(
               name: "Distance",
-               color: Colors.yellow,
+               color: Colors.blue,
               dataSource: [
                 EventData('2015,', 3000),
                 EventData('2016', 1500),
                 EventData('2017', 4000),
                 EventData('2018', 1700),
                 EventData('2019', 2000),
-                
+              ],
+              xValueMapper: (EventData events, _) => events.year,
+              yValueMapper: (EventData events, _) => events.clories,
+              dataLabelSettings: DataLabelSettings(isVisible: true) 
+            ),
+          ]
+        ),
+            ),
+             Divider(height: 24.0,),
+     
+        Container(
+        child: SfCartesianChart(
+          primaryXAxis: CategoryAxis(),
+          title: ChartTitle(text: 'Fast rate for years'), 
+          legend: Legend(isVisible: true), 
+          series: <LineSeries<EventData, String>>[
+             LineSeries<EventData, String>(
+              name: "Fast rate",
+               color: Colors.amber,
+              dataSource: [
+                EventData('2015,', 3000),
+                EventData('2016', 1500),
+                EventData('2017', 4000),
+                EventData('2018', 1700),
+                EventData('2019', 2000),
               ],
               xValueMapper: (EventData events, _) => events.year,
               yValueMapper: (EventData events, _) => events.clories,
@@ -188,13 +265,12 @@ List<Widget> charts = [Center(
         )
         ),
 ];
-
   @override
   Widget build(BuildContext context) {
     
   // final Event event = ModalRoute.of(context).settings.arguments;
   // final UserProvider provider = Provider.of<UserProvider>(context);
-  //   Firestore.instance.collection(Configs.collection_user) .document(provider.id) .collection("events").document(event.id);
+  //   Firestore.instance.collection(Configs.collection_user) .document(provider.id).collection("events").document(event.id);
 
     return DefaultTabController(
       length:2,

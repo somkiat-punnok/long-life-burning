@@ -195,7 +195,8 @@ class StepToDayProvider extends ChangeNotifier {
   }
 
   void _onData(int steps) async {
-    _steps = _stepOld + steps;
+    print("steps: $steps");
+    _steps = steps;
     _currentStep = _steps;
     _currentTime = DateTime.now();
     final num _stepNow = (_currentStep - _previousStep).abs();
