@@ -166,6 +166,7 @@ class RecordEvent extends StatelessWidget {
                   }
                   await userRef?.setData({
                     "recordDate": DateTime.now(),
+                    "record": true,
                     "duration": {
                       "hour": stopwatch?.hour ?? 0,
                       "minute": stopwatch?.minute ?? 0,

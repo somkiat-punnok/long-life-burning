@@ -13,16 +13,14 @@ class StepCountProvider extends ChangeNotifier {
 
   StepCountProvider({
     @required this.user,
-  }) {
-    reset();
-  }
+  });
 
   final UserProvider user;
 
-  num get calories => _calories;
-  num get distences => _distences / 1000.0;
-  String get avgPace => _avgPace;
-  RecordState get state => _state;
+  num get calories => _calories ?? 0.0;
+  num get distences => (_distences ?? 0.0) / 1000.0;
+  String get avgPace => _avgPace ?? "00:00";
+  RecordState get state => _state ?? RecordState.INIT;
 
   void reset() {
     _pace?.clear();
@@ -42,9 +40,10 @@ class StepCountProvider extends ChangeNotifier {
   }
 
   void startListening() async {
+    reset();
     final Pedometer _pedometer = new Pedometer();
     final Location _location = new Location();
-    reset();
+    _state = RecordState.START;
     if (await _location.serviceEnabled()) {
       bool _permission = await _location.hasPermission();
       if (!_permission) {
@@ -65,7 +64,6 @@ class StepCountProvider extends ChangeNotifier {
       _subscription = _pedometer.pedometerStream.listen(_onData,
           onError: _onError, onDone: _onDone, cancelOnError: true);
     }
-    _state = RecordState.START;
     notifyListeners();
   }
 
@@ -78,6 +76,7 @@ class StepCountProvider extends ChangeNotifier {
   void _onData(int steps) async {
     _currentStep = steps;
     _currentTime = DateTime.now();
+    _state = RecordState.START;
     final num _stepNow = (_currentStep - _previousStep).abs();
     if (_stepNow > 0) {
       num _temp = 0.0, _second = 0, _minute = 0, _hour = 0;
@@ -112,6 +111,7 @@ class StepCountProvider extends ChangeNotifier {
   void _onDataLocate(LocationData locate) async {
     _currentLocate = locate;
     _currentTime = DateTime.now();
+    _state = RecordState.START;
     final Geolocator _locator = new Geolocator();
     final num _distenceBetween = await _locator.distanceBetween(
       _previousLocate?.latitude,

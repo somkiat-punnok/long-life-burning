@@ -3,6 +3,7 @@ part of providers;
 class EventRecordUser {
 
   final String eventId;
+  final bool isRecord;
   final num calories;
   final num distance;
   final TimeRecordUser avgpace;
@@ -10,6 +11,7 @@ class EventRecordUser {
 
   EventRecordUser({
     this.eventId,
+    this.isRecord,
     this.calories,
     this.distance,
     this.avgpace,
@@ -18,6 +20,7 @@ class EventRecordUser {
 
   factory EventRecordUser.fromMap(Map<String, dynamic> map) => EventRecordUser(
     eventId: map["eventId"],
+    isRecord: map["record"],
     calories: map["calories"],
     distance: map["distance"],
     avgpace: TimeRecordUser.fromMap(map["avgpace"]),
@@ -28,6 +31,7 @@ class EventRecordUser {
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     "eventId": this.eventId,
+    "record": this.isRecord,
     "calories": this.calories,
     "distance": this.distance,
     "avgpace": this.avgpace.toMap(),
@@ -42,6 +46,7 @@ class EventRecordUser {
       other is EventRecordUser &&
         runtimeType == other.runtimeType &&
         eventId == other.eventId &&
+        isRecord == other.isRecord &&
         calories == other.calories &&
         distance == other.distance &&
         avgpace == other.avgpace &&
@@ -50,6 +55,7 @@ class EventRecordUser {
   @override
   int get hashCode => (
     eventId.hashCode ^
+    isRecord.hashCode ^
     calories.hashCode ^
     distance.hashCode ^
     avgpace.hashCode ^

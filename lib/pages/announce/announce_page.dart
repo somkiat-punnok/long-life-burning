@@ -130,7 +130,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
           final Event e = Event.fromMap(dataTemp);
           _data.add(e);
           if ((province?.isNotEmpty ?? false) || (category?.isNotEmpty ?? false)) {
-            if (!e.province.contains(province ?? "") || !e.category.contains(category ?? "")) return;
+            if (!e.province.contains(province ?? "") || !e.category.startsWith(category ?? "")) return;
           }
           final DateTime _date = DateTime(e.date.year, e.date.month, e.date.day);
           if (_events[_date] == null) _events[_date] = [];

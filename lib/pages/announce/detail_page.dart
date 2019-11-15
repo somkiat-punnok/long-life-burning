@@ -1,18 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart'
+  show
+    CupertinoAlertDialog,
+    CupertinoDialogAction;
 import 'package:cloud_firestore/cloud_firestore.dart'
   show
     Firestore,
     DocumentSnapshot,
     DocumentReference,
     CollectionReference;
-import 'package:long_life_burning/pages/announce/record_event_page.dart';
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
     Configs,
     SizeConfig,
-    cancelNotification,
+    // cancelNotification,
     scheduleNotification;
+import 'package:long_life_burning/utils/widgets/date_utils.dart';
+import 'package:long_life_burning/pages/announce/record_event_page.dart';
 import 'package:long_life_burning/modules/announce/event/events.dart' show Event;
 import 'package:long_life_burning/utils/providers/all.dart'
   show
@@ -125,7 +129,7 @@ class _EventDetailPageState extends State<EventDetailPage> {
           ],
         ),
       ),
-      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMinutes ?? 0)) && (provider.user != null))
+      floatingActionButton: ((0 < (event?.date?.difference(_now)?.inMilliseconds ?? 0)) && (provider.user != null))
           ? _ButtonWidget(
             user: provider,
             event: event,
@@ -152,133 +156,149 @@ class _ButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (user?.events?.contains(event?.id) ?? false) {
-      return Container(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                right: 8.0,
-                top: 2.0,
-                bottom: 2.0,
-              ),
-              child: RaisedButton(
-                onPressed: () async {
-                  final CollectionReference _ref = Firestore.instance
-                      .collection(Configs.collection_user)
-                      .document(user.id)
-                      .collection("events");
-                  await showDialog(
-                    context: context,
-                    builder: (context) => CupertinoAlertDialog(
-                      title: Text("Cancel join event"),
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "You\'re sure cancel join this event.",
-                        ),
+      final DateTime _now = DateTime.now();
+      final List _record = user?.record?.where((r) => r.eventId == event?.id)?.toList();
+      if (Utils.isSameDay(_now, event.date) && (!_record[0].isRecord)) {
+        return Container(
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0,
+                  top: 2.0,
+                  bottom: 2.0,
+                ),
+                child: OutlineButton(
+                  color: Colors.green,
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      top: 2.0,
+                      bottom: 2.0,
+                    ),
+                    child: Text(
+                      "record".toUpperCase(),
+                    ),
+                  ),
+                  onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => RecordEventPage(
+                        eventId: event.id,
                       ),
-                      actions: [
-                        CupertinoDialogAction(
-                          isDefaultAction: true,
-                          child: Text('YES'),
-                          onPressed: () async {
-                            if (this.onLoad != null) this.onLoad(true);
-                            await cancelNotification(
-                              event.id,
-                              id: event.id.hashCode,
-                            );
-                            final DocumentReference eventRef = Firestore.instance
-                                .collection(Configs.collection_event)
-                                .document(event.id);
-                            final DocumentReference userRef = Firestore.instance
-                                .collection(Configs.collection_user)
-                                .document(user.id)
-                                .collection("events")
-                                .document(event.id);
-                            final DocumentSnapshot eventDoc = await eventRef.get();
-                            if (eventDoc?.exists ?? false) {
-                              final Map<String, dynamic> data = eventDoc.data;
-                              if (data["users"]?.isEmpty ?? true) data["users"] = [];
-                              final List join = List.of(data["users"] ?? []);
-                              if (join?.remove(user.user.uid) ?? false) {
-                                await eventRef.setData({
-                                  "users": join,
-                                }, merge: true);
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+      if (!_record[0].isRecord) {
+        return Container(
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.only(
+                  left: 8.0,
+                  right: 8.0,
+                  top: 2.0,
+                  bottom: 2.0,
+                ),
+                child: RaisedButton(
+                  onPressed: () async {
+                    final CollectionReference _ref = Firestore.instance
+                        .collection(Configs.collection_user)
+                        .document(user.id)
+                        .collection("events");
+                    await showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                        title: Text("Cancel join event"),
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "You\'re sure cancel join this event.",
+                          ),
+                        ),
+                        actions: [
+                          CupertinoDialogAction(
+                            isDefaultAction: true,
+                            child: Text('YES'),
+                            onPressed: () async {
+                              if (this.onLoad != null) this.onLoad(true);
+                              // await cancelNotification(
+                              //   event.id,
+                              //   id: event.id.hashCode,
+                              // );
+                              final DocumentReference eventRef = Firestore.instance
+                                  .collection(Configs.collection_event)
+                                  .document(event.id);
+                              final DocumentReference userRef = Firestore.instance
+                                  .collection(Configs.collection_user)
+                                  .document(user.id)
+                                  .collection("events")
+                                  .document(event.id);
+                              final DocumentSnapshot eventDoc = await eventRef.get();
+                              if (eventDoc?.exists ?? false) {
+                                final Map<String, dynamic> data = eventDoc.data;
+                                if (data["users"]?.isEmpty ?? true) data["users"] = [];
+                                final List join = List.of(data["users"] ?? []);
+                                if (join?.remove(user.user.uid) ?? false) {
+                                  await eventRef.setData({
+                                    "users": join,
+                                  }, merge: true);
+                                }
                               }
-                            }
-                            final DocumentSnapshot userDoc = await userRef.get();
-                            if (userDoc?.exists ?? false) {
-                              await userRef.delete();
-                            }
-                            if (this.onLoad != null) this.onLoad(false);
-                            await Navigator.of(context).maybePop();
-                          },
-                        ),
-                        CupertinoDialogAction(
-                          isDestructiveAction: true,
-                          child: Text('NO'),
-                          onPressed: () async {
-                            await Navigator.of(context).maybePop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                  final List<String> _e = <String>[];
-                  await Navigator.of(context).popUntil(ModalRoute.withName('/'));
-                  await _ref
-                    .getDocuments()
-                    .then((snap) async {
-                      snap.documents.forEach((d) {
-                        if (d.exists) _e.add(d.documentID);
+                              final DocumentSnapshot userDoc = await userRef.get();
+                              if (userDoc?.exists ?? false) {
+                                await userRef.delete();
+                              }
+                              if (this.onLoad != null) this.onLoad(false);
+                              await Navigator.of(context).maybePop();
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            isDestructiveAction: true,
+                            child: Text('NO'),
+                            onPressed: () async {
+                              await Navigator.of(context).maybePop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                    final List<String> _e = <String>[];
+                    await Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                    await _ref
+                      .getDocuments()
+                      .then((snap) async {
+                        snap.documents.forEach((d) {
+                          if (d.exists) _e.add(d.documentID);
+                        });
+                        user.events = _e;
                       });
-                      user.events = _e;
-                    });
-                },
-                color: Colors.red,
-                child: Text(
-                  "cancel join".toUpperCase(),
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                right: 8.0,
-                top: 2.0,
-                bottom: 2.0,
-              ),
-              child: OutlineButton(
-                color: Colors.green,
-                child: Container(
-                  padding: const EdgeInsets.only(
-                    left: 8.0,
-                    right: 8.0,
-                    top: 2.0,
-                    bottom: 2.0,
-                  ),
+                  },
+                  color: Colors.red,
                   child: Text(
-                    "record".toUpperCase(),
-                  ),
-                ),
-                onPressed: () async => await Navigator.of(Configs.index_context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => RecordEventPage(
-                      eventId: event.id,
+                    "cancel join".toUpperCase(),
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
+            ],
+          ),
+        );
+      }
+
+      return Container();
     }
 
     return Container(
@@ -301,7 +321,7 @@ class _ButtonWidget extends StatelessWidget {
                   id: event.id.hashCode,
                   title: "Reminder Event".toUpperCase(),
                   body: "Tomorrow, start event: ${event.title}",
-                  date: event?.date?.subtract(Duration(days: 1,)) ?? DateTime.now(),
+                  date: DateTime.now().add(Duration(seconds: 10,)),
                 );
                 final DocumentReference eventRef = Firestore.instance
                     .collection(Configs.collection_event)
@@ -316,7 +336,7 @@ class _ButtonWidget extends StatelessWidget {
                     .document(user.id)
                     .collection("events");
                 final DocumentSnapshot eventDoc = await eventRef.get();
-                if (eventDoc.exists) {
+                if (eventDoc?.exists ?? false) {
                   final Map<String, dynamic> data = eventDoc.data;
                   if (data["users"]?.isEmpty ?? true) data["users"] = [];
                   final List join = List.of(data["users"] ?? []);
@@ -328,10 +348,11 @@ class _ButtonWidget extends StatelessWidget {
                   }
                 }
                 final DocumentSnapshot userDoc = await userRef.get();
-                if (!userDoc.exists) {
+                if (!(userDoc?.exists ?? false)) {
                   await userRef.setData({
                     "eventId": event.id,
                     "date": DateTime.now(),
+                    "record": false,
                     "duration": {
                       "hour": 0,
                       "minute": 0,
