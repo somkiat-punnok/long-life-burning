@@ -54,7 +54,7 @@ class _DetailGroupState extends State<DetailGroup> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: (data.users[0] == userProvider.user.uid) ? <Widget>[
+        actions: (data.users[0] == userProvider.user?.uid ?? 0) ? <Widget>[
           IconButton(
             icon: Icon(Icons.close),
               onPressed: () => showDialog(
@@ -96,13 +96,13 @@ class _DetailGroupState extends State<DetailGroup> {
             Row(
                mainAxisAlignment: MainAxisAlignment.end,
               children:<Widget>[
-                    new Text('Time: ${data.time}',
+                    new Text('Time: ${data?.time ?? 0}',
                   style: TextStyle(
                     fontSize:15.0),
                     ),
               ]
             ),
-             new Text(data.groupname,
+             new Text(data?.groupname ?? 0,
                   style: TextStyle(
                     fontSize:30.0),
                     ),
@@ -113,13 +113,13 @@ class _DetailGroupState extends State<DetailGroup> {
             ),
             ),
              Divider(height: 40.0,),
-               new Text('Date : ${data.date}',
+               new Text('Date : ${data?.date ?? 0}',
             style: TextStyle(
               fontSize: 15.0
             ),
              ),
               Divider(height: 40.0,),
-             new Text('Category : '+data.category,
+             new Text('Category : '+data?.category ?? 0,
             style: TextStyle(
               fontSize: 15.0
             ),
