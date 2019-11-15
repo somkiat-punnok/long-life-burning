@@ -48,7 +48,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
     _arrow_icon = Icons.arrow_drop_up;
     _now = DateTime.now();
     _calendarController = CalendarController();
-    _selectedDay = DateTime(_now.year, _now.month, _now.day);
+    _selectedDay = DateTime(_now?.year, _now?.month, _now?.day);
     _events = <DateTime, List>{};
     _onDayEvents = [];
   }
@@ -69,18 +69,18 @@ class _AnnouncePageState extends State<AnnouncePage> {
     setState(() {});
   }
 
-  void _selection(BuildContext context) async => await Navigator.of(context)
+  Future<void> _selection(BuildContext context) async => await Navigator.of(context)
     .pushNamed(YearsCalendarPage.routeName)
     .then(
       (res) {
         if (res != null) {
           final result = res as List;
-          if (_now.year == result[0] && _now.month == result[1]) {
-            _selectedDay = DateTime(_now.year, _now.month, _now.day);
+          if ((_now?.year ?? 0) == result[0] && (_now?.month ?? 0) == result[1]) {
+            _selectedDay = DateTime(_now?.year, _now?.month, _now?.day);
           } else {
             _selectedDay = DateTime(result[0], result[1], 1);
           }
-          _calendarController.setSelectedDay(_selectedDay, runCallback: true);
+          _calendarController?.setSelectedDay(_selectedDay, runCallback: true);
         }
       }
     );
@@ -152,7 +152,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
             events: _events,
             onDaySelected: _onDaySelected,
             onVisibleDaysChanged: _onVisibleDaysChanged,
-            onTitleText: () {
+            onTitleText: () async {
               _selection(context);
             },
             onIcon1: () async {
@@ -205,7 +205,7 @@ class _AnnouncePageState extends State<AnnouncePage> {
                 ),
               ],
             ),
-            onPressed: () {
+            onPressed: () async {
               _arrow_icon = (_calendarController?.calendarFormat ?? CalendarFormat.month) == CalendarFormat.month
                 ? Icons.arrow_drop_down
                 : Icons.arrow_drop_up;

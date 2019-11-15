@@ -1,8 +1,5 @@
-
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:long_life_burning/pages/group/group_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:long_life_burning/utils/providers/all.dart';
 
 class DetailGroup extends StatefulWidget {

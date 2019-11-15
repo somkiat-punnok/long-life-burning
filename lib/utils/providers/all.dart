@@ -1,6 +1,7 @@
 library providers;
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart'
   show
     required,

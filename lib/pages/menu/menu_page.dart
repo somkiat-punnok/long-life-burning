@@ -24,11 +24,8 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
 
-  UserProvider userProvider;
-
   @override
   Widget build(BuildContext context) {
-    userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       resizeToAvoidBottomPadding: false,
@@ -56,7 +53,8 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   List<Widget> _buildList(BuildContext context) {
-    List<Widget> list = <Widget>[];
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+    final List<Widget> list = <Widget>[];
     list.addAll([
       Padding(
         padding: EdgeInsets.only(

@@ -14,7 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart'
     GoogleMapController;
 
 final CameraPosition _kCenter = CameraPosition(
-  target: LatLng(19.027510, 99.900178),
+  target: LatLng(13.03887, 101.490104),
   zoom: 5.75,
 );
 

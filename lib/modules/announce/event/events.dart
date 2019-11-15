@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart' show CupertinoColors;
 import 'package:google_maps_flutter/google_maps_flutter.dart' show LatLng;
+import 'package:long_life_burning/utils/helper/constants.dart' show MAP_CATEGORIES;
 
 part './event_view.dart';
 part './event_card.dart';

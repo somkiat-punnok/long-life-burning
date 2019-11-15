@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart'
-  show
-    CupertinoColors,
-    CupertinoAlertDialog,
-    CupertinoDialogAction;
+import 'package:flutter/cupertino.dart' show CupertinoColors;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
 import 'package:long_life_burning/utils/helper/constants.dart'
   show
@@ -44,7 +40,7 @@ class _IndexState extends State<Index> {
   void initState() { 
     super.initState();
     var initAndroid = AndroidInitializationSettings('ic_launcher');
-    var initIOS = IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotify);
+    var initIOS = IOSInitializationSettings();
     var initSetting = InitializationSettings(initAndroid, initIOS);
     Configs.notifyPlugin.initialize(initSetting, onSelectNotification: onSelectNotify);
   }
@@ -73,28 +69,7 @@ class _IndexState extends State<Index> {
 
   Future<void> onSelectNotify(String payload) async {
     final NavBarProvider provider = Provider.of<NavBarProvider>(context);
-    provider.value = 2;
-  }
-
-  Future<void> onDidReceiveLocalNotify(int id, String title, String body, String payload) async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) => CupertinoAlertDialog(
-        title: title != null ? Text(title) : null,
-        content: body != null ? Text(body) : null,
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            child: Text('Ok'),
-            onPressed: () async {
-              await Navigator.of(context, rootNavigator: true).maybePop();
-              final NavBarProvider provider = Provider.of<NavBarProvider>(context);
-              provider.value = 2;
-            },
-          )
-        ],
-      ),
-    );
+    provider.value = 4;
   }
 }
 
