@@ -13,16 +13,21 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
         if (snap?.documents?.isNotEmpty ?? false) {
           Configs.login = true;
           final List<String> _e = <String>[];
+          final List<EventRecordUser> _r = <EventRecordUser>[];
           await Firestore.instance
             .collection(Configs.collection_user)
             .document(snap.documents[0].documentID)
             .collection("events")
-            .getDocuments()
-            .then((snapshot) async {
+            .snapshots()
+            .listen((snapshot) async {
               snapshot.documents.forEach((d) {
-                if (d.exists) _e.add(d.documentID);
+                if (d.exists) {
+                  _e.add(d.documentID);
+                  _r.add(EventRecordUser.fromMap(d.data));
+                }
               });
               userProvider.events = _e;
+              userProvider.record = _r;
             });
           userProvider.setUser(
             userNew: user,
@@ -38,7 +43,24 @@ Future<void> checkAuth(UserProvider userProvider, FirebaseUser user) async {
   }
 }
 
-Future<void> showNotification({ String action, String payload }) async {
+Future<void> saveDeviceToken({ String uid }) async {
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  String fcmToken = await _fcm.getToken();
+  if (fcmToken != null) {
+    await Firestore.instance
+      .collection('users')
+      .document(uid)
+      .collection('token')
+      .document(fcmToken)
+      .setData({
+        'token': fcmToken,
+        'createdAt': DateTime.now(),
+        'platform': Platform.operatingSystem,
+      });
+  }
+}
+
+Future<void> showNotification(String uid, { int id, String title, String body, String payload }) async {
   var androidSpecifics = AndroidNotificationDetails(
     'long_burn_app',
     'long life burning',
@@ -53,19 +75,32 @@ Future<void> showNotification({ String action, String payload }) async {
   );
   var specifics = NotificationDetails(androidSpecifics, iosSpecifics);
   await Configs.notifyPlugin.show(
-    0,
-    '$action event',
-    'event: $payload',
+    id ?? 0,
+    title ?? "",
+    body ?? "",
     specifics,
-    payload: payload,
+    payload: payload ?? "",
   );
+  await Firestore.instance
+    .collection('users')
+    .document(uid)
+    .collection('notifications')
+    .add({
+      "id": id ?? 0,
+      "title": title ?? "",
+      "body": body ?? "",
+      "date": DateTime.now(),
+      "payload": payload ?? "",
+    });
 }
 
-Future<void> scheduleNotification({ String action, String payload, DateTime date }) async {
+Future<void> scheduleNotification(String uid, { int id, String title, String body, String payload, DateTime date }) async {
   var androidSpecifics = AndroidNotificationDetails(
     'long_burn_app',
     'long life burning',
     'application for workout community',
+    importance: Importance.Max,
+    priority: Priority.High,
   );
   var iosSpecifics = IOSNotificationDetails(
     presentAlert: true,
@@ -74,16 +109,42 @@ Future<void> scheduleNotification({ String action, String payload, DateTime date
   );
   var specifics = NotificationDetails(androidSpecifics, iosSpecifics);
   await Configs.notifyPlugin.schedule(
-    0,
-    '$action event',
-    'event: $payload',
-    date,
+    id ?? 0,
+    title ?? "",
+    body ?? "",
+    date ?? DateTime.now(),
     specifics,
+    payload: payload ?? "",
   );
+  await Firestore.instance
+    .collection('users')
+    .document(uid)
+    .collection('notifications')
+    .add({
+      "id": id ?? 0,
+      "title": title ?? "",
+      "body": body ?? "",
+      "date": date ?? DateTime.now(),
+      "payload": payload ?? "",
+    });
 }
 
-Future<void> cancelNotification({ int id }) async {
+Future<void> cancelNotification(String uid, { int id }) async {
   await Configs.notifyPlugin.cancel(id);
+  await Firestore.instance
+    .collection('users')
+    .document(uid)
+    .collection('notifications')
+    .where('id', isEqualTo: id)
+    .getDocuments()
+    .then((snapshot) async {
+      await Firestore.instance
+        .collection('users')
+        .document(uid)
+        .collection('notifications')
+        .document(snapshot.documents[0].documentID)
+        .delete();
+    });
 }
 
 num calculateCalories({

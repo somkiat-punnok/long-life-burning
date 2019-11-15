@@ -17,13 +17,14 @@ class NotifyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.notify != null ? SingleChildScrollView(
+    List<Notify> _notify = this.notify.where((n) => 0 > (n?.date?.difference(DateTime.now())?.inSeconds ?? 0)).toList();
+    return _notify != null && _notify.isNotEmpty ? SingleChildScrollView(
       child: Column(
         children: List<Widget>.generate(
-          this.notify.length,
+          _notify.length,
           (int i) => NotifyCard(
-            title: this.notify[i].title ?? "",
-            body: this.notify[i].body ?? "",
+            title: _notify[i].title ?? "",
+            body: _notify[i].body ?? "",
           ),
         ),
       ),

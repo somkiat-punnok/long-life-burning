@@ -1,11 +1,17 @@
 library constant;
 
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
-import '../providers/all.dart' show UserProvider;
 import '../widgets/platform.dart' show isMaterial;
+import '../providers/all.dart'
+  show
+    UserProvider,
+    EventRecordUser;
 
 export '../widgets/platform.dart';
 export '../widgets/size_config.dart';

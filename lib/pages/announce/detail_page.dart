@@ -12,6 +12,7 @@ import 'package:long_life_burning/utils/helper/constants.dart'
     Configs,
     SizeConfig,
     showNotification,
+    cancelNotification,
     scheduleNotification;
 import 'package:long_life_burning/modules/announce/event/events.dart' show Event;
 import 'package:long_life_burning/utils/providers/all.dart'
@@ -186,10 +187,9 @@ class _ButtonWidget extends StatelessWidget {
                           child: Text('YES'),
                           onPressed: () async {
                             if (this.onLoad != null) this.onLoad(true);
-                            await scheduleNotification(
-                              action: "Cancel",
-                              payload: event.id,
-                              date: DateTime.now().add(Duration(seconds: 10)),
+                            await cancelNotification(
+                              event.id,
+                              id: event.id.hashCode,
                             );
                             final DocumentReference eventRef = Firestore.instance
                                 .collection(Configs.collection_event)
@@ -297,9 +297,12 @@ class _ButtonWidget extends StatelessWidget {
             child: RaisedButton(
               onPressed: () async {
                 if (this.onLoad != null) this.onLoad(true);
-                await showNotification(
-                  action: "Join",
-                  payload: event.id,
+                await scheduleNotification(
+                  user.id,
+                  id: event.id.hashCode,
+                  title: "Reminder Event".toUpperCase(),
+                  body: "Tomorrow, start event: ${event.title}",
+                  date: event?.date?.subtract(Duration(days: 1,)) ?? DateTime.now(),
                 );
                 final DocumentReference eventRef = Firestore.instance
                     .collection(Configs.collection_event)

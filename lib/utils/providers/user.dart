@@ -1,5 +1,117 @@
 part of providers;
 
+class EventRecordUser {
+
+  final String eventId;
+  final num calories;
+  final num distance;
+  final TimeRecordUser avgpace;
+  final TimeRecordUser duration;
+
+  EventRecordUser({
+    this.eventId,
+    this.calories,
+    this.distance,
+    this.avgpace,
+    this.duration,
+  });
+
+  factory EventRecordUser.fromMap(Map<String, dynamic> map) => EventRecordUser(
+    eventId: map["eventId"],
+    calories: map["calories"],
+    distance: map["distance"],
+    avgpace: TimeRecordUser.fromMap(map["avgpace"]),
+    duration: TimeRecordUser.fromMap(map["duration"]),
+  );
+
+  factory EventRecordUser.fromJson(String s) => EventRecordUser.fromMap(json.decode(s));
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+    "eventId": this.eventId,
+    "calories": this.calories,
+    "distance": this.distance,
+    "avgpace": this.avgpace.toMap(),
+    "duration": this.duration.toMap(),
+  };
+
+  String toJson() => json.encode(this.toMap());
+
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+      other is EventRecordUser &&
+        runtimeType == other.runtimeType &&
+        eventId == other.eventId &&
+        calories == other.calories &&
+        distance == other.distance &&
+        avgpace == other.avgpace &&
+        duration == other.duration;
+
+  @override
+  int get hashCode => (
+    eventId.hashCode ^
+    calories.hashCode ^
+    distance.hashCode ^
+    avgpace.hashCode ^
+    duration.hashCode
+  );
+
+  @override
+  String toString() {
+    return '$runtimeType{id: $eventId, calories: $calories, distance: $distance}';
+  }
+}
+
+class TimeRecordUser {
+
+  final num hour;
+  final num minute;
+  final num second;
+
+  TimeRecordUser({
+    this.hour,
+    this.minute,
+    this.second,
+  });
+
+  factory TimeRecordUser.fromMap(Map map) => TimeRecordUser(
+    hour: map["hour"],
+    minute: map["minute"],
+    second: map["second"],
+  );
+
+  factory TimeRecordUser.fromJson(String s) => TimeRecordUser.fromMap(json.decode(s));
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+    "hour": this.hour,
+    "minute": this.minute,
+    "second": this.second,
+  };
+
+  String toJson() => json.encode(this.toMap());
+
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+      other is TimeRecordUser &&
+        runtimeType == other.runtimeType &&
+        hour == other.hour &&
+        minute == other.minute &&
+        second == other.second;
+
+  @override
+  int get hashCode => (
+    hour.hashCode ^
+    minute.hashCode ^
+    second.hashCode
+  );
+
+  @override
+  String toString() {
+    return '$runtimeType{hour: $hour, minute: $minute, second: $second}';
+  }
+}
+
 class UserProvider extends ChangeNotifier {
 
   FirebaseUser _user;
@@ -10,7 +122,7 @@ class UserProvider extends ChangeNotifier {
   Gender _gender;
   DateTime _dateOfBirth;
   List<String> _events;
-  List<Notify> _notify;
+  List<EventRecordUser> _record;
 
   FirebaseUser get user => _user;
   String get id => _id;
@@ -20,14 +132,14 @@ class UserProvider extends ChangeNotifier {
   Gender get gender => _gender;
   DateTime get dateOfBirth => _dateOfBirth;
   List<String> get events => _events;
-  List<Notify> get notify => _notify;
+  List<EventRecordUser> get record => _record;
 
   set events(List<String> eventNew) {
     _events = eventNew;
   }
 
-  set notify(List<Notify> notifyNew) {
-    _notify = notifyNew;
+  set record(List<EventRecordUser> recordNew) {
+    _record = recordNew;
   }
 
   void setUser({
@@ -58,8 +170,6 @@ class UserProvider extends ChangeNotifier {
     _gender = null;
     _dateOfBirth = null;
     _events = null;
-    _notify = null;
     notifyListeners();
   }
-
 }

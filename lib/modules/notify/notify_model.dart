@@ -1,7 +1,8 @@
 part of notify;
 
 class Notify {
-  final String id;
+
+  final num id;
   final String title;
   final String body;
   final DateTime date;
@@ -17,7 +18,7 @@ class Notify {
     id: map["id"],
     title: map["title"],
     body: map["body"],
-    date: DateTime.parse("${map["date"]} ${map["time"].split(".")[0]}:${map["time"].split(".")[1]}:00"),
+    date: map["date"] != null ? DateTime.fromMicrosecondsSinceEpoch(map["date"]?.microsecondsSinceEpoch ?? 0) : null,
   );
 
   factory Notify.fromJson(String s) => Notify.fromMap(json.decode(s));

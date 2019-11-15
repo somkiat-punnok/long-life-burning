@@ -1,13 +1,13 @@
 library providers;
 
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart'
   show
     required,
     ChangeNotifier,
     ValueNotifier;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
-import 'package:long_life_burning/modules/notify/notify.dart' show Notify;
 import 'package:long_life_burning/modules/stepcount/stepcounter.dart'
   show
     kHeight,

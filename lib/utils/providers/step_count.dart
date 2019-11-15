@@ -214,7 +214,6 @@ class StepToDayProvider extends ChangeNotifier {
       await _pref?.setInt("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_steps", _steps ?? 0);
       await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_calories", _calories ?? 0.0);
       await _pref?.setDouble("$Prefix_KEY${_currentTime.year}-${_currentTime.month}-${_currentTime.day}_distences", _distences ?? 0.0);
-      notifyListeners();
     }
     _previousTime = _currentTime;
     _previousStep = _currentStep;
