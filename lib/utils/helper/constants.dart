@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show Firestore;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseUser;
-import '../widgets/platform.dart' show isMaterial;
 import '../providers/all.dart'
   show
     UserProvider,
@@ -25,7 +24,7 @@ part './options.dart';
 const String APPNAME = 'Long Burn';
 
 // Key AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE
-String Map_API_Key = isMaterial ? 'AIzaSyCngcsFoAznocj_aRI9CRwdtE6_gRAINGc' : 'AIzaSyApxB8Xjrg0m-ayriRwcXQpNVz0ONsXlGE';
+String Map_API_Key = '';
 
 const String Prefix_KEY = 'long_burn_';
 
